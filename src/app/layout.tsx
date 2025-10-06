@@ -1,15 +1,16 @@
 import "./globals.css";
-import {Metadata} from "next";
+import type { Metadata } from "next";
+import Header from "@/components/Header";
 
-export const metadata:Metadata = { title: "JSON CRM Generator" };
+export const metadata: Metadata = { title: "SEO Tools" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="uk">
-        <body className="min-h-dvh bg-neutral-50 text-neutral-900">
-        <div className="mx-auto max-w-5xl p-6">{children}</div>
+        <html lang="uk" className="bg-neutral-50 text-neutral-900">
+        <body className="min-h-dvh">
+        <Header />
+        <main className="mx-auto max-w-5xl p-6">{children}</main>
         </body>
         </html>
     );
 }
-
