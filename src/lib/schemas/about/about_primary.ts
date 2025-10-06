@@ -1,6 +1,5 @@
-import { z } from "zod";
+import {z} from "zod";
 
-/** /about -> about_primary */
 export const about_primary_schema = z.object({
     title: z.string().min(1, "Обов'язково"),
     imageHero: z.string().min(1, "Обов'язково"),

@@ -1,114 +1,104 @@
 "use client";
-import { useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+
+import {useState} from "react";
 import JSZip from "jszip";
-import { saveAs } from "file-saver";
-import {AnyBlockValue, BLOCK_META, BLOCK_SCHEMAS, BlockKey, PageKey, PAGES} from "@/lib/schemas";
+import {saveAs} from "file-saver";
+
+import {type AnyBlockValue, BLOCK_META, BLOCK_SCHEMAS, type BlockKey, type PageKey, PAGES,} from "@/lib/schemas";
+
 import {indexForAbout, indexForApp, rootIndex} from "@/lib/generators";
 
-export default function ValidatorPage() {
-    const [localeFolder, setLocaleFolder] = useState("cs");
+import type {ZodTypeAny} from "zod";
+import DataSummary from "@/components/validator_json/DataSummary";
+import SelectorsBar from "@/components/validator_json/SelectorsBar";
+import BlockFormDialog from "@/components/validator_json/BlockFormDialog";
+
+const ValidatorPage = () => {
+    // Стан для вибору поточної локалі (папки, наприклад "cs", "pl" тощо)
+    const [localeFolder, setLocaleFolder] = useState<string>("cs");
+
+    // Стан для вибраної сторінки (наприклад, "about", "app" тощо)
     const [page, setPage] = useState<PageKey | "">("");
+
+    // Стан для вибраного блоку сторінки (наприклад, "about_primary", "mobile_app")
     const [block, setBlock] = useState<BlockKey | "">("");
+
+    // Збереження усіх даних блоків, які користувач уже заповнив
     const [data, setData] = useState<Partial<Record<BlockKey, AnyBlockValue>>>({});
 
-    const schema = block ? (BLOCK_SCHEMAS as any)[block] : null;
-    const form = useForm<any>({ resolver: schema ? zodResolver(schema) : undefined });
+    // Отримуємо список блоків, доступних для поточної сторінки
+    const availableBlocks: BlockKey[] = page ? PAGES[page].blocks : [];
 
-    function openBlock() {
+    // Функція відкриття модалки для редагування блоку
+    function openBlock(): void {
         if (!block) return;
-        const draft = (data as any)[block];
-        form.reset(draft ?? {});
-        (document.getElementById("formDialog") as HTMLDialogElement)?.showModal();
+        (document.getElementById("formDialog") as HTMLDialogElement | null)?.showModal();
     }
 
-    function saveBlock(values: any) {
+    // Функція збереження даних із форми блоку
+    function saveBlock(values: AnyBlockValue): void {
         if (!block) return;
-        setData((prev) => ({ ...prev, [block as BlockKey]: values }));
-        (document.getElementById("formDialog") as HTMLDialogElement)?.close();
+        setData((prev) => ({...prev, [block]: values}));
+        (document.getElementById("formDialog") as HTMLDialogElement | null)?.close();
     }
 
-    async function generateZip() {
+    async function generateZip(): Promise<void> {
         if (!localeFolder) return;
         const zip = new JSZip();
 
+        // --- ГЕНЕРАЦІЯ ПАПКИ "about" ---
         if (data.about_primary) {
             const about = zip.folder(`${localeFolder}/about`)!;
+            // Додаємо файл із даними блока
             about.file("about_primary.json", JSON.stringify(data.about_primary, null, 2));
             about.file("index.ts", indexForAbout());
         }
 
-        const hasApp = data.app_about_primary || data.mobile_app;
+        // --- ГЕНЕРАЦІЯ ПАПКИ "app" ---
+        const hasApp = Boolean(data.app_about_primary || data.mobile_app);
         if (hasApp) {
             const app = zip.folder(`${localeFolder}/app`)!;
+            // Якщо заповнено блок app_about_primary — додаємо його JSON
             if (data.app_about_primary)
                 app.file("about_primary.json", JSON.stringify(data.app_about_primary, null, 2));
+            // Якщо заповнено блок mobile_app — додаємо його JSON
             if (data.mobile_app)
                 app.file("mobile_app.json", JSON.stringify(data.mobile_app, null, 2));
             app.file("index.ts", indexForApp());
         }
 
-        zip.file(`${localeFolder}/index.ts`, rootIndex(!!data.about_primary, !!hasApp));
+        // --- ГОЛОВНИЙ index.ts ---
+        zip.file(`${localeFolder}/index.ts`, rootIndex(Boolean(data.about_primary), hasApp));
 
-        const blob = await zip.generateAsync({ type: "blob" });
+        // Генеруємо ZIP як Blob і зберігаємо на пристрій
+        const blob = await zip.generateAsync({type: "blob"});
         saveAs(blob, `${localeFolder}.zip`);
     }
 
-    const availableBlocks: BlockKey[] = page ? PAGES[page].blocks : [];
+    // Підбираємо схему (zod-схему) під вибраний блок, щоб знати які поля показувати у формі
+    const schema: ZodTypeAny | null = block ? BLOCK_SCHEMAS[block] : null;
+    // Отримуємо поточний драфт даних для блоку, якщо вже редагувався
+    const draft: AnyBlockValue | undefined = block ? data[block] : undefined;
 
     return (
         <div className="space-y-6">
             <h1 className="text-2xl font-bold">Валідатор JSON</h1>
 
-            <div className="grid gap-4 md:grid-cols-3">
-                <label className="flex flex-col gap-2">
-                    <span className="text-sm">Назва кореневої папки (locale)</span>
-                    <input
-                        className="rounded border p-2"
-                        value={localeFolder}
-                        onChange={(e) => setLocaleFolder(e.target.value)}
-                    />
-                </label>
+            {/* Панель вибору мови, сторінки та блоку */}
+            <SelectorsBar
+                localeFolder={localeFolder}
+                setLocaleFolder={setLocaleFolder}
+                page={page}
+                setPage={(p) => {
+                    setPage(p);
+                    setBlock(""); // Скидаємо блок при зміні сторінки
+                }}
+                block={block}
+                setBlock={setBlock}
+                availableBlocks={availableBlocks}
+            />
 
-                <label className="flex flex-col gap-2">
-                    <span className="text-sm">Сторінка</span>
-                    <select
-                        className="rounded border p-2"
-                        value={page}
-                        onChange={(e) => {
-                            const p = e.target.value as PageKey | "";
-                            setPage(p);
-                            setBlock("");
-                        }}
-                    >
-                        <option value="">—</option>
-                        {Object.entries(PAGES).map(([key, v]) => (
-                            <option key={key} value={key}>
-                                {v.label}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-
-                <label className="flex flex-col gap-2">
-                    <span className="text-sm">Блок</span>
-                    <select
-                        className="rounded border p-2"
-                        value={block}
-                        onChange={(e) => setBlock(e.target.value as BlockKey | "")}
-                        disabled={!page}
-                    >
-                        <option value="">—</option>
-                        {availableBlocks.map((b) => (
-                            <option key={b} value={b}>
-                                {BLOCK_META[b].label}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-            </div>
-
+            {/* Кнопки керування */}
             <div className="flex gap-3">
                 <button
                     className="rounded bg-black px-4 py-2 text-white disabled:opacity-50"
@@ -117,181 +107,27 @@ export default function ValidatorPage() {
                 >
                     Відкрити форму блоку
                 </button>
+
                 <button className="rounded border px-4 py-2" onClick={generateZip}>
                     Згенерувати ZIP
                 </button>
             </div>
 
-            <section className="rounded border bg-white p-4">
-                <h2 className="mb-3 font-semibold">Поточні дані</h2>
-                <ul className="space-y-1 text-sm">
-                    {(["about_primary", "app_about_primary", "mobile_app"] as BlockKey[]).map((b) => (
-                        <li key={b}>
-                            <span className="font-medium">{BLOCK_META[b].label}:</span>{" "}
-                            {data[b] ? "заповнено ✅" : "порожньо"}
-                        </li>
-                    ))}
-                </ul>
-            </section>
+            {/* Коротке резюме заповнених даних */}
+            <DataSummary data={data} BLOCK_META={BLOCK_META}/>
 
-            <dialog id="formDialog" className="rounded-xl p-0">
-                <FormDialogContent
-                    block={block as BlockKey | ""}
-                    form={form}
-                    onCancel={() => (document.getElementById("formDialog") as HTMLDialogElement)?.close()}
-                    onSave={saveBlock}
-                />
-            </dialog>
+            {/* Модалка з формою редагування блоку */}
+            <BlockFormDialog
+                schema={schema}
+                block={block}
+                initialValues={draft ?? {}}
+                onCancel={() =>
+                    (document.getElementById("formDialog") as HTMLDialogElement | null)?.close()
+                }
+                onSave={saveBlock}
+            />
         </div>
     );
 }
 
-/* ---------------- ФОРМИ ---------------- */
-function FormDialogContent({ block, form, onCancel, onSave }: any) {
-    if (!block) return null;
-    const { register, handleSubmit, control, formState: { errors } } = form;
-
-    const Row = ({ label, name, as = "input" }: { label: string; name: string; as?: "input" | "textarea" }) => (
-        <label className="flex flex-col gap-1">
-            <span className="text-xs text-neutral-600">{label}</span>
-            {as === "input" ? (
-                <input className="rounded border p-2" {...register(name)} />
-            ) : (
-                <textarea className="rounded border p-2" rows={4} {...register(name)} />
-            )}
-            {errors?.[name]?.message && (
-                <span className="text-xs text-red-600">{String((errors as any)[name].message)}</span>
-            )}
-        </label>
-    );
-
-    return (
-        <form onSubmit={handleSubmit(onSave)} className="w-[90vw] max-w-3xl space-y-4 p-6">
-            <h3 className="text-lg font-semibold">{block}</h3>
-
-            {block === "about_primary" && (
-                <div className="space-y-3">
-                    <Row label="Заголовок" name="title" />
-                    <Row label="Герой-картинка (path)" name="imageHero" />
-                    <Row label="Інтро" name="intro" as="textarea" />
-                    <div className="grid gap-3 rounded border p-3">
-                        <span className="text-sm font-medium">miniGame</span>
-                        <Row label="miniGame.title" name="miniGame.title" />
-                        <Row label="miniGame.text" name="miniGame.text" as="textarea" />
-                        <Row label="miniGame.note" name="miniGame.note" as="textarea" />
-                    </div>
-                </div>
-            )}
-
-            {block === "app_about_primary" && (
-                <div className="space-y-3">
-                    <Row label="image1" name="image1" />
-                    <Row label="pIntro" name="pIntro" as="textarea" />
-                    <Row label="uiTitle" name="uiTitle" />
-                    <Row label="pUI" name="pUI" as="textarea" />
-                    <Row label="image2" name="image2" />
-                    <Row label="pHome" name="pHome" as="textarea" />
-                    <Row label="gamesTitle" name="gamesTitle" />
-                    <Row label="pGames" name="pGames" as="textarea" />
-                </div>
-            )}
-
-            {block === "mobile_app" && (
-                <MobileAppFields control={control} register={register} />
-            )}
-
-            <div className="flex justify-end gap-3 pt-2">
-                <button type="button" className="rounded border px-4 py-2" onClick={onCancel}>Скасувати</button>
-                <button type="submit" className="rounded bg-black px-4 py-2 text-white">Зберегти блок</button>
-            </div>
-        </form>
-    );
-}
-
-function MobileAppFields({ control, register }: any) {
-    const { fields: cardFields, append: addCard, remove: delCard } = useFieldArray({ control, name: "cards" });
-    const { fields: rowFields, append: addRow, remove: delRow } = useFieldArray({ control, name: "compare.rows" });
-
-    return (
-        <div className="space-y-4">
-            <div className="grid gap-2 rounded border p-3">
-                <span className="text-sm font-medium">title</span>
-                <input className="rounded border p-2" {...register("title.brand")} placeholder="brand" />
-                <input className="rounded border p-2" {...register("title.tail")} placeholder="tail" />
-            </div>
-
-            <label className="flex flex-col gap-1">
-                <span className="text-xs text-neutral-600">lead</span>
-                <textarea className="rounded border p-2" rows={3} {...register("lead")} />
-            </label>
-
-            {/* Cards */}
-            <div className="rounded border p-3 space-y-3">
-                <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium">cards</span>
-                    <button type="button" className="rounded border px-2 py-1 text-sm" onClick={() => addCard({ title: "", steps: [""] })}>
-                        + Додати картку
-                    </button>
-                </div>
-                {cardFields.map((cf: any, i: number) => (
-                    <div key={cf.id} className="border rounded-lg p-3">
-                        <div className="flex justify-between items-center mb-2">
-                            <span className="text-sm font-semibold">Картка #{i + 1}</span>
-                            <button type="button" className="text-xs underline" onClick={() => delCard(i)}>Видалити</button>
-                        </div>
-                        <input className="rounded border p-2 w-full mb-2" {...register(`cards.${i}.title`)} placeholder="title" />
-                        <StepsArray control={control} register={register} namePrefix={`cards.${i}.steps`} addLabel="+ Додати крок" />
-                    </div>
-                ))}
-            </div>
-
-            {/* Compare */}
-            <div className="rounded border p-3 space-y-3">
-                <label className="flex flex-col gap-1">
-                    <span className="text-xs text-neutral-600">compare.title</span>
-                    <input className="rounded border p-2" {...register("compare.title")} />
-                </label>
-
-                <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium">compare.rows</span>
-                    <button type="button" className="rounded border px-2 py-1 text-sm" onClick={() => addRow({ label: "", items: [""] })}>
-                        + Додати рядок
-                    </button>
-                </div>
-
-                {rowFields.map((rf: any, i: number) => (
-                    <div key={rf.id} className="border rounded-lg p-3">
-                        <div className="flex justify-between items-center mb-2">
-                            <span className="text-sm font-semibold">Рядок #{i + 1}</span>
-                            <button type="button" className="text-xs underline" onClick={() => delRow(i)}>Видалити</button>
-                        </div>
-                        <input className="rounded border p-2 w-full mb-2" {...register(`compare.rows.${i}.label`)} placeholder="label" />
-                        <StepsArray control={control} register={register} namePrefix={`compare.rows.${i}.items`} addLabel="+ Додати пункт" />
-                    </div>
-                ))}
-            </div>
-
-            <label className="flex flex-col gap-1">
-                <span className="text-xs text-neutral-600">cta</span>
-                <input className="rounded border p-2" {...register("cta")} />
-            </label>
-        </div>
-    );
-}
-
-function StepsArray({ control, register, namePrefix, addLabel }: any) {
-    const { fields, append, remove } = useFieldArray({ control, name: namePrefix });
-    return (
-        <div className="bg-neutral-50 rounded-md p-2 space-y-2">
-            {fields.map((f: any, idx: number) => (
-                <div key={f.id} className="flex items-center gap-2">
-                    <input className="w-full rounded border p-2" {...register(`${namePrefix}.${idx}`)} />
-                    <button type="button" className="text-xs underline" onClick={() => remove(idx)}>×</button>
-                </div>
-            ))}
-            <button type="button" className="rounded border px-2 py-1 text-xs" onClick={() => append("")}>
-                {addLabel}
-            </button>
-        </div>
-    );
-}
+export default ValidatorPage;
