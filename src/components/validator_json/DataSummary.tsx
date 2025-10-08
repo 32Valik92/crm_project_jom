@@ -1,3 +1,4 @@
+// components/validator_json/DataSummary.tsx
 "use client";
 
 import type { AnyBlockValue, BlockKey } from "@/lib/schemas";
@@ -9,7 +10,20 @@ type Props = {
 
 const DataSummary = ({ data, BLOCK_META }: Props)=> {
     // Визначаємо порядок блоків, у якому вони відображаються
-    const order: BlockKey[] = ["about_primary", "app_about_primary", "mobile_app"];
+    const order: BlockKey[] = [
+        "about_primary",
+        "app_about_primary",
+        "mobile_app",
+        "bonus_about_primary",
+        "bonus_bonuses",
+        "bonus_hero",
+        "bonus_cashback_about_primary",
+        "bonus_deposit_about_primary",
+        "bonus_deposit_bonuses",
+        "bonus_freebet_about_primary",
+        "bonus_freebet_bonuses",
+    ];
+
 
     return (
         <section className="rounded-[4px] border bg-white p-[16px]">
