@@ -7,13 +7,25 @@ import {saveAs} from "file-saver";
 
 import {type AnyBlockValue, BLOCK_META, BLOCK_SCHEMAS, type BlockKey, type PageKey, PAGES,} from "@/lib/schemas";
 
-import { indexForAbout, indexForApp, indexForBonus, indexForBonusCashback, indexForBonusDeposit, rootIndex } from "@/lib/generators";
+import {
+    indexForAbout,
+    indexForApp,
+    indexForBonus,
+    indexForBonusCashback,
+    indexForBonusDeposit,
+    indexForBonusFreespin, indexForBonusPromocode,
+    rootIndex
+} from "@/lib/generators";
 
 import type {ZodTypeAny} from "zod";
 import DataSummary from "@/components/validator_json/DataSummary";
 import SelectorsBar from "@/components/validator_json/SelectorsBar";
 import BlockFormDialog from "@/components/validator_json/BlockFormDialog";
 import {indexForBonusFreebet} from "@/lib/generators/bonus_freebet";
+import {indexForContacts} from "@/lib/generators/contacts";
+import {indexForFaq} from "@/lib/generators/faq";
+import {indexForFooter} from "@/lib/generators/footer";
+import {indexForHeader} from "@/lib/generators/header";
 
 const ValidatorPage = () => {
     const [localeFolder, setLocaleFolder] = useState<string>("cs");
@@ -93,6 +105,60 @@ const ValidatorPage = () => {
             bonusFreebet.file("index.ts", indexForBonusFreebet());
         }
 
+        const hasBonusFreespin = Boolean(data.bonus_freespin_about_primary || data.bonus_freespin_bonuses);
+        if (hasBonusFreespin) {
+            const bonusFreespin = zip.folder(`${localeFolder}/bonus_freespin`)!;
+            if (data.bonus_freespin_about_primary)
+                bonusFreespin.file("about_primary.json", JSON.stringify(data.bonus_freespin_about_primary, null, 2));
+            if (data.bonus_freespin_bonuses)
+                bonusFreespin.file("bonuses.json", JSON.stringify(data.bonus_freespin_bonuses, null, 2));
+            bonusFreespin.file("index.ts", indexForBonusFreespin());
+        }
+
+        const hasBonusPromocode = Boolean(data.bonus_promocode_about_primary || data.bonus_promocode_bonuses);
+        if (hasBonusPromocode) {
+            const bonusPromocode = zip.folder(`${localeFolder}/bonus_promocode`)!;
+            if (data.bonus_promocode_about_primary)
+                bonusPromocode.file("about_primary.json", JSON.stringify(data.bonus_promocode_about_primary, null, 2));
+            if (data.bonus_promocode_bonuses)
+                bonusPromocode.file("bonuses.json", JSON.stringify(data.bonus_promocode_bonuses, null, 2));
+            bonusPromocode.file("index.ts", indexForBonusPromocode());
+        }
+
+        const hasContacts = Boolean(data.contacts_about_primary || data.contacts_about_secondary);
+        if (hasContacts) {
+            const contacts = zip.folder(`${localeFolder}/contacts`)!;
+            if (data.contacts_about_primary)
+                contacts.file("about_primary.json", JSON.stringify(data.contacts_about_primary, null, 2));
+            if (data.contacts_about_secondary)
+                contacts.file("about_secondary.json", JSON.stringify(data.contacts_about_secondary, null, 2));
+            contacts.file("index.ts", indexForContacts());
+        }
+
+        const hasFaq = Boolean(data.faq_about_primary);
+        if (hasFaq) {
+            const faq = zip.folder(`${localeFolder}/faq`)!;
+            if (data.faq_about_primary)
+                faq.file("about_primary.json", JSON.stringify(data.faq_about_primary, null, 2));
+            faq.file("index.ts", indexForFaq());
+        }
+
+        const hasFooter = Boolean(data.footer_footer);
+        if (hasFooter) {
+            const footer = zip.folder(`${localeFolder}/footer`)!;
+            if (data.footer_footer)
+                footer.file("footer.json", JSON.stringify(data.footer_footer, null, 2));
+            footer.file("index.ts", indexForFooter());
+        }
+
+        const hasHeader = Boolean(data.header_header);
+        if (hasHeader) {
+            const header = zip.folder(`${localeFolder}/header`)!;
+            if (data.header_header)
+                header.file("header.json", JSON.stringify(data.header_header, null, 2));
+            header.file("index.ts", indexForHeader());
+        }
+
         zip.file(
             `${localeFolder}/index.ts`,
             rootIndex(
@@ -101,9 +167,16 @@ const ValidatorPage = () => {
                 hasBonus,
                 hasBonusCashback,
                 hasBonusDeposit,
-                hasBonusFreebet
+                hasBonusFreebet,
+                hasBonusFreespin,
+                hasBonusPromocode,
+                hasContacts,
+                hasFaq,
+                hasFooter,
+                hasHeader
             )
         );
+
         const blob = await zip.generateAsync({type: "blob"});
         saveAs(blob, `${localeFolder}.zip`);
     }

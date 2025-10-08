@@ -16,6 +16,15 @@ import BonusDepositAboutPrimaryForm from "./forms/bonus_deposit/AboutPrimaryForm
 import BonusDepositBonusesForm from "./forms/bonus_deposit/BonusesForm";
 import BonusFreebetAboutPrimaryForm from "@/components/validator_json/forms/bonus_freebet/AboutPrimaryForm";
 import BonusFreebetBonusesForm from "@/components/validator_json/forms/bonus_freebet/BonusesForm";
+import BonusFreespinAboutPrimaryForm from "@/components/validator_json/forms/bonus_freespin/AboutPrimaryForm";
+import BonusFreespinBonusesForm from "@/components/validator_json/forms/bonus_freespin/BonusesForm";
+import BonusPromocodeAboutPrimaryForm from "@/components/validator_json/forms/bonus_promocode/AboutPrimaryForm";
+import BonusPromocodeBonusesForm from "@/components/validator_json/forms/bonus_promocode/BonusesForm";
+import ContactsAboutPrimaryForm from "@/components/validator_json/forms/contacts/AboutPrimaryForm";
+import ContactsAboutSecondaryForm from "@/components/validator_json/forms/contacts/AboutSecondaryForm";
+import FaqAboutPrimaryForm from "@/components/validator_json/forms/faq/AboutPrimaryForm";
+import FooterForm from "@/components/validator_json/forms/footer/FooterForm";
+import HeaderForm from "@/components/validator_json/forms/header/HeaderForm";
 
 /** ---------- API ---------- */
 type Props = {
@@ -46,12 +55,14 @@ export default BlockFormDialog;
 function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) {
     const form = useForm<any>({
         resolver: schema ? zodResolver(schema) : undefined,
-        defaultValues: initialValues, // лише дефолти; без values, щоб форма не "памʼятала"
+        defaultValues: initialValues,
     });
 
     if (!block) return null;
 
-    const { register, handleSubmit, control, formState: { errors }, reset } = form;
+    const { register, handleSubmit, control, formState: { errors }, reset, watch } = form;
+
+    const draft = watch();
 
     type RowProps = { label: string; name: string; as?: "input" | "textarea" };
     const Row = ({ label, name, as = "input" }: RowProps) => (
@@ -72,7 +83,6 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
 
     const onSubmit = handleSubmit((values) => {
         onSave(values);
-        console.log(222)
         reset();
     });
 
@@ -110,6 +120,39 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
             )}
             {block === "bonus_freebet_bonuses" && (
                 <BonusFreebetBonusesForm control={control} registerAction={register} />
+            )}
+
+            {block === "bonus_freespin_about_primary" && (
+                <BonusFreespinAboutPrimaryForm control={control} registerAction={register} />
+            )}
+            {block === "bonus_freespin_bonuses" && (
+                <BonusFreespinBonusesForm control={control} registerAction={register} />
+            )}
+
+            {block === "bonus_promocode_about_primary" && (
+                <BonusPromocodeAboutPrimaryForm control={control} registerAction={register} />
+            )}
+            {block === "bonus_promocode_bonuses" && (
+                <BonusPromocodeBonusesForm control={control} registerAction={register} />
+            )}
+
+            {block === "contacts_about_primary" && (
+                <ContactsAboutPrimaryForm control={control} registerAction={register} />
+            )}
+            {block === "contacts_about_secondary" && (
+                <ContactsAboutSecondaryForm control={control} registerAction={register} />
+            )}
+
+            {block === "faq_about_primary" && (
+                <FaqAboutPrimaryForm control={control} registerAction={register} />
+            )}
+
+            {block === "footer_footer" && (
+                <FooterForm control={control} registerAction={register} />
+            )}
+
+            {block === "header_header" && (
+                <HeaderForm control={control} registerAction={register} sourceTemplate={draft} />
             )}
 
             <div className="flex justify-end gap-[12px] pt-[8px]">

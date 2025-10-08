@@ -5,6 +5,8 @@ export { indexForApp } from "./app";
 export { indexForBonus } from "./bonus";
 export { indexForBonusCashback } from "./bonus_cashback";
 export { indexForBonusDeposit } from "./bonus_deposit";
+export { indexForBonusFreespin } from "./bonus_freespin";
+export { indexForBonusPromocode } from "./bonus_promocode";
 
 /**
  * Генератор головного файлу index.ts у кореневій папці локалі.
@@ -15,6 +17,12 @@ export { indexForBonusDeposit } from "./bonus_deposit";
  * @param hasBonusCashback - "bonus_cashback"
  * @param hasBonusDeposit - "bonus_deposit"
  * @param hasBonusFreebet - "bonus_freebet"
+ * @param hasBonusFreespin - "bonus_freespin"
+ * @param hasBonusPromocode - "bonus_promocode"
+ * @param hasContacts - "contacts"
+ * @param hasFaq - "faq"
+ * @param hasFooter - "footer"
+ * @param hasHeader - "header"
  * @returns Вміст текстового файлу index.ts як рядок
  *
  * Приклад результату, якщо є обидва розділи:
@@ -27,7 +35,16 @@ export function rootIndex(
     hasBonus: boolean,
     hasBonusCashback: boolean,
     hasBonusDeposit: boolean,
-    hasBonusFreebet: boolean
+    hasBonusFreebet: boolean,
+    hasBonusFreespin: boolean,
+    hasBonusPromocode: boolean,
+    hasContacts: boolean,
+    hasFaq: boolean,
+    hasFooter: boolean,
+    hasHeader: boolean
+
+
+
 ) {
     // Створюємо масив рядків для майбутнього вмісту index.ts
     const lines: string[] = [];
@@ -45,6 +62,18 @@ export function rootIndex(
     if (hasBonusDeposit) lines.push("export { default as bonus_deposit } from './bonus_deposit';");
 
     if (hasBonusFreebet) lines.push("export { default as bonus_freebet } from './bonus_freebet';");
+
+    if (hasBonusFreespin) lines.push("export { default as bonus_freespin } from './bonus_freespin';");
+
+    if (hasBonusPromocode) lines.push("export { default as bonus_promocode } from './bonus_promocode';");
+
+    if (hasContacts) lines.push("export { default as contacts } from './contacts';");
+
+    if (hasFaq) lines.push("export { default as faq } from './faq';");
+
+    if (hasFooter) lines.push("export { default as footer } from './footer';");
+
+    if (hasHeader) lines.push("export { default as header } from './header';");
 
     // Об’єднуємо рядки у єдиний текст, додаючи перенос рядка між ними
     // Якщо масив порожній — повертаємо пустий рядок

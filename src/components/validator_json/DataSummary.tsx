@@ -22,6 +22,16 @@ const DataSummary = ({ data, BLOCK_META }: Props)=> {
         "bonus_deposit_bonuses",
         "bonus_freebet_about_primary",
         "bonus_freebet_bonuses",
+        "bonus_freespin_about_primary",
+        "bonus_freespin_bonuses",
+        "bonus_promocode_about_primary",
+        "bonus_promocode_bonuses",
+        "contacts_about_primary",
+        "contacts_about_secondary",
+        "faq_about_primary",
+        "footer_footer",
+        "header_header",
+
     ];
 
 
