@@ -23,22 +23,22 @@ const SelectorsBar = ({
                           availableBlocks
                       }: Props) => {
     return (
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-[16px] md:grid-cols-3">
             {/* --- ВИБІР ЛОКАЛІ --- */}
-            <label className="flex flex-col gap-2">
-                <span className="text-sm">Назва кореневої папки (locale)</span>
+            <label className="flex flex-col gap-[8px]">
+                <span className="text-[14px] leading-[20px]">Назва кореневої папки (locale)</span>
                 <input
-                    className="rounded border p-2"
+                    className="rounded-[4px] border p-[8px]"
                     value={localeFolder}
                     onChange={(e) => setLocaleFolder(e.target.value)}
                 />
             </label>
 
             {/* --- ВИБІР СТОРІНКИ --- */}
-            <label className="flex flex-col gap-2">
-                <span className="text-sm">Сторінка</span>
+            <label className="flex flex-col gap-[8px]">
+                <span className="text-[14px] leading-[20px]">Сторінка</span>
                 <select
-                    className="rounded border p-2"
+                    className="rounded-[4px] border p-[8px]"
                     value={page}
                     onChange={(e) => setPage(e.target.value as PageKey | "")}
                 >
@@ -53,10 +53,10 @@ const SelectorsBar = ({
             </label>
 
             {/* --- ВИБІР БЛОКУ --- */}
-            <label className="flex flex-col gap-2">
-                <span className="text-sm">Блок</span>
+            <label className="flex flex-col gap-[8px]">
+                <span className="text-[14px] leading-[20px]">Блок</span>
                 <select
-                    className="rounded border p-2"
+                    className="rounded-[4px] border p-[8px]"
                     value={block}
                     onChange={(e) => setBlock(e.target.value as BlockKey | "")}
                     disabled={!page}

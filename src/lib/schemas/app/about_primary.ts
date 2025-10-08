@@ -1,4 +1,4 @@
-import {z} from "zod";
+import { z } from "zod";
 
 export const app_about_primary_schema = z.object({
     image1: z.string().min(1, "Обов'язкове поле"),

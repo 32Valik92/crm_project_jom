@@ -1,4 +1,4 @@
-import {z} from "zod";
+import { z } from "zod";
 
 export const app_mobile_app_schema = z.object({
     title: z.object({

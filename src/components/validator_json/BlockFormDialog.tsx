@@ -20,7 +20,7 @@ type Props = {
 const BlockFormDialog = ({ schema, block, initialValues, onCancel, onSave }: Props) => {
     return (
         // <dialog> — нативне модальне вікно, яким керує зовнішній код через .showModal()/.close()
-        <dialog id="formDialog" className="rounded-xl p-0">
+        <dialog id="formDialog" className="rounded-[12px] p-[0px]">
             <FormContent
                 schema={schema}
                 block={block}
@@ -56,14 +56,14 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
     // Дрібний допоміжний компонент для простих рядків (input/textarea)
     type RowProps = { label: string; name: string; as?: "input" | "textarea" };
     const Row = ({ label, name, as = "input" }: RowProps) => (
-        <label className="flex flex-col gap-1">
-            <span className="text-xs text-neutral-600">{label}</span>
+        <label className="flex flex-col gap-[4px]">
+            <span className="text-[12px] leading-[16px] text-[#525252]">{label}</span>
 
             {/* Регіструємо поле: name — це шлях у форм-стейті (може бути вкладеним: "miniGame.title") */}
             {as === "input" ? (
-                <input className="rounded border p-2" {...register(name)} />
+                <input className="rounded-[4px] border p-[8px]" {...register(name)} />
             ) : (
-                <textarea className="rounded border p-2" rows={4} {...register(name)} />
+                <textarea className="rounded-[4px] border p-[8px]" rows={4} {...register(name)} />
             )}
 
             {/* Відображаємо помилку під полем, якщо схема згенерувала message */}
@@ -73,14 +73,14 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
               з "object-path" або свій get(). Тут зберігаємо твою поточну логіку.
             */}
             {(errors)?.[name]?.message && (
-                <span className="text-xs text-red-600">{String((errors)[name].message)}</span>
+                <span className="text-[12px] leading-[16px] text-[#dc2626]">{String((errors)[name].message)}</span>
             )}
         </label>
     );
 
     return (
-        <form onSubmit={handleSubmit(onSave)} className="w-[90vw] max-w-3xl space-y-4 p-6">
-            <h3 className="text-lg font-semibold">{block}</h3>
+        <form onSubmit={handleSubmit(onSave)} className="w-[90vw] max-w-[768px] space-y-[16px] p-[24px]">
+            <h3 className="text-[18px] font-semibold leading-[28px]">{block}</h3>
 
             {/* Рендер специфічної форми залежно від типу блоку:
                - Простим блокам передаємо RowComponent для рендеру полів
@@ -97,11 +97,11 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
             )}
 
             {/* Кнопки керування в діалозі */}
-            <div className="flex justify-end gap-3 pt-2">
-                <button type="button" className="rounded border px-4 py-2" onClick={onCancel}>
+            <div className="flex justify-end gap-[12px] pt-[8px]">
+                <button type="button" className="rounded-[4px] border px-[16px] py-[8px]" onClick={onCancel}>
                     Скасувати
                 </button>
-                <button type="submit" className="rounded bg-black px-4 py-2 text-white">
+                <button type="submit" className="rounded-[4px] bg-[#000000] px-[16px] py-[8px] text-[#ffffff]">
                     Зберегти блок
                 </button>
             </div>

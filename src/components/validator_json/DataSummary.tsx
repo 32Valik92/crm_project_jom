@@ -1,4 +1,4 @@
-"use client"; // Компонент рендериться на стороні клієнта (Next.js Client Component)
+"use client";
 
 import type { AnyBlockValue, BlockKey } from "@/lib/schemas";
 
@@ -12,10 +12,10 @@ const DataSummary = ({ data, BLOCK_META }: Props)=> {
     const order: BlockKey[] = ["about_primary", "app_about_primary", "mobile_app"];
 
     return (
-        <section className="rounded border bg-white p-4">
-            <h2 className="mb-3 font-semibold">Поточні дані</h2>
+        <section className="rounded-[4px] border bg-white p-[16px]">
+            <h2 className="mb-[12px] font-semibold">Поточні дані</h2>
 
-            <ul className="space-y-1 text-sm">
+            <ul className="space-y-[4px] text-[14px] leading-[20px]">
                 {order.map((b) => (
                     <li key={b}>
                         <span className="font-medium">{BLOCK_META[b].label}:</span>{" "}

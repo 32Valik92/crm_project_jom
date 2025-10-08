@@ -6,10 +6,12 @@ export const metadata: Metadata = { title: "SEO Tools" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="uk" className="bg-neutral-50 text-neutral-900">
-        <body className="min-h-dvh">
+        <html lang="uk" className="bg-[#fafafa] text-[#171717]">
+        <body className="min-h-[100vh]">
         <Header />
-        <main className="mx-auto max-w-5xl p-6">{children}</main>
+        <main className="mx-auto max-w-[1024px] p-[24px]">
+            {children}
+        </main>
         </body>
         </html>
     );

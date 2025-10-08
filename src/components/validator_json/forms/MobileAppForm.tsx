@@ -2,8 +2,8 @@
 
 import { useEffect } from "react";
 import { useFieldArray, type Control, type UseFormRegister } from "react-hook-form";
-import { StepsArray } from "./StepsArray";
 import { AppMobileApp } from "@/lib/schemas";
+import StepsArray from "@/components/validator_json/forms/StepsArray";
 
 // - control: інстанс RHF control для підключення useFieldArray
 // - registerAction: функція реєстрації полів (alias для register)

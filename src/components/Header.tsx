@@ -9,10 +9,10 @@ export default function Header() {
 
     return (
         <div className="border-b bg-white">
-            <div className="mx-auto max-w-5xl flex items-center justify-between p-4">
-                <Link href="/" className="font-semibold">SEO Tools</Link>
+            <div className="mx-auto max-w-[1024px] flex items-center justify-between p-[16px]">
+                <Link href="/" className="font-semibold text-[16px] leading-[24px]">SEO Tools</Link>
 
-                <nav className="flex items-center gap-2">
+                <nav className="flex items-center gap-[8px]">
                     {NAV_ITEMS.map((item) => {
                         const isActive = item.startsWith
                             ? pathname.startsWith(item.href)
@@ -23,8 +23,10 @@ export default function Header() {
                                 key={item.href}
                                 href={item.href}
                                 className={[
-                                    "rounded px-3 py-1 transition",
-                                    isActive ? "font-semibold underline underline-offset-4" : "hover:bg-neutral-100"
+                                    "rounded-[4px] px-[12px] py-[4px] transition",
+                                    isActive
+                                        ? "font-semibold underline underline-offset-[4px]"
+                                        : "hover:bg-[#f5f5f5]"
                                 ].join(" ")}
                             >
                                 {item.label}

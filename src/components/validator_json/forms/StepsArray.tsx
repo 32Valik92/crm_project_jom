@@ -27,19 +27,19 @@ const StepsArray = ({control, registerAction, namePrefix, addLabel}: Props) => {
     }, [fields.length, append]);
 
     return (
-        <div className="bg-neutral-50 rounded-md p-2 space-y-2">
+        <div className="bg-[#fafafa] rounded-[6px] p-[8px] space-y-[8px]">
             {/* Рендеримо кожний елемент масиву як input + кнопка видалення */}
             {fields.map((f, idx) => (
-                <div key={f.id} className="flex items-center gap-2">
+                <div key={f.id} className="flex items-center gap-[8px]">
                     {/* Регіструємо поле за індексом у масиві:
                         namePrefix = "cards.0.steps" -> "cards.0.steps.0" | "cards.0.steps.1" ... */}
                     <input
-                        className="w-full rounded border p-2"
+                        className="w-full rounded-[4px] border p-[8px] text-[16px] leading-[24px]"
                         {...registerAction(`${namePrefix}.${idx}`)}
                     />
                     <button
                         type="button"
-                        className="text-xs underline"
+                        className="text-[12px] leading-[16px] underline"
                         onClick={() => remove(idx)}
                         aria-label="Видалити"
                         title="Видалити"
@@ -52,7 +52,7 @@ const StepsArray = ({control, registerAction, namePrefix, addLabel}: Props) => {
             {/* Додати новий елемент у кінець масиву */}
             <button
                 type="button"
-                className="rounded border px-2 py-1 text-xs"
+                className="rounded-[4px] border px-[8px] py-[4px] text-[12px] leading-[16px]"
                 onClick={() => append("")}
             >
                 {addLabel}
