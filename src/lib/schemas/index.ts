@@ -56,6 +56,39 @@ export type { FooterData } from "./footer/footer";
 export { header_schema } from "./header/header";
 export type { HeaderData } from "./header/header";
 
+export { responsiblegame_about_primary_schema } from "./responsiblegame/about_primary";
+export type { ResponsibleGameAboutPrimary } from "./responsiblegame/about_primary";
+
+export { slots_about_primary_schema } from "./slots/about_primary";
+export type { SlotsAboutPrimary } from "./slots/about_primary";
+export { slots_casino_schema } from "./slots/casino";
+export type { SlotsCasino } from "./slots/casino";
+export { slots_hero_schema } from "./slots/hero";
+export type { SlotsHero } from "./slots/hero";
+
+export { slots_aviator_about_primary_schema } from "./slots_aviator/about_primary";
+export type { SlotsAviatorAboutPrimary } from "./slots_aviator/about_primary";
+
+export { slots_bookofdead_about_primary_schema } from "./slots_bookofdead/about_primary";
+export type { SlotsBookOfDeadAboutPrimary} from "./slots_bookofdead/about_primary";
+
+export { slots_bookofradeluxe_about_primary_schema } from "./slots_bookofradeluxe/about_primary";
+export type { SlotsBookOfRaDeluxeAboutPrimary } from "./slots_bookofradeluxe/about_primary";
+
+export { slots_chickenroad_about_primary_schema } from "./slots_chickenroad/about_primary";
+export type { SlotsChickenRoadAboutPrimary } from "./slots_chickenroad/about_primary";
+
+export { slots_fruitcocktail_about_primary_schema } from "./slots_fruitcocktail/about_primary";
+export type { SlotsFruitCocktailAboutPrimary } from "./slots_fruitcocktail/about_primary";
+
+export { slots_plinko_about_primary_schema } from "./slots_plinko/about_primary";
+export type { SlotsPlinkoAboutPrimary } from "./slots_plinko/about_primary";
+
+export { slots_popular_about_primary_schema } from "./slots_popular/about_primary";
+export type { SlotsPopularAboutPrimary } from "./slots_popular/about_primary";
+export { slots_popular_casino_schema } from "./slots_popular/casino";
+export type { SlotsPopularCasino } from "./slots_popular/casino";
+
 export const BLOCK_SCHEMAS = {
     about_primary: require("./about/about_primary").about_primary_schema,
 
@@ -89,8 +122,26 @@ export const BLOCK_SCHEMAS = {
 
     header_header: require("./header/header").header_schema,
 
+    responsiblegame_about_primary: require("./responsiblegame/about_primary").responsiblegame_about_primary_schema,
+
+    slots_about_primary: require("./slots/about_primary").slots_about_primary_schema,
+    slots_casino: require("./slots/casino").slots_casino_schema,
+    slots_hero: require("./slots/hero").slots_hero_schema,
+
     slots_aviator_about_primary: require("./slots_aviator/about_primary").slots_aviator_about_primary_schema,
 
+    slots_bookofdead_about_primary: require("./slots_bookofdead/about_primary").slots_bookofdead_about_primary_schema,
+
+    slots_bookofradeluxe_about_primary: require("./slots_bookofradeluxe/about_primary").slots_bookofradeluxe_about_primary_schema,
+
+    slots_chickenroad_about_primary: require("./slots_chickenroad/about_primary").slots_chickenroad_about_primary_schema,
+
+    slots_fruitcocktail_about_primary: require("./slots_fruitcocktail/about_primary").slots_fruitcocktail_about_primary_schema,
+
+    slots_plinko_about_primary: require("./slots_plinko/about_primary").slots_plinko_about_primary_schema,
+
+    slots_popular_about_primary: require("./slots_popular/about_primary").slots_popular_about_primary_schema,
+    slots_popular_casino: require("./slots_popular/casino").slots_popular_casino_schema,
 
 } as const;
 
@@ -115,4 +166,15 @@ export type AnyBlockValue =
     | import("./faq/about_primary").FaqAboutPrimary
     | import("./footer/footer").FooterData
     | import("./header/header").HeaderData
-    | import("./slots_aviator/about_primary").SlotsAviatorAboutPrimary;
+    | import("./responsiblegame/about_primary").ResponsibleGameAboutPrimary
+    | import("./slots/about_primary").SlotsAboutPrimary
+    | import("./slots/casino").SlotsCasino
+    | import("./slots/hero").SlotsHero
+    | import("./slots_aviator/about_primary").SlotsAviatorAboutPrimary
+    | import("./slots_bookofdead/about_primary").SlotsBookOfDeadAboutPrimary
+    | import("./slots_bookofradeluxe/about_primary").SlotsBookOfRaDeluxeAboutPrimary
+    | import("./slots_chickenroad/about_primary").SlotsChickenRoadAboutPrimary
+    | import("./slots_fruitcocktail/about_primary").SlotsFruitCocktailAboutPrimary
+    | import("./slots_plinko/about_primary").SlotsPlinkoAboutPrimary
+    | import("./slots_popular/about_primary").SlotsPopularAboutPrimary
+    | import("./slots_popular/casino").SlotsPopularCasino;

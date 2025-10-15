@@ -26,6 +26,17 @@ import FaqAboutPrimaryForm from "@/components/validator_json/forms/faq/AboutPrim
 import FooterForm from "@/components/validator_json/forms/footer/FooterForm";
 import HeaderForm from "@/components/validator_json/forms/header/HeaderForm";
 import SlotsAviatorAboutPrimaryForm from "@/components/validator_json/forms/slots_aviator/AboutPrimaryForm";
+import ResponsibleGameAboutPrimaryForm from "@/components/validator_json/forms/responsiblegame/AboutPrimaryForm";
+import SlotsAboutPrimaryForm from "@/components/validator_json/forms/slots/AboutPrimaryForm";
+import SlotsHeroForm from "@/components/validator_json/forms/slots/HeroForm";
+import SlotsCasinoForm from "@/components/validator_json/forms/slots/CasinoForm";
+import SlotsBookOfDeadAboutPrimaryForm from "@/components/validator_json/forms/slots_bookofdead/AboutPrimaryForm";
+import SlotsBookOfRaDeluxeAboutPrimaryForm
+    from "@/components/validator_json/forms/slots_bookofradeluxe/AboutPrimaryForm";
+import SlotsChickenRoadAboutPrimaryForm from "@/components/validator_json/forms/slots_chickenroad/AboutPrimaryForm";
+import SlotsPlinkoAboutPrimaryForm from "@/components/validator_json/forms/slots_plinko/AboutPrimaryForm";
+import SlotsPopularAboutPrimaryForm from "@/components/validator_json/forms/slots_popular/AboutPrimaryForm";
+import SlotsPopularCasinoForm from "@/components/validator_json/forms/slots_popular/CasinoForm";
 
 /** ---------- API ---------- */
 type Props = {
@@ -201,11 +212,83 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
                 <HeaderForm control={control} registerAction={register} sourceTemplate={draft} />
             )}
 
+            {block === "responsiblegame_about_primary" && (
+                <ResponsibleGameAboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}
+                />
+            )}
+
+            {block === "slots_about_primary" && (
+                <SlotsAboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}
+                />
+            )}
+            {block === "slots_casino" && (
+                <SlotsCasinoForm
+                    control={control}
+                    registerAction={register}
+                />
+            )}
+            {block === "slots_hero" &&
+                <SlotsHeroForm
+                    RowComponent={Row}
+                />}
+
             {block === "slots_aviator_about_primary" && (
                 <SlotsAviatorAboutPrimaryForm
                     control={control}
                     registerAction={register}
                     setValue={setValue}
+                />
+            )}
+
+            {block === "slots_bookofdead_about_primary" && (
+                <SlotsBookOfDeadAboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}
+                />
+            )}
+
+            {block === "slots_bookofradeluxe_about_primary" && (
+                <SlotsBookOfRaDeluxeAboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}
+                />
+            )}
+
+            {block === "slots_chickenroad_about_primary" && (
+                <SlotsChickenRoadAboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}
+                />
+            )}
+
+            {block === "slots_plinko_about_primary" && (
+                <SlotsPlinkoAboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}
+                />
+            )}
+
+            {block === "slots_popular_about_primary" && (
+                <SlotsPopularAboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}
+                />
+            )}
+            {block === "slots_popular_casino" && (
+                <SlotsPopularCasinoForm
+                    control={control}
+                    registerAction={register}
                 />
             )}
 

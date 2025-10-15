@@ -1,3 +1,4 @@
+// src/components/validator_json/forms/slots_aviator/AboutPrimaryForm.tsx
 "use client";
 
 import { useEffect, useRef } from "react";
@@ -18,7 +19,7 @@ const KIND_OPTS = [
     { v: "ordered", label: "Ordered list" },
 ] as const;
 
-export default function BonusAboutPrimaryForm({ control, registerAction, setValue }: Props) {
+export default function SlotsBookOfDeadAboutPrimaryForm({ control, registerAction, setValue }: Props) {
     const blocksFA = useFieldArray({ control, name: "blocks" as any });
     const didInit = useRef(false);
 

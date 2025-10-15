@@ -3,7 +3,9 @@ export type PageKey =
     | "about" | "app"
     | "bonus" | "bonus_cashback" | "bonus_deposit" | "bonus_freebet" | "bonus_freespin" | "bonus_promocode"
     | "contacts" | "faq" | "footer" | "header"
-    | "slots_aviator";
+    | "slots_aviator" | "responsiblegame" | "slots" | "slots_bookofdead"
+    | "slots_bookofradeluxe" | "slots_chickenroad" | "slots_fruitcocktail" | "slots_plinko"
+    | "slots_popular";
 
 export type BlockKey =
     | "about_primary" | "app_about_primary" | "mobile_app"
@@ -17,7 +19,16 @@ export type BlockKey =
     | "faq_about_primary"
     | "footer_footer"
     | "header_header"
-    | "slots_aviator_about_primary";
+    | "slots_aviator_about_primary" | "responsiblegame_about_primary"
+    | "slots_about_primary"
+    | "slots_casino"
+    | "slots_hero"
+    | "slots_bookofdead_about_primary"
+    | "slots_bookofradeluxe_about_primary"
+    | "slots_chickenroad_about_primary"
+    | "slots_fruitcocktail_about_primary"
+    | "slots_plinko_about_primary"
+    | "slots_popular_about_primary" | "slots_popular_casino";
 
 export const PAGES: Record<PageKey, { label: string; blocks: BlockKey[] }> = {
     about: { label: "About page", blocks: ["about_primary"] },
@@ -32,7 +43,17 @@ export const PAGES: Record<PageKey, { label: string; blocks: BlockKey[] }> = {
     faq: { label: "FAQ page", blocks: ["faq_about_primary"] },
     footer: { label: "Footer", blocks: ["footer_footer"] },
     header: { label: "Header", blocks: ["header_header"] },
+    responsiblegame: { label: "Responsible Game page", blocks: ["responsiblegame_about_primary"] },
+    slots: { label: "Slots page", blocks: ["slots_about_primary", "slots_casino", "slots_hero"] },
     slots_aviator: { label: "Slots Aviator page", blocks: ["slots_aviator_about_primary"] },
+    slots_bookofdead: { label: "Slots / Book of Dead", blocks: ["slots_bookofdead_about_primary"] },
+    slots_bookofradeluxe: { label: "Slots / Book of Ra Deluxe", blocks: ["slots_bookofradeluxe_about_primary"] },
+    slots_chickenroad: { label: "Slots / Chicken Road", blocks: ["slots_chickenroad_about_primary"] },
+    slots_fruitcocktail: { label: "Slots / Fruit Cocktail", blocks: ["slots_fruitcocktail_about_primary"] },
+    slots_plinko: { label: "Slots / Plinko", blocks: ["slots_plinko_about_primary"] },
+    slots_popular: { label: "Slots / Popular", blocks: ["slots_popular_about_primary", "slots_popular_casino"] },
+
+
 };
 
 export const BLOCK_META: Record<BlockKey, { label: string; file: string }> = {
@@ -56,5 +77,17 @@ export const BLOCK_META: Record<BlockKey, { label: string; file: string }> = {
     faq_about_primary: { label: "FAQ / About Primary", file: "about_primary.json" },
     footer_footer: { label: "Footer / Data", file: "footer.json" },
     header_header: { label: "Header / Data", file: "header.json" },
+    responsiblegame_about_primary: { label: "Responsible Game / About Primary", file: "about_primary.json" },
+    slots_about_primary: { label: "Slots / About Primary", file: "about_primary.json" },
+    slots_casino: { label: "Slots / Casino", file: "casino.json" },
+    slots_hero: { label: "Slots / Hero", file: "hero.json" },
     slots_aviator_about_primary: { label: "Slots Aviator / About Primary", file: "about_primary.json" },
+    slots_bookofdead_about_primary: { label: "Slots Book of Dead / About Primary", file: "about_primary.json" },
+    slots_bookofradeluxe_about_primary: { label: "Slots Book of Ra Deluxe / About Primary", file: "about_primary.json" },
+    slots_chickenroad_about_primary: { label: "Slots Chicken Road / About Primary", file: "about_primary.json" },
+    slots_fruitcocktail_about_primary: { label: "Slots Fruit Cocktail / About Primary", file: "about_primary.json" },
+    slots_plinko_about_primary: { label: "Slots Plinko / About Primary", file: "about_primary.json" },
+    slots_popular_about_primary: { label: "Slots Popular / About Primary", file: "about_primary.json" },
+    slots_popular_casino: { label: "Slots Popular / Casino", file: "casino.json" },
+
 };

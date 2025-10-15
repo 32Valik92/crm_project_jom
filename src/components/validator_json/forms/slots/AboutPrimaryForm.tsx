@@ -18,7 +18,7 @@ const KIND_OPTS = [
     { v: "ordered", label: "Ordered list" },
 ] as const;
 
-export default function BonusAboutPrimaryForm({ control, registerAction, setValue }: Props) {
+export default function SlotsAboutPrimaryForm({ control, registerAction, setValue }: Props) {
     const blocksFA = useFieldArray({ control, name: "blocks" as any });
     const didInit = useRef(false);
 

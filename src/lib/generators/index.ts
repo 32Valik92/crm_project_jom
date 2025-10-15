@@ -7,7 +7,15 @@ export {indexForBonusCashback} from "./bonus_cashback";
 export {indexForBonusDeposit} from "./bonus_deposit";
 export {indexForBonusFreespin} from "./bonus_freespin";
 export {indexForBonusPromocode} from "./bonus_promocode";
+export {indexForResponsibleGame} from "./responsiblegame";
+export { indexForSlots } from "./slots";
 export {indexForSlotsAviator} from "./slots_aviator";
+export { indexForSlotsBookOfDead } from "./slots_bookofdead";
+export { indexForSlotsBookOfRaDeluxe } from "./slots_bookofradeluxe";
+export { indexForSlotsChickenRoad } from "./slots_chickenroad";
+export { indexForSlotsFruitCocktail } from "./slots_fruitcocktail";
+export { indexForSlotsPlinko } from "./slots_plinko";
+export { indexForSlotsPopular } from "./slots_popular";
 
 /**
  * Генератор головного файлу index.ts у кореневій папці локалі.
@@ -24,7 +32,15 @@ export {indexForSlotsAviator} from "./slots_aviator";
  * @param hasFaq - "faq"
  * @param hasFooter - "footer"
  * @param hasHeader - "header"
+ * @param hasResponsibleGame - "ResponsibleGame"
+ * @param hasSlots - "slots"
  * @param hasSlotsAviator - "slots_aviator"
+ * @param hasSlotsBookOfDead - "slots__bookOfDead"
+ * @param hasSlotsBookOfRaDeluxe - "Slots_BookOfRaDeluxe"
+ * @param hasSlotsChickenRoad - "Slots_ChickenRoad"
+ * @param hasSlotsFruitCocktail - "Slots_FruitCocktail"
+ * @param hasSlotsPlinko - "Slots_Plinko"
+ * @param hasSlotsPopular - "Slots_Popular"
  * @returns Вміст текстового файлу index.ts як рядок
  *
  * Приклад результату, якщо є обидва розділи:
@@ -44,7 +60,15 @@ export function rootIndex(
     hasFaq: boolean,
     hasFooter: boolean,
     hasHeader: boolean,
-    hasSlotsAviator: boolean
+    hasResponsibleGame: boolean,
+    hasSlots: boolean,
+    hasSlotsAviator: boolean,
+    hasSlotsBookOfDead: boolean,
+    hasSlotsBookOfRaDeluxe: boolean,
+    hasSlotsChickenRoad: boolean,
+    hasSlotsFruitCocktail: boolean,
+    hasSlotsPlinko: boolean,
+    hasSlotsPopular: boolean,
 ) {
     // Створюємо масив рядків для майбутнього вмісту index.ts
     const lines: string[] = [];
@@ -75,7 +99,23 @@ export function rootIndex(
 
     if (hasHeader) lines.push("export { default as header } from './header';");
 
+    if (hasResponsibleGame) lines.push("export { default as responsiblegame } from './responsiblegame';");
+
+    if (hasSlots) lines.push("export { default as slots } from './slots';");
+
     if (hasSlotsAviator) lines.push("export { default as slots_aviator } from './slots_aviator';");
+
+    if (hasSlotsBookOfDead) lines.push("export { default as slots_bookofdead } from './slots_bookofdead';");
+
+    if (hasSlotsBookOfRaDeluxe) lines.push("export { default as slots_bookofradeluxe } from './slots_bookofradeluxe';");
+
+    if (hasSlotsChickenRoad) lines.push("export { default as slots_chickenroad } from './slots_chickenroad';");
+
+    if (hasSlotsFruitCocktail) lines.push("export { default as slots_fruitcocktail } from './slots_fruitcocktail';");
+
+    if (hasSlotsPlinko) lines.push("export { default as slots_plinko } from './slots_plinko';");
+
+    if (hasSlotsPopular) lines.push("export { default as slots_popular } from './slots_popular';");
 
     // Об’єднуємо рядки у єдиний текст, додаючи перенос рядка між ними
     // Якщо масив порожній — повертаємо пустий рядок

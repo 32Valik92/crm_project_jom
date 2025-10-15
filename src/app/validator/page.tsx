@@ -13,7 +13,15 @@ import {
     indexForBonus,
     indexForBonusCashback,
     indexForBonusDeposit,
-    indexForBonusFreespin, indexForBonusPromocode, indexForSlotsAviator,
+    indexForBonusFreespin,
+    indexForBonusPromocode,
+    indexForResponsibleGame,
+    indexForSlots,
+    indexForSlotsAviator,
+    indexForSlotsBookOfDead,
+    indexForSlotsBookOfRaDeluxe,
+    indexForSlotsChickenRoad,
+    indexForSlotsFruitCocktail, indexForSlotsPlinko, indexForSlotsPopular,
     rootIndex
 } from "@/lib/generators";
 
@@ -159,12 +167,75 @@ const ValidatorPage = () => {
             header.file("index.ts", indexForHeader());
         }
 
+        const hasResponsibleGame = Boolean(data.responsiblegame_about_primary);
+
+        if (hasResponsibleGame) {
+            const rg = zip.folder(`${localeFolder}/responsiblegame`)!;
+            rg.file("about_primary.json", JSON.stringify(data.responsiblegame_about_primary, null, 2));
+            rg.file("index.ts", indexForResponsibleGame());
+        }
+
+        const hasSlots = Boolean(data.slots_about_primary || data.slots_casino || data.slots_hero);
+
+        if (hasSlots) {
+            const slots = zip.folder(`${localeFolder}/slots`)!;
+            if (data.slots_about_primary) slots.file("about_primary.json", JSON.stringify(data.slots_about_primary, null, 2));
+            if (data.slots_casino) slots.file("casino.json", JSON.stringify(data.slots_casino, null, 2));
+            if (data.slots_hero) slots.file("hero.json", JSON.stringify(data.slots_hero, null, 2));
+            slots.file("index.ts", indexForSlots());
+        }
+
         const hasSlotsAviator = Boolean(data.slots_aviator_about_primary);
         if (hasSlotsAviator) {
             const sa = zip.folder(`${localeFolder}/slots_aviator`)!;
             if (data.slots_aviator_about_primary)
                 sa.file("about_primary.json", JSON.stringify(data.slots_aviator_about_primary, null, 2));
             sa.file("index.ts", indexForSlotsAviator());
+        }
+
+        const hasSlotsBookOfDead = Boolean(data.slots_bookofdead_about_primary);
+        if (hasSlotsBookOfDead) {
+            const folder = zip.folder(`${localeFolder}/slots_bookofdead`)!;
+            folder.file("about_primary.json", JSON.stringify(data.slots_bookofdead_about_primary, null, 2));
+            folder.file("index.ts", indexForSlotsBookOfDead());
+        }
+
+        const hasSlotsBookOfRaDeluxe = Boolean(data.slots_bookofradeluxe_about_primary);
+        if (hasSlotsBookOfRaDeluxe) {
+            const folder = zip.folder(`${localeFolder}/slots_bookofradeluxe`)!;
+            folder.file("about_primary.json", JSON.stringify(data.slots_bookofradeluxe_about_primary, null, 2));
+            folder.file("index.ts", indexForSlotsBookOfRaDeluxe());
+        }
+
+        const hasSlotsChickenRoad = Boolean(data.slots_chickenroad_about_primary);
+        if (hasSlotsChickenRoad) {
+            const folder = zip.folder(`${localeFolder}/slots_chickenroad`)!;
+            folder.file("about_primary.json", JSON.stringify(data.slots_chickenroad_about_primary, null, 2));
+            folder.file("index.ts", indexForSlotsChickenRoad());
+        }
+
+        const hasSlotsFruitCocktail = Boolean(data.slots_fruitcocktail_about_primary);
+        if (hasSlotsFruitCocktail) {
+            const folder = zip.folder(`${localeFolder}/slots_fruitcocktail`)!;
+            folder.file("about_primary.json", JSON.stringify(data.slots_fruitcocktail_about_primary, null, 2));
+            folder.file("index.ts", indexForSlotsFruitCocktail());
+        }
+
+        const hasSlotsPlinko = Boolean(data.slots_plinko_about_primary);
+        if (hasSlotsPlinko) {
+            const folder = zip.folder(`${localeFolder}/slots_plinko`)!;
+            folder.file("about_primary.json", JSON.stringify(data.slots_plinko_about_primary, null, 2));
+            folder.file("index.ts", indexForSlotsPlinko());
+        }
+
+        const hasSlotsPopular = Boolean(data.slots_popular_about_primary || data.slots_popular_casino);
+        if (hasSlotsPopular) {
+            const folder = zip.folder(`${localeFolder}/slots_popular`)!;
+            if (data.slots_popular_about_primary)
+                folder.file("about_primary.json", JSON.stringify(data.slots_popular_about_primary, null, 2));
+            if (data.slots_popular_casino)
+                folder.file("casino.json", JSON.stringify(data.slots_popular_casino, null, 2));
+            folder.file("index.ts", indexForSlotsPopular());
         }
 
         zip.file(
@@ -182,7 +253,16 @@ const ValidatorPage = () => {
                 hasFaq,
                 hasFooter,
                 hasHeader,
-                hasSlotsAviator
+                hasResponsibleGame,
+                hasSlots,
+                hasSlotsAviator,
+                hasSlotsBookOfDead,
+                hasSlotsBookOfRaDeluxe,
+                hasSlotsChickenRoad,
+                hasSlotsFruitCocktail,
+                hasSlotsPlinko,
+                hasSlotsPopular,
+
             )
         );
 

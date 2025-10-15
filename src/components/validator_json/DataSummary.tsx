@@ -31,7 +31,18 @@ const DataSummary = ({ data, BLOCK_META }: Props)=> {
         "faq_about_primary",
         "footer_footer",
         "header_header",
+        "responsiblegame_about_primary",
+        "slots_about_primary",
+        "slots_casino",
+        "slots_hero",
         "slots_aviator_about_primary",
+        "slots_bookofdead_about_primary",
+        "slots_bookofradeluxe_about_primary",
+        "slots_chickenroad_about_primary",
+        "slots_fruitcocktail_about_primary",
+        "slots_plinko_about_primary",
+        "slots_popular_about_primary",
+        "slots_popular_casino",
 
     ];
 

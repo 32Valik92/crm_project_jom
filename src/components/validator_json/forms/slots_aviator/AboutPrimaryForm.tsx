@@ -148,6 +148,23 @@ function BlockEditor({
                 />
             )}
 
+            {kind === "cta" && (
+                <div className="grid md:grid-cols-2 gap-[8px]">
+                    <FieldInput
+                        registerAction={registerAction}
+                        errors={errors}
+                        name={`blocks.${idx}.label`}
+                        placeholder="label"
+                    />
+                    <FieldInput
+                        registerAction={registerAction}
+                        errors={errors}
+                        name={`blocks.${idx}.href`}
+                        placeholder="href"
+                    />
+                </div>
+            )}
+
             {kind === "paragraph" && (
                 <LinesEditor
                     control={control}
