@@ -91,14 +91,25 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
         <form onSubmit={onSubmit} className="w-[90vw] max-w-[768px] space-y-[16px] p-[24px]">
             <h3 className="text-[18px] font-semibold leading-[28px]">{block}</h3>
 
-            {block === "about_primary" && <AboutPrimaryForm RowComponent={Row} />}
+            {block === "about_primary" &&
+                <AboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}
+                />
+            }
+
             {block === "app_about_primary" && <AppAboutPrimaryForm RowComponent={Row} />}
             {block === "mobile_app" && (
                 <MobileAppForm control={control} registerAction={register} />
             )}
 
             {block === "bonus_about_primary" && (
-                <BonusAboutPrimaryForm RowComponent={Row} control={control} registerAction={register} />
+                <BonusAboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}
+                />
             )}
             {block === "bonus_bonuses" && (
                 <BonusBonusesForm control={control} registerAction={register} />
@@ -160,7 +171,7 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
                 <SlotsAviatorAboutPrimaryForm
                     control={control}
                     registerAction={register}
-                    setValue={setValue}              // ⬅️ передаємо
+                    setValue={setValue}
                 />
             )}
 
