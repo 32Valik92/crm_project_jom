@@ -6,7 +6,7 @@ import {type Control, type UseFormRegister, useFieldArray, useWatch, UseFormSetV
 type Props = {
     control: Control;
     registerAction: UseFormRegister<any>;
-    setValue: UseFormSetValue<any>;             // ⬅️ додали
+    setValue: UseFormSetValue<any>;
 };
 
 const KIND_OPTS = [
@@ -38,7 +38,7 @@ export default function AboutPrimaryForm({ control, registerAction, setValue }: 
                     key={f.id}
                     control={control}
                     registerAction={registerAction}
-                    setValue={setValue}                  // ⬅️ передаємо далі
+                    setValue={setValue}
                     idx={idx}
                     onRemove={() => blocksFA.remove(idx)}
                 />
@@ -77,8 +77,8 @@ function addByKind(append: (v: any) => void, kind: string) {
         append({
             kind,
             alt: "",
-            desktop: { src: "", height: 420 },      // ⬅️ зашито
-            mobile:  { src: "", height: 320 },      // ⬅️ зашито
+            desktop: { src: "", height: 420 },
+            mobile:  { src: "", height: 320 },
         });
     else if (kind === "cta") append({ kind, label: "", href: "" });
     else if (kind === "unordered") append({ kind, intro: "", items: [""] });

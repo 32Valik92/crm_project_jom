@@ -99,7 +99,13 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
                 />
             }
 
-            {block === "app_about_primary" && <AppAboutPrimaryForm RowComponent={Row} />}
+            {block === "app_about_primary" &&
+                <AppAboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}
+                />
+            }
             {block === "mobile_app" && (
                 <MobileAppForm control={control} registerAction={register} />
             )}
@@ -117,46 +123,74 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
             {block === "bonus_hero" && <BonusHeroForm RowComponent={Row} />}
 
             {block === "bonus_cashback_about_primary" && (
-                <BonusCashbackAboutPrimaryForm control={control} registerAction={register} />
+                <BonusCashbackAboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}
+                />
             )}
 
             {block === "bonus_deposit_about_primary" && (
-                <BonusDepositAboutPrimaryForm control={control} registerAction={register} />
+                <BonusDepositAboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}
+                />
             )}
             {block === "bonus_deposit_bonuses" && (
                 <BonusDepositBonusesForm control={control} registerAction={register} />
             )}
 
             {block === "bonus_freebet_about_primary" && (
-                <BonusFreebetAboutPrimaryForm control={control} registerAction={register} />
+                <BonusFreebetAboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}
+                />
             )}
             {block === "bonus_freebet_bonuses" && (
                 <BonusFreebetBonusesForm control={control} registerAction={register} />
             )}
 
             {block === "bonus_freespin_about_primary" && (
-                <BonusFreespinAboutPrimaryForm control={control} registerAction={register} />
+                <BonusFreespinAboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}
+                />
             )}
             {block === "bonus_freespin_bonuses" && (
                 <BonusFreespinBonusesForm control={control} registerAction={register} />
             )}
 
             {block === "bonus_promocode_about_primary" && (
-                <BonusPromocodeAboutPrimaryForm control={control} registerAction={register} />
+                <BonusPromocodeAboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}
+                />
             )}
             {block === "bonus_promocode_bonuses" && (
                 <BonusPromocodeBonusesForm control={control} registerAction={register} />
             )}
 
             {block === "contacts_about_primary" && (
-                <ContactsAboutPrimaryForm control={control} registerAction={register} />
+                <ContactsAboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}
+                />
             )}
             {block === "contacts_about_secondary" && (
                 <ContactsAboutSecondaryForm control={control} registerAction={register} />
             )}
 
             {block === "faq_about_primary" && (
-                <FaqAboutPrimaryForm control={control} registerAction={register} />
+                <FaqAboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}
+                />
             )}
 
             {block === "footer_footer" && (
