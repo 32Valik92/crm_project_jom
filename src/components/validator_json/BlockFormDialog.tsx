@@ -25,6 +25,7 @@ import ContactsAboutSecondaryForm from "@/components/validator_json/forms/contac
 import FaqAboutPrimaryForm from "@/components/validator_json/forms/faq/AboutPrimaryForm";
 import FooterForm from "@/components/validator_json/forms/footer/FooterForm";
 import HeaderForm from "@/components/validator_json/forms/header/HeaderForm";
+import SlotsAviatorAboutPrimaryForm from "@/components/validator_json/forms/slots_aviator/AboutPrimaryForm";
 
 /** ---------- API ---------- */
 type Props = {
@@ -60,7 +61,7 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
 
     if (!block) return null;
 
-    const { register, handleSubmit, control, formState: { errors }, reset, watch } = form;
+    const { register, handleSubmit, control, formState: { errors }, reset, watch, setValue } = form;
 
     const draft = watch();
 
@@ -153,6 +154,14 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
 
             {block === "header_header" && (
                 <HeaderForm control={control} registerAction={register} sourceTemplate={draft} />
+            )}
+
+            {block === "slots_aviator_about_primary" && (
+                <SlotsAviatorAboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}              // ⬅️ передаємо
+                />
             )}
 
             <div className="flex justify-end gap-[12px] pt-[8px]">

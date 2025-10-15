@@ -89,6 +89,9 @@ export const BLOCK_SCHEMAS = {
 
     header_header: require("./header/header").header_schema,
 
+    slots_aviator_about_primary: require("./slots_aviator/about_primary").slots_aviator_about_primary_schema,
+
+
 } as const;
 
 export type AnyBlockValue =
@@ -111,4 +114,5 @@ export type AnyBlockValue =
     | import("./contacts/about_secondary").ContactsAboutSecondary
     | import("./faq/about_primary").FaqAboutPrimary
     | import("./footer/footer").FooterData
-    | import("./header/header").HeaderData;
+    | import("./header/header").HeaderData
+    | import("./slots_aviator/about_primary").SlotsAviatorAboutPrimary;

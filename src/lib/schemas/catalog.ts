@@ -1,14 +1,10 @@
-// lib/schemas/catalog.ts
-// --- Єдина точка правди (Single Source of Truth) ---
-// Тут визначено всі сторінки сайту, їхні блоки та метадані для генерації JSON.
-
-// --- Тип для ключів сторінок ---
+// src/lib/schemas/catalog.ts (додай)
 export type PageKey =
     | "about" | "app"
     | "bonus" | "bonus_cashback" | "bonus_deposit" | "bonus_freebet" | "bonus_freespin" | "bonus_promocode"
-    | "contacts" | "faq" | "footer" | "header";
+    | "contacts" | "faq" | "footer" | "header"
+    | "slots_aviator";
 
-// --- Тип для ключів блоків контенту ---
 export type BlockKey =
     | "about_primary" | "app_about_primary" | "mobile_app"
     | "bonus_about_primary" | "bonus_bonuses" | "bonus_hero"
@@ -20,9 +16,9 @@ export type BlockKey =
     | "contacts_about_primary" | "contacts_about_secondary"
     | "faq_about_primary"
     | "footer_footer"
-    | "header_header";
+    | "header_header"
+    | "slots_aviator_about_primary";
 
-// --- Реєстр сторінок та пов’язаних із ними блоків ---
 export const PAGES: Record<PageKey, { label: string; blocks: BlockKey[] }> = {
     about: { label: "About page", blocks: ["about_primary"] },
     app: { label: "App page", blocks: ["app_about_primary", "mobile_app"] },
@@ -36,11 +32,9 @@ export const PAGES: Record<PageKey, { label: string; blocks: BlockKey[] }> = {
     faq: { label: "FAQ page", blocks: ["faq_about_primary"] },
     footer: { label: "Footer", blocks: ["footer_footer"] },
     header: { label: "Header", blocks: ["header_header"] },
-
+    slots_aviator: { label: "Slots Aviator page", blocks: ["slots_aviator_about_primary"] },
 };
 
-// --- Метадані для кожного блоку ---
-// Використовується для відображення назв у UI та для генерації назв JSON-файлів
 export const BLOCK_META: Record<BlockKey, { label: string; file: string }> = {
     about_primary: { label: "About / Primary", file: "about_primary.json" },
     app_about_primary: { label: "App / Primary", file: "about_primary.json" },
@@ -62,5 +56,5 @@ export const BLOCK_META: Record<BlockKey, { label: string; file: string }> = {
     faq_about_primary: { label: "FAQ / About Primary", file: "about_primary.json" },
     footer_footer: { label: "Footer / Data", file: "footer.json" },
     header_header: { label: "Header / Data", file: "header.json" },
-
+    slots_aviator_about_primary: { label: "Slots Aviator / About Primary", file: "about_primary.json" },
 };

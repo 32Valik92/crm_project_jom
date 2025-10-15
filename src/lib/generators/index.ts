@@ -1,12 +1,13 @@
 // lib/generators/index.ts
 // Експортуємо генератори для index.ts файлів кожного розділу локалі
-export { indexForAbout } from "./about";
-export { indexForApp } from "./app";
-export { indexForBonus } from "./bonus";
-export { indexForBonusCashback } from "./bonus_cashback";
-export { indexForBonusDeposit } from "./bonus_deposit";
-export { indexForBonusFreespin } from "./bonus_freespin";
-export { indexForBonusPromocode } from "./bonus_promocode";
+export {indexForAbout} from "./about";
+export {indexForApp} from "./app";
+export {indexForBonus} from "./bonus";
+export {indexForBonusCashback} from "./bonus_cashback";
+export {indexForBonusDeposit} from "./bonus_deposit";
+export {indexForBonusFreespin} from "./bonus_freespin";
+export {indexForBonusPromocode} from "./bonus_promocode";
+export {indexForSlotsAviator} from "./slots_aviator";
 
 /**
  * Генератор головного файлу index.ts у кореневій папці локалі.
@@ -23,6 +24,7 @@ export { indexForBonusPromocode } from "./bonus_promocode";
  * @param hasFaq - "faq"
  * @param hasFooter - "footer"
  * @param hasHeader - "header"
+ * @param hasSlotsAviator - "slots_aviator"
  * @returns Вміст текстового файлу index.ts як рядок
  *
  * Приклад результату, якщо є обидва розділи:
@@ -41,10 +43,8 @@ export function rootIndex(
     hasContacts: boolean,
     hasFaq: boolean,
     hasFooter: boolean,
-    hasHeader: boolean
-
-
-
+    hasHeader: boolean,
+    hasSlotsAviator: boolean
 ) {
     // Створюємо масив рядків для майбутнього вмісту index.ts
     const lines: string[] = [];
@@ -74,6 +74,8 @@ export function rootIndex(
     if (hasFooter) lines.push("export { default as footer } from './footer';");
 
     if (hasHeader) lines.push("export { default as header } from './header';");
+
+    if (hasSlotsAviator) lines.push("export { default as slots_aviator } from './slots_aviator';");
 
     // Об’єднуємо рядки у єдиний текст, додаючи перенос рядка між ними
     // Якщо масив порожній — повертаємо пустий рядок

@@ -31,6 +31,7 @@ const DataSummary = ({ data, BLOCK_META }: Props)=> {
         "faq_about_primary",
         "footer_footer",
         "header_header",
+        "slots_aviator_about_primary",
 
     ];
 

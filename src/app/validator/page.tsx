@@ -13,7 +13,7 @@ import {
     indexForBonus,
     indexForBonusCashback,
     indexForBonusDeposit,
-    indexForBonusFreespin, indexForBonusPromocode,
+    indexForBonusFreespin, indexForBonusPromocode, indexForSlotsAviator,
     rootIndex
 } from "@/lib/generators";
 
@@ -159,6 +159,14 @@ const ValidatorPage = () => {
             header.file("index.ts", indexForHeader());
         }
 
+        const hasSlotsAviator = Boolean(data.slots_aviator_about_primary);
+        if (hasSlotsAviator) {
+            const sa = zip.folder(`${localeFolder}/slots_aviator`)!;
+            if (data.slots_aviator_about_primary)
+                sa.file("about_primary.json", JSON.stringify(data.slots_aviator_about_primary, null, 2));
+            sa.file("index.ts", indexForSlotsAviator());
+        }
+
         zip.file(
             `${localeFolder}/index.ts`,
             rootIndex(
@@ -173,7 +181,8 @@ const ValidatorPage = () => {
                 hasContacts,
                 hasFaq,
                 hasFooter,
-                hasHeader
+                hasHeader,
+                hasSlotsAviator
             )
         );
 
