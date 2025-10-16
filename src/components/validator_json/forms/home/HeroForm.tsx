@@ -5,7 +5,7 @@ import { type UseFormRegister } from "react-hook-form";
 
 type Props = { registerAction: UseFormRegister<any> };
 
-export default function SlotsHeroForm({ registerAction }: Props) {
+export default function HomeHeroForm({ registerAction }: Props) {
     return (
         <div className="space-y-[12px]">
             <label className="flex flex-col gap-[4px]">

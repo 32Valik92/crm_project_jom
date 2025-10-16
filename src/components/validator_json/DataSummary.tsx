@@ -47,6 +47,23 @@ const DataSummary = ({ data, BLOCK_META }: Props)=> {
         "sportsbook_basketball_about_primary",
         "sportsbook_football_about_primary",
 
+        "home_about",
+        "home_about_primary",
+        "home_bonuses",
+        "home_casino",
+        "home_faq",
+        "home_feature_cards",
+        "home_hero",
+        "home_how_to_start",
+        "home_mobile_app",
+        "home_payments",
+        "home_registration_guide",
+        "home_sports",
+        "home_support",
+        "home_top_feature",
+        "home_verification",
+
+        "seo_seo"
     ];
 
 

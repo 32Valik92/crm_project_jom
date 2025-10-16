@@ -14,7 +14,7 @@ import {
     indexForBonusCashback,
     indexForBonusDeposit,
     indexForBonusFreespin,
-    indexForBonusPromocode,
+    indexForBonusPromocode, indexForHome,
     indexForResponsibleGame,
     indexForSlots,
     indexForSlotsAviator,
@@ -25,7 +25,8 @@ import {
     indexForSlotsPlinko,
     indexForSlotsPopular,
     indexForSportsbook,
-    indexForSportsbookBasketball, indexForSportsbookFootball,
+    indexForSportsbookBasketball,
+    indexForSportsbookFootball,
     rootIndex
 } from "@/lib/generators";
 
@@ -169,6 +170,44 @@ const ValidatorPage = () => {
             header.file("index.ts", indexForHeader());
         }
 
+        const hasHome =
+            Boolean(data.home_about) ||
+            Boolean(data.home_about_primary) ||
+            Boolean(data.home_bonuses) ||
+            Boolean(data.home_casino) ||
+            Boolean(data.home_faq) ||
+            Boolean(data.home_feature_cards) ||
+            Boolean(data.home_hero) ||
+            Boolean(data.home_how_to_start) ||
+            Boolean(data.home_mobile_app) ||
+            Boolean(data.home_payments) ||
+            Boolean(data.home_registration_guide) ||
+            Boolean(data.home_sports) ||
+            Boolean(data.home_support) ||
+            Boolean(data.home_top_feature) ||
+            Boolean(data.home_verification);
+        if (hasHome) {
+            const home = zip.folder(`${localeFolder}/home`)!;
+
+            if (data.home_about) home.file("about.json", JSON.stringify(data.home_about, null, 2));
+            if (data.home_about_primary) home.file("about_primary.json", JSON.stringify(data.home_about_primary, null, 2));
+            if (data.home_bonuses) home.file("bonuses.json", JSON.stringify(data.home_bonuses, null, 2));
+            if (data.home_casino) home.file("casino.json", JSON.stringify(data.home_casino, null, 2));
+            if (data.home_faq) home.file("faq.json", JSON.stringify(data.home_faq, null, 2));
+            if (data.home_feature_cards) home.file("feature_cards.json", JSON.stringify(data.home_feature_cards, null, 2));
+            if (data.home_hero) home.file("hero.json", JSON.stringify(data.home_hero, null, 2));
+            if (data.home_how_to_start) home.file("how_to_start.json", JSON.stringify(data.home_how_to_start, null, 2));
+            if (data.home_mobile_app) home.file("mobile_app.json", JSON.stringify(data.home_mobile_app, null, 2));
+            if (data.home_payments) home.file("payments.json", JSON.stringify(data.home_payments, null, 2));
+            if (data.home_registration_guide) home.file("registration_guide.json", JSON.stringify(data.home_registration_guide, null, 2));
+            if (data.home_sports) home.file("sports.json", JSON.stringify(data.home_sports, null, 2));
+            if (data.home_support) home.file("support.json", JSON.stringify(data.home_support, null, 2));
+            if (data.home_top_feature) home.file("top_feature.json", JSON.stringify(data.home_top_feature, null, 2));
+            if (data.home_verification) home.file("verification.json", JSON.stringify(data.home_verification, null, 2));
+
+            home.file("index.ts", indexForHome());
+        }
+
         const hasResponsibleGame = Boolean(data.responsiblegame_about_primary);
 
         if (hasResponsibleGame) {
@@ -264,6 +303,11 @@ const ValidatorPage = () => {
             folder.file("index.ts", indexForSportsbookFootball());
         }
 
+        const hasSeo = Boolean(data.seo_seo);
+        if (hasSeo) {
+            zip.file(`${localeFolder}/seo.json`, JSON.stringify(data.seo_seo, null, 2));
+        }
+
         zip.file(
             `${localeFolder}/index.ts`,
             rootIndex(
@@ -279,6 +323,7 @@ const ValidatorPage = () => {
                 hasFaq,
                 hasFooter,
                 hasHeader,
+                hasHome,
                 hasResponsibleGame,
                 hasSlots,
                 hasSlotsAviator,
@@ -291,6 +336,7 @@ const ValidatorPage = () => {
                 hasSportsbook,
                 hasSportsbookBasketball,
                 hasSportsbookFootball,
+                hasSeo,
             )
         );
 

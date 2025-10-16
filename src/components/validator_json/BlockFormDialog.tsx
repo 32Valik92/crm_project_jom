@@ -1,9 +1,9 @@
 // src/components/validator_json/BlockFormDialog.tsx (повна заміна — прибрано `values`, додано reset після submit)
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import type { BlockKey } from "@/lib/schemas";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import type {BlockKey} from "@/lib/schemas";
 
 import AboutPrimaryForm from "@/components/validator_json/forms/AboutPrimaryForm";
 import AppAboutPrimaryForm from "@/components/validator_json/forms/AppAboutPrimaryForm";
@@ -36,11 +36,27 @@ import SlotsChickenRoadAboutPrimaryForm from "@/components/validator_json/forms/
 import SlotsPlinkoAboutPrimaryForm from "@/components/validator_json/forms/slots_plinko/AboutPrimaryForm";
 import SlotsPopularAboutPrimaryForm from "@/components/validator_json/forms/slots_popular/AboutPrimaryForm";
 import SlotsPopularCasinoForm from "@/components/validator_json/forms/slots_popular/CasinoForm";
-import SportsbookHeroForm from "@/components/validator_json/forms/sportsbook/BonusHeroForm";
 import SportsbookAboutPrimaryForm from "@/components/validator_json/forms/sportsbook/AboutPrimaryForm";
 import SportsbookBasketballAboutPrimaryForm
     from "@/components/validator_json/forms/sportsbook_basketball/AboutPrimaryForm";
 import SportsbookFootballAboutPrimaryForm from "@/components/validator_json/forms/sportsbook_football/AboutPrimaryForm";
+import SportsbookHeroForm from "@/components/validator_json/forms/sportsbook/HeroForm";
+import HomeAboutForm from "./forms/home/AboutForm";
+import HomeAboutPrimaryForm from "./forms/home/AboutPrimaryForm";
+import HomeBonusesForm from "./forms/home/BonusesForm";
+import HomeCasinoForm from "./forms/home/CasinoForm";
+import HomeFaqForm from "./forms/home/FaqForm";
+import HomeFeatureCardsForm from "./forms/home/FeatureCardsForm";
+import HomeHeroForm from "./forms/home/HeroForm";
+import HomeHowToStartForm from "./forms/home/HowToStartForm";
+import HomeMobileAppForm from "@/components/validator_json/forms/home/MobileAppForm";
+import HomePaymentsForm from "./forms/home/PaymentsForm";
+import HomeRegistrationGuideForm from "@/components/validator_json/forms/home/RegistrationGuideForm";
+import HomeSportsForm from "./forms/home/SportsForm";
+import HomeSupportForm from "@/components/validator_json/forms/home/SupportForm";
+import HomeTopFeatureForm from "@/components/validator_json/forms/home/TopFeatureForm";
+import HomeVerificationForm from "@/components/validator_json/forms/home/VerificationForm";
+import SeoForm from "./forms/seo/SeoForm";
 
 /** ---------- API ---------- */
 type Props = {
@@ -51,7 +67,7 @@ type Props = {
     onSave: (v: any) => void;
 };
 
-const BlockFormDialog = ({ schema, block, initialValues, onCancel, onSave }: Props) => {
+const BlockFormDialog = ({schema, block, initialValues, onCancel, onSave}: Props) => {
     return (
         <dialog id="formDialog" className="rounded-[12px] p-[0px]">
             <FormContent
@@ -68,7 +84,7 @@ const BlockFormDialog = ({ schema, block, initialValues, onCancel, onSave }: Pro
 export default BlockFormDialog;
 
 /** ---------- ВНУТРІШНЄ ВМІСТ ДІАЛОГУ ---------- */
-function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) {
+function FormContent({schema, block, initialValues, onCancel, onSave}: Props) {
     const form = useForm<any>({
         resolver: schema ? zodResolver(schema) : undefined,
         defaultValues: initialValues,
@@ -76,26 +92,9 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
 
     if (!block) return null;
 
-    const { register, handleSubmit, control, formState: { errors }, reset, watch, setValue } = form;
+    const {register, handleSubmit, control, formState: {errors}, reset, watch, setValue} = form;
 
     const draft = watch();
-
-    type RowProps = { label: string; name: string; as?: "input" | "textarea" };
-    const Row = ({ label, name, as = "input" }: RowProps) => (
-        <label className="flex flex-col gap-[4px]">
-            <span className="text-[12px] leading-[16px] text-[#525252]">{label}</span>
-            {as === "input" ? (
-                <input className="rounded-[4px] border p-[8px]" {...register(name)} />
-            ) : (
-                <textarea className="rounded-[4px] border p-[8px]" rows={4} {...register(name)} />
-            )}
-            {(errors as any)?.[name]?.message && (
-                <span className="text-[12px] leading-[16px] text-[#dc2626]">
-          {String((errors as any)[name].message)}
-        </span>
-            )}
-        </label>
-    );
 
     const onSubmit = handleSubmit((values) => {
         onSave(values);
@@ -122,7 +121,7 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
                 />
             }
             {block === "mobile_app" && (
-                <MobileAppForm control={control} registerAction={register} />
+                <MobileAppForm control={control} registerAction={register}/>
             )}
 
             {block === "bonus_about_primary" && (
@@ -133,9 +132,9 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
                 />
             )}
             {block === "bonus_bonuses" && (
-                <BonusBonusesForm control={control} registerAction={register} />
+                <BonusBonusesForm control={control} registerAction={register}/>
             )}
-            {block === "bonus_hero" && <BonusHeroForm RowComponent={Row} />}
+            {block === "bonus_hero" && <BonusHeroForm registerAction={register}/>}
 
             {block === "bonus_cashback_about_primary" && (
                 <BonusCashbackAboutPrimaryForm
@@ -153,7 +152,7 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
                 />
             )}
             {block === "bonus_deposit_bonuses" && (
-                <BonusDepositBonusesForm control={control} registerAction={register} />
+                <BonusDepositBonusesForm control={control} registerAction={register}/>
             )}
 
             {block === "bonus_freebet_about_primary" && (
@@ -164,7 +163,7 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
                 />
             )}
             {block === "bonus_freebet_bonuses" && (
-                <BonusFreebetBonusesForm control={control} registerAction={register} />
+                <BonusFreebetBonusesForm control={control} registerAction={register}/>
             )}
 
             {block === "bonus_freespin_about_primary" && (
@@ -175,7 +174,7 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
                 />
             )}
             {block === "bonus_freespin_bonuses" && (
-                <BonusFreespinBonusesForm control={control} registerAction={register} />
+                <BonusFreespinBonusesForm control={control} registerAction={register}/>
             )}
 
             {block === "bonus_promocode_about_primary" && (
@@ -186,7 +185,7 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
                 />
             )}
             {block === "bonus_promocode_bonuses" && (
-                <BonusPromocodeBonusesForm control={control} registerAction={register} />
+                <BonusPromocodeBonusesForm control={control} registerAction={register}/>
             )}
 
             {block === "contacts_about_primary" && (
@@ -206,11 +205,70 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
             )}
 
             {block === "footer_footer" && (
-                <FooterForm control={control} registerAction={register} />
+                <FooterForm control={control} registerAction={register}/>
             )}
 
             {block === "header_header" && (
-                <HeaderForm control={control} registerAction={register} sourceTemplate={draft} />
+                <HeaderForm control={control} registerAction={register} sourceTemplate={draft}/>
+            )}
+
+            {block === "home_about" && (
+                <HomeAboutForm
+                    control={control}
+                    registerAction={register}
+                />
+            )}
+            {block === "home_about_primary" && (
+                <HomeAboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}
+                />
+            )}
+            {block === "home_bonuses" && (
+                <HomeBonusesForm
+                    control={control}
+                    registerAction={register}
+                />
+            )}
+            {block === "home_casino" && (
+                <HomeCasinoForm
+                    control={control}
+                    registerAction={register}
+                />
+            )}
+            {block === "home_faq" && (
+                <HomeFaqForm control={control} registerAction={register} />
+            )}
+            {block === "home_feature_cards" && (
+                <HomeFeatureCardsForm control={control} registerAction={register} />
+            )}
+            {block === "home_hero" && <HomeHeroForm registerAction={register}/>}
+            {block === "home_how_to_start" && (
+                <HomeHowToStartForm control={control} registerAction={register} />
+            )}
+            {block === "home_mobile_app" && (
+                <HomeMobileAppForm control={control} registerAction={register} />
+            )}
+            {block === "home_payments" && (
+                <HomePaymentsForm control={control} registerAction={register} />
+            )}
+            {block === "home_registration_guide" && (
+                <HomeRegistrationGuideForm control={control} registerAction={register} />
+            )}
+            {block === "home_sports" && (
+                <HomeSportsForm control={control} registerAction={register} />
+            )}
+            {block === "home_support" && (
+                <HomeSupportForm control={control} registerAction={register} />
+            )}
+            {block === "home_top_feature" && (
+                <HomeTopFeatureForm control={control} registerAction={register} />
+            )}
+            {block === "home_verification" && (
+                <HomeVerificationForm
+                    registerAction={register}
+                    errors={(control)?._formState?.errors} />
             )}
 
             {block === "responsiblegame_about_primary" && (
@@ -234,10 +292,7 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
                     registerAction={register}
                 />
             )}
-            {block === "slots_hero" &&
-                <SlotsHeroForm
-                    RowComponent={Row}
-                />}
+            {block === "slots_hero" && <SlotsHeroForm registerAction={register}/>}
 
             {block === "slots_aviator_about_primary" && (
                 <SlotsAviatorAboutPrimaryForm
@@ -301,7 +356,7 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
                 />
             )}
             {block === "sportsbook_hero" && (
-                <SportsbookHeroForm RowComponent={Row} />
+                <SportsbookHeroForm registerAction={register}/>
             )}
 
             {block === "sportsbook_basketball_about_primary" && (
@@ -317,6 +372,14 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
                     control={control}
                     registerAction={register}
                     setValue={setValue}
+                />
+            )}
+
+            {block === "seo_seo" && (
+                <SeoForm
+                    control={control}
+                    registerAction={register}
+                    setValue={form.setValue}
                 />
             )}
 

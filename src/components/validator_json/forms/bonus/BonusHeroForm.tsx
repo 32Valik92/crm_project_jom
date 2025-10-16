@@ -1,27 +1,32 @@
-// components/validator_json/forms/bonus/BonusHeroForm.tsx
+// src/components/validator_json/forms/sportsbook/HeroForm.tsx
 "use client";
 
-import { JSX } from "react";
+import { type UseFormRegister } from "react-hook-form";
 
-type RowProps = {
-    label: string;
-    name: string;
-    as?: "input" | "textarea";
-};
+type Props = { registerAction: UseFormRegister<any> };
 
-type Props = {
-    RowComponent: (p: RowProps) => JSX.Element;
-};
-
-const BonusHeroForm = ({ RowComponent }: Props) => {
+export default function BonusHeroForm ({ registerAction }: Props) {
     return (
         <div className="space-y-[12px]">
-            <RowComponent label="badge" name="badge" />
-            <RowComponent label="title" name="title" />
-            <RowComponent label="cta" name="cta" />
-            <RowComponent label="description" name="description" as="textarea" />
+            <label className="flex flex-col gap-[4px]">
+                <span className="text-[12px] leading-[16px] text-[#525252]">badge</span>
+                <input className="rounded-[4px] border p-[8px]" {...registerAction("badge")} />
+            </label>
+
+            <label className="flex flex-col gap-[4px]">
+                <span className="text-[12px] leading-[16px] text-[#525252]">title</span>
+                <input className="rounded-[4px] border p-[8px]" {...registerAction("title")} />
+            </label>
+
+            <label className="flex flex-col gap-[4px]">
+                <span className="text-[12px] leading-[16px] text-[#525252]">cta</span>
+                <input className="rounded-[4px] border p-[8px]" {...registerAction("cta")} />
+            </label>
+
+            <label className="flex flex-col gap-[4px]">
+                <span className="text-[12px] leading-[16px] text-[#525252]">description</span>
+                <textarea className="rounded-[4px] border p-[8px]" rows={4} {...registerAction("description")} />
+            </label>
         </div>
     );
-};
-
-export default BonusHeroForm;
+}

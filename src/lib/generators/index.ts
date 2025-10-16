@@ -19,6 +19,7 @@ export { indexForSlotsPopular } from "./slots_popular";
 export { indexForSportsbook } from "./sportsbook";
 export { indexForSportsbookBasketball } from "./sportsbook_basketball";
 export { indexForSportsbookFootball } from "./sportsbook_football";
+export { indexForHome } from "./home";
 
 
 /**
@@ -36,6 +37,7 @@ export { indexForSportsbookFootball } from "./sportsbook_football";
  * @param hasFaq - "faq"
  * @param hasFooter - "footer"
  * @param hasHeader - "header"
+ * @param hasHome - "home"
  * @param hasResponsibleGame - "ResponsibleGame"
  * @param hasSlots - "slots"
  * @param hasSlotsAviator - "slots_aviator"
@@ -48,6 +50,7 @@ export { indexForSportsbookFootball } from "./sportsbook_football";
  * @param hasSportsbook - "Sportsbook"
  * @param hasSportsbookBasketball - "Sportsbook_Basketball"
  * @param hasSportsbookFootball - "Sportsbook_Football"
+ * @param hasSeo - "Seo"
  * @returns Вміст текстового файлу index.ts як рядок
  *
  * Приклад результату, якщо є обидва розділи:
@@ -67,6 +70,7 @@ export function rootIndex(
     hasFaq: boolean,
     hasFooter: boolean,
     hasHeader: boolean,
+    hasHome: boolean,
     hasResponsibleGame: boolean,
     hasSlots: boolean,
     hasSlotsAviator: boolean,
@@ -79,6 +83,7 @@ export function rootIndex(
     hasSportsbook: boolean,
     hasSportsbookBasketball: boolean,
     hasSportsbookFootball: boolean,
+    hasSeo: boolean,
 ) {
     // Створюємо масив рядків для майбутнього вмісту index.ts
     const lines: string[] = [];
@@ -109,6 +114,8 @@ export function rootIndex(
 
     if (hasHeader) lines.push("export { default as header } from './header';");
 
+    if (hasHome) lines.push("export { default as home } from './home';");
+
     if (hasResponsibleGame) lines.push("export { default as responsiblegame } from './responsiblegame';");
 
     if (hasSlots) lines.push("export { default as slots } from './slots';");
@@ -132,6 +139,8 @@ export function rootIndex(
     if (hasSportsbookBasketball) lines.push("export { default as sportsbook_basketball } from './sportsbook_basketball';");
 
     if (hasSportsbookFootball) lines.push("export { default as sportsbook_football } from './sportsbook_football';");
+
+    if (hasSeo) lines.push("export { default as seo } from './seo.json';");
 
     // Об’єднуємо рядки у єдиний текст, додаючи перенос рядка між ними
     // Якщо масив порожній — повертаємо пустий рядок
