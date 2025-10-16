@@ -16,6 +16,10 @@ export { indexForSlotsChickenRoad } from "./slots_chickenroad";
 export { indexForSlotsFruitCocktail } from "./slots_fruitcocktail";
 export { indexForSlotsPlinko } from "./slots_plinko";
 export { indexForSlotsPopular } from "./slots_popular";
+export { indexForSportsbook } from "./sportsbook";
+export { indexForSportsbookBasketball } from "./sportsbook_basketball";
+export { indexForSportsbookFootball } from "./sportsbook_football";
+
 
 /**
  * Генератор головного файлу index.ts у кореневій папці локалі.
@@ -41,6 +45,9 @@ export { indexForSlotsPopular } from "./slots_popular";
  * @param hasSlotsFruitCocktail - "Slots_FruitCocktail"
  * @param hasSlotsPlinko - "Slots_Plinko"
  * @param hasSlotsPopular - "Slots_Popular"
+ * @param hasSportsbook - "Sportsbook"
+ * @param hasSportsbookBasketball - "Sportsbook_Basketball"
+ * @param hasSportsbookFootball - "Sportsbook_Football"
  * @returns Вміст текстового файлу index.ts як рядок
  *
  * Приклад результату, якщо є обидва розділи:
@@ -69,6 +76,9 @@ export function rootIndex(
     hasSlotsFruitCocktail: boolean,
     hasSlotsPlinko: boolean,
     hasSlotsPopular: boolean,
+    hasSportsbook: boolean,
+    hasSportsbookBasketball: boolean,
+    hasSportsbookFootball: boolean,
 ) {
     // Створюємо масив рядків для майбутнього вмісту index.ts
     const lines: string[] = [];
@@ -116,6 +126,12 @@ export function rootIndex(
     if (hasSlotsPlinko) lines.push("export { default as slots_plinko } from './slots_plinko';");
 
     if (hasSlotsPopular) lines.push("export { default as slots_popular } from './slots_popular';");
+
+    if (hasSportsbook) lines.push("export { default as sportsbook } from './sportsbook';");
+
+    if (hasSportsbookBasketball) lines.push("export { default as sportsbook_basketball } from './sportsbook_basketball';");
+
+    if (hasSportsbookFootball) lines.push("export { default as sportsbook_football } from './sportsbook_football';");
 
     // Об’єднуємо рядки у єдиний текст, додаючи перенос рядка між ними
     // Якщо масив порожній — повертаємо пустий рядок

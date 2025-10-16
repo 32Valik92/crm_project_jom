@@ -27,7 +27,6 @@ const DataSummary = ({ data, BLOCK_META }: Props)=> {
         "bonus_promocode_about_primary",
         "bonus_promocode_bonuses",
         "contacts_about_primary",
-        "contacts_about_secondary",
         "faq_about_primary",
         "footer_footer",
         "header_header",
@@ -43,6 +42,10 @@ const DataSummary = ({ data, BLOCK_META }: Props)=> {
         "slots_plinko_about_primary",
         "slots_popular_about_primary",
         "slots_popular_casino",
+        "sportsbook_about_primary",
+        "sportsbook_hero",
+        "sportsbook_basketball_about_primary",
+        "sportsbook_football_about_primary",
 
     ];
 

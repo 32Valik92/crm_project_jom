@@ -21,7 +21,11 @@ import {
     indexForSlotsBookOfDead,
     indexForSlotsBookOfRaDeluxe,
     indexForSlotsChickenRoad,
-    indexForSlotsFruitCocktail, indexForSlotsPlinko, indexForSlotsPopular,
+    indexForSlotsFruitCocktail,
+    indexForSlotsPlinko,
+    indexForSlotsPopular,
+    indexForSportsbook,
+    indexForSportsbookBasketball, indexForSportsbookFootball,
     rootIndex
 } from "@/lib/generators";
 
@@ -133,13 +137,11 @@ const ValidatorPage = () => {
             bonusPromocode.file("index.ts", indexForBonusPromocode());
         }
 
-        const hasContacts = Boolean(data.contacts_about_primary || data.contacts_about_secondary);
+        const hasContacts = Boolean(data.contacts_about_primary);
         if (hasContacts) {
             const contacts = zip.folder(`${localeFolder}/contacts`)!;
             if (data.contacts_about_primary)
                 contacts.file("about_primary.json", JSON.stringify(data.contacts_about_primary, null, 2));
-            if (data.contacts_about_secondary)
-                contacts.file("about_secondary.json", JSON.stringify(data.contacts_about_secondary, null, 2));
             contacts.file("index.ts", indexForContacts());
         }
 
@@ -238,6 +240,30 @@ const ValidatorPage = () => {
             folder.file("index.ts", indexForSlotsPopular());
         }
 
+        const hasSportsbook = Boolean(data.sportsbook_about_primary || data.sportsbook_hero);
+        if (hasSportsbook) {
+            const folder = zip.folder(`${localeFolder}/sportsbook`)!;
+            if (data.sportsbook_about_primary)
+                folder.file("about_primary.json", JSON.stringify(data.sportsbook_about_primary, null, 2));
+            if (data.sportsbook_hero)
+                folder.file("hero.json", JSON.stringify(data.sportsbook_hero, null, 2));
+            folder.file("index.ts", indexForSportsbook());
+        }
+
+        const hasSportsbookBasketball = Boolean(data.sportsbook_basketball_about_primary);
+        if (hasSportsbookBasketball) {
+            const folder = zip.folder(`${localeFolder}/sportsbook_basketball`)!;
+            folder.file("about_primary.json", JSON.stringify(data.sportsbook_basketball_about_primary, null, 2));
+            folder.file("index.ts", indexForSportsbookBasketball());
+        }
+
+        const hasSportsbookFootball = Boolean(data.sportsbook_football_about_primary);
+        if (hasSportsbookFootball) {
+            const folder = zip.folder(`${localeFolder}/sportsbook_football`)!;
+            folder.file("about_primary.json", JSON.stringify(data.sportsbook_football_about_primary, null, 2));
+            folder.file("index.ts", indexForSportsbookFootball());
+        }
+
         zip.file(
             `${localeFolder}/index.ts`,
             rootIndex(
@@ -262,7 +288,9 @@ const ValidatorPage = () => {
                 hasSlotsFruitCocktail,
                 hasSlotsPlinko,
                 hasSlotsPopular,
-
+                hasSportsbook,
+                hasSportsbookBasketball,
+                hasSportsbookFootball,
             )
         );
 

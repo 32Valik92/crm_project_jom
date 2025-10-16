@@ -44,8 +44,6 @@ export type { BonusPromocodeBonuses } from "./bonus_promocode/bonuses";
 
 export { contacts_about_primary_schema } from "./contacts/about_primary";
 export type { ContactsAboutPrimary } from "./contacts/about_primary";
-export { contacts_about_secondary_schema } from "./contacts/about_secondary";
-export type { ContactsAboutSecondary } from "./contacts/about_secondary";
 
 export { faq_about_primary_schema } from "./faq/about_primary";
 export type { FaqAboutPrimary } from "./faq/about_primary";
@@ -89,6 +87,18 @@ export type { SlotsPopularAboutPrimary } from "./slots_popular/about_primary";
 export { slots_popular_casino_schema } from "./slots_popular/casino";
 export type { SlotsPopularCasino } from "./slots_popular/casino";
 
+export { sportsbook_about_primary_schema } from "./sportsbook/about_primary";
+export type { SportsbookAboutPrimary } from "./sportsbook/about_primary";
+export { sportsbook_hero_schema } from "./sportsbook/hero";
+export type { SportsbookHero } from "./sportsbook/hero";
+
+export { sportsbook_basketball_about_primary_schema } from "./sportsbook_basketball/about_primary";
+export type { SportsbookBasketballAboutPrimary } from "./sportsbook_basketball/about_primary";
+
+export { sportsbook_football_about_primary_schema } from "./sportsbook_football/about_primary";
+export type { SportsbookFootballAboutPrimary } from "./sportsbook_football/about_primary";
+
+
 export const BLOCK_SCHEMAS = {
     about_primary: require("./about/about_primary").about_primary_schema,
 
@@ -114,7 +124,6 @@ export const BLOCK_SCHEMAS = {
     bonus_promocode_bonuses: require("./bonus_promocode/bonuses").bonus_promocode_bonuses_schema,
 
     contacts_about_primary: require("./contacts/about_primary").contacts_about_primary_schema,
-    contacts_about_secondary: require("./contacts/about_secondary").contacts_about_secondary_schema,
 
     faq_about_primary: require("./faq/about_primary").faq_about_primary_schema,
 
@@ -143,6 +152,13 @@ export const BLOCK_SCHEMAS = {
     slots_popular_about_primary: require("./slots_popular/about_primary").slots_popular_about_primary_schema,
     slots_popular_casino: require("./slots_popular/casino").slots_popular_casino_schema,
 
+    sportsbook_about_primary: require("./sportsbook/about_primary").sportsbook_about_primary_schema,
+    sportsbook_hero: require("./sportsbook/hero").sportsbook_hero_schema,
+
+    sportsbook_basketball_about_primary: require("./sportsbook_basketball/about_primary").sportsbook_basketball_about_primary_schema,
+
+    sportsbook_football_about_primary: require("./sportsbook_football/about_primary").sportsbook_football_about_primary_schema,
+
 } as const;
 
 export type AnyBlockValue =
@@ -162,7 +178,6 @@ export type AnyBlockValue =
     | import("./bonus_promocode/about_primary").BonusPromocodeAboutPrimary
     | import("./bonus_promocode/bonuses").BonusPromocodeBonuses
     | import("./contacts/about_primary").ContactsAboutPrimary
-    | import("./contacts/about_secondary").ContactsAboutSecondary
     | import("./faq/about_primary").FaqAboutPrimary
     | import("./footer/footer").FooterData
     | import("./header/header").HeaderData
@@ -177,4 +192,8 @@ export type AnyBlockValue =
     | import("./slots_fruitcocktail/about_primary").SlotsFruitCocktailAboutPrimary
     | import("./slots_plinko/about_primary").SlotsPlinkoAboutPrimary
     | import("./slots_popular/about_primary").SlotsPopularAboutPrimary
-    | import("./slots_popular/casino").SlotsPopularCasino;
+    | import("./slots_popular/casino").SlotsPopularCasino
+    | import("./sportsbook/about_primary").SportsbookAboutPrimary
+    | import("./sportsbook/hero").SportsbookHero
+    | import("./sportsbook_basketball/about_primary").SportsbookBasketballAboutPrimary
+    | import("./sportsbook_football/about_primary").SportsbookFootballAboutPrimary;

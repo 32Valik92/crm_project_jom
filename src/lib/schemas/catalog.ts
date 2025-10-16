@@ -5,7 +5,7 @@ export type PageKey =
     | "contacts" | "faq" | "footer" | "header"
     | "slots_aviator" | "responsiblegame" | "slots" | "slots_bookofdead"
     | "slots_bookofradeluxe" | "slots_chickenroad" | "slots_fruitcocktail" | "slots_plinko"
-    | "slots_popular";
+    | "slots_popular" | "sportsbook" | "sportsbook_basketball" | "sportsbook_football";
 
 export type BlockKey =
     | "about_primary" | "app_about_primary" | "mobile_app"
@@ -15,7 +15,7 @@ export type BlockKey =
     | "bonus_freebet_about_primary" | "bonus_freebet_bonuses"
     | "bonus_freespin_about_primary" | "bonus_freespin_bonuses"
     | "bonus_promocode_about_primary" | "bonus_promocode_bonuses"
-    | "contacts_about_primary" | "contacts_about_secondary"
+    | "contacts_about_primary"
     | "faq_about_primary"
     | "footer_footer"
     | "header_header"
@@ -28,7 +28,10 @@ export type BlockKey =
     | "slots_chickenroad_about_primary"
     | "slots_fruitcocktail_about_primary"
     | "slots_plinko_about_primary"
-    | "slots_popular_about_primary" | "slots_popular_casino";
+    | "slots_popular_about_primary" | "slots_popular_casino"
+    | "sportsbook_about_primary" | "sportsbook_hero"
+    | "sportsbook_basketball_about_primary"
+    | "sportsbook_football_about_primary";
 
 export const PAGES: Record<PageKey, { label: string; blocks: BlockKey[] }> = {
     about: { label: "About page", blocks: ["about_primary"] },
@@ -39,7 +42,7 @@ export const PAGES: Record<PageKey, { label: string; blocks: BlockKey[] }> = {
     bonus_freebet: { label: "Bonus Freebet page", blocks: ["bonus_freebet_about_primary", "bonus_freebet_bonuses"] },
     bonus_freespin: { label: "Bonus Freespin page", blocks: ["bonus_freespin_about_primary", "bonus_freespin_bonuses"] },
     bonus_promocode: { label: "Bonus Promocode page", blocks: ["bonus_promocode_about_primary", "bonus_promocode_bonuses"] },
-    contacts: { label: "Contacts page", blocks: ["contacts_about_primary", "contacts_about_secondary"] },
+    contacts: { label: "Contacts page", blocks: ["contacts_about_primary"] },
     faq: { label: "FAQ page", blocks: ["faq_about_primary"] },
     footer: { label: "Footer", blocks: ["footer_footer"] },
     header: { label: "Header", blocks: ["header_header"] },
@@ -52,6 +55,9 @@ export const PAGES: Record<PageKey, { label: string; blocks: BlockKey[] }> = {
     slots_fruitcocktail: { label: "Slots / Fruit Cocktail", blocks: ["slots_fruitcocktail_about_primary"] },
     slots_plinko: { label: "Slots / Plinko", blocks: ["slots_plinko_about_primary"] },
     slots_popular: { label: "Slots / Popular", blocks: ["slots_popular_about_primary", "slots_popular_casino"] },
+    sportsbook: { label: "Sportsbook", blocks: ["sportsbook_about_primary", "sportsbook_hero"] },
+    sportsbook_basketball: { label: "Sportsbook / Basketball", blocks: ["sportsbook_basketball_about_primary"] },
+    sportsbook_football: { label: "Sportsbook / Football", blocks: ["sportsbook_football_about_primary"] },
 
 
 };
@@ -73,7 +79,6 @@ export const BLOCK_META: Record<BlockKey, { label: string; file: string }> = {
     bonus_promocode_about_primary: { label: "Bonus Promocode / About Primary", file: "about_primary.json" },
     bonus_promocode_bonuses: { label: "Bonus Promocode / Bonuses", file: "bonuses.json" },
     contacts_about_primary: { label: "Contacts / About Primary", file: "about_primary.json" },
-    contacts_about_secondary: { label: "Contacts / About Secondary", file: "about_secondary.json" },
     faq_about_primary: { label: "FAQ / About Primary", file: "about_primary.json" },
     footer_footer: { label: "Footer / Data", file: "footer.json" },
     header_header: { label: "Header / Data", file: "header.json" },
@@ -89,5 +94,9 @@ export const BLOCK_META: Record<BlockKey, { label: string; file: string }> = {
     slots_plinko_about_primary: { label: "Slots Plinko / About Primary", file: "about_primary.json" },
     slots_popular_about_primary: { label: "Slots Popular / About Primary", file: "about_primary.json" },
     slots_popular_casino: { label: "Slots Popular / Casino", file: "casino.json" },
+    sportsbook_about_primary: { label: "Sportsbook / About Primary", file: "about_primary.json" },
+    sportsbook_hero: { label: "Sportsbook / Hero", file: "hero.json" },
+    sportsbook_basketball_about_primary: { label: "Sportsbook Basketball / About Primary", file: "about_primary.json" },
+    sportsbook_football_about_primary: { label: "Sportsbook Football / About Primary", file: "about_primary.json" },
 
 };

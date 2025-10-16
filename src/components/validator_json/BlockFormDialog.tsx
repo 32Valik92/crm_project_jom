@@ -21,7 +21,6 @@ import BonusFreespinBonusesForm from "@/components/validator_json/forms/bonus_fr
 import BonusPromocodeAboutPrimaryForm from "@/components/validator_json/forms/bonus_promocode/AboutPrimaryForm";
 import BonusPromocodeBonusesForm from "@/components/validator_json/forms/bonus_promocode/BonusesForm";
 import ContactsAboutPrimaryForm from "@/components/validator_json/forms/contacts/AboutPrimaryForm";
-import ContactsAboutSecondaryForm from "@/components/validator_json/forms/contacts/AboutSecondaryForm";
 import FaqAboutPrimaryForm from "@/components/validator_json/forms/faq/AboutPrimaryForm";
 import FooterForm from "@/components/validator_json/forms/footer/FooterForm";
 import HeaderForm from "@/components/validator_json/forms/header/HeaderForm";
@@ -37,6 +36,11 @@ import SlotsChickenRoadAboutPrimaryForm from "@/components/validator_json/forms/
 import SlotsPlinkoAboutPrimaryForm from "@/components/validator_json/forms/slots_plinko/AboutPrimaryForm";
 import SlotsPopularAboutPrimaryForm from "@/components/validator_json/forms/slots_popular/AboutPrimaryForm";
 import SlotsPopularCasinoForm from "@/components/validator_json/forms/slots_popular/CasinoForm";
+import SportsbookHeroForm from "@/components/validator_json/forms/sportsbook/BonusHeroForm";
+import SportsbookAboutPrimaryForm from "@/components/validator_json/forms/sportsbook/AboutPrimaryForm";
+import SportsbookBasketballAboutPrimaryForm
+    from "@/components/validator_json/forms/sportsbook_basketball/AboutPrimaryForm";
+import SportsbookFootballAboutPrimaryForm from "@/components/validator_json/forms/sportsbook_football/AboutPrimaryForm";
 
 /** ---------- API ---------- */
 type Props = {
@@ -192,9 +196,6 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
                     setValue={setValue}
                 />
             )}
-            {block === "contacts_about_secondary" && (
-                <ContactsAboutSecondaryForm control={control} registerAction={register} />
-            )}
 
             {block === "faq_about_primary" && (
                 <FaqAboutPrimaryForm
@@ -289,6 +290,33 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
                 <SlotsPopularCasinoForm
                     control={control}
                     registerAction={register}
+                />
+            )}
+
+            {block === "sportsbook_about_primary" && (
+                <SportsbookAboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}
+                />
+            )}
+            {block === "sportsbook_hero" && (
+                <SportsbookHeroForm RowComponent={Row} />
+            )}
+
+            {block === "sportsbook_basketball_about_primary" && (
+                <SportsbookBasketballAboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}
+                />
+            )}
+
+            {block === "sportsbook_football_about_primary" && (
+                <SportsbookFootballAboutPrimaryForm
+                    control={control}
+                    registerAction={register}
+                    setValue={setValue}
                 />
             )}
 
