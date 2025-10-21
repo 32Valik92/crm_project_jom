@@ -1,4 +1,3 @@
-// src/lib/schemas/index.ts
 export {PAGES, BLOCK_META} from "./catalog";
 export type {PageKey, BlockKey} from "./catalog";
 
