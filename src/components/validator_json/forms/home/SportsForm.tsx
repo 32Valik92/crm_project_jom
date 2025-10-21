@@ -23,75 +23,90 @@ export default function HomeSportsForm({
 
     const err = (p: string) => p.split(".").reduce((a, k) => (a ? a[k] : undefined), errors);
     const cls = (bad: boolean) =>
-        ["rounded-[4px] border p-[8px] w-full", bad ? "border-[#dc2626]" : ""].join(" ");
+        [
+            "rounded-md border px-3 py-2 w-full",
+            "bg-slate-900 border-slate-600 text-slate-50 outline-none",
+            "focus:border-sky-500 focus:ring-2 focus:ring-sky-500",
+            bad ? "border-red-600" : "",
+        ].join(" ");
 
     return (
-        <div className="space-y-[16px]">
+        <div className="space-y-4">
             {/* title */}
-            <div className="flex flex-col gap-[4px]">
-                <span className="text-[12px] leading-[16px] text-[#525252]">title</span>
+            <div className="flex flex-col gap-1.5">
+        <span className="text-xs font-semibold uppercase tracking-wide">
+          title
+        </span>
                 <input className={cls(!!err("title"))} {...registerAction("title")} />
                 {!!err("title") && (
-                    <span className="text-[12px] leading-[16px] text-[#dc2626]">
-            {String(err("title")?.message)}
-          </span>
+                    <span className="text-xs text-red-500">{String(err("title")?.message)}</span>
                 )}
             </div>
 
             {/* subtitle */}
-            <div className="flex flex-col gap-[4px]">
-                <span className="text-[12px] leading-[16px] text-[#525252]">subtitle</span>
+            <div className="flex flex-col gap-1.5">
+        <span className="text-xs font-semibold uppercase tracking-wide">
+          subtitle
+        </span>
                 <input className={cls(!!err("subtitle"))} {...registerAction("subtitle")} />
                 {!!err("subtitle") && (
-                    <span className="text-[12px] leading-[16px] text-[#dc2626]">
-            {String(err("subtitle")?.message)}
-          </span>
+                    <span className="text-xs text-red-500">{String(err("subtitle")?.message)}</span>
                 )}
             </div>
 
             {/* cards */}
-            <div className="space-y-[8px] rounded-[6px] border p-[12px]">
-                <div className="text-[14px] leading-[20px] font-medium">cards</div>
+            <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4">
+                <div className="text-sm font-semibold text-slate-100">cards</div>
 
                 {cardsFA.fields.map((card, cIdx) => {
                     const base = `cards.${cIdx}`;
                     return (
-                        <div key={card.id} className="rounded-[6px] border p-[12px] space-y-[8px]">
-                            <div className="grid md:grid-cols-5 gap-[8px]">
-                                <div className="md:col-span-2 flex flex-col gap-[4px]">
-                                    <span className="text-[12px] leading-[16px] text-[#525252]">{base}.icon</span>
+                        <div key={card.id} className="space-y-3 rounded-xl border border-slate-700 bg-slate-900 p-4">
+                            <div className="grid gap-2 md:grid-cols-5">
+                                {/* icon */}
+                                <div className="md:col-span-2 flex flex-col gap-1.5">
+                  <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
+                    {base}.icon
+                  </span>
                                     <input className={cls(!!err(`${base}.icon`))} {...registerAction(`${base}.icon`)} />
                                     {!!err(`${base}.icon`) && (
-                                        <span className="text-[12px] leading-[16px] text-[#dc2626]">
+                                        <span className="text-xs text-red-500">
                       {String(err(`${base}.icon`)?.message)}
                     </span>
                                     )}
                                 </div>
 
-                                <div className="md:col-span-1 flex flex-col gap-[4px]">
-                                    <span className="text-[12px] leading-[16px] text-[#525252]">{base}.title</span>
+                                {/* title */}
+                                <div className="md:col-span-1 flex flex-col gap-1.5">
+                  <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
+                    {base}.title
+                  </span>
                                     <input className={cls(!!err(`${base}.title`))} {...registerAction(`${base}.title`)} />
                                     {!!err(`${base}.title`) && (
-                                        <span className="text-[12px] leading-[16px] text-[#dc2626]">
+                                        <span className="text-xs text-red-500">
                       {String(err(`${base}.title`)?.message)}
                     </span>
                                     )}
                                 </div>
 
-                                <div className="md:col-span-2 flex flex-col gap-[4px]">
-                                    <span className="text-[12px] leading-[16px] text-[#525252]">{base}.subtitle</span>
+                                {/* subtitle */}
+                                <div className="md:col-span-2 flex flex-col gap-1.5">
+                  <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
+                    {base}.subtitle
+                  </span>
                                     <input className={cls(!!err(`${base}.subtitle`))} {...registerAction(`${base}.subtitle`)} />
                                     {!!err(`${base}.subtitle`) && (
-                                        <span className="text-[12px] leading-[16px] text-[#dc2626]">
+                                        <span className="text-xs text-red-500">
                       {String(err(`${base}.subtitle`)?.message)}
                     </span>
                                     )}
                                 </div>
 
-                                <div className="md:col-span-5">
+                                {/* remove */}
+                                <div className="md:col-span-5 flex justify-end">
                                     <button
                                         type="button"
-                                        className="text-[12px] leading-[16px] underline"
+                                        className="rounded-md bg-slate-700 px-2 py-1 text-xs text-slate-100 transition hover:bg-red-700"
                                         onClick={() => cardsFA.remove(cIdx)}
                                     >
                                         ×
@@ -104,7 +119,7 @@ export default function HomeSportsForm({
 
                 <button
                     type="button"
-                    className="rounded-[4px] border px-[8px] py-[4px] text-[12px] leading-[16px]"
+                    className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-xs font-medium text-slate-100 transition hover:bg-slate-700"
                     onClick={() => cardsFA.append({ icon: "", title: "", subtitle: "" })}
                 >
                     Додати картку

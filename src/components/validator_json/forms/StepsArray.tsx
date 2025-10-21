@@ -1,7 +1,8 @@
+// src/components/validator_json/forms/StepsArray.tsx
 "use client";
 
-import {useEffect} from "react";
-import {type Control, useFieldArray, type UseFormRegister} from "react-hook-form";
+import { useEffect } from "react";
+import { type Control, useFieldArray, type UseFormRegister } from "react-hook-form";
 
 type Props = {
     control: Control;
@@ -10,36 +11,39 @@ type Props = {
     addLabel: string;
 };
 
-const StepsArray = ({control, registerAction, namePrefix, addLabel}: Props) => {
+const StepsArray = ({ control, registerAction, namePrefix, addLabel }: Props) => {
     // Підключаємо масив за вказаним шляхом namePrefix
-    // Напр.: namePrefix = "cards.0.steps" -> редагуємо steps усередині нульової картки
-    const {fields, append, remove} = useFieldArray({
+    const { fields, append, remove } = useFieldArray({
         control,
-        // RHF очікує точний шлях як generic; якщо типи строгі — задай Control<Schema> і прибери 'as any'
         name: namePrefix as any,
     });
 
-    // Гарантуємо, що масив ніколи не порожній: автододаємо 1 елемент
+    // Гарантуємо, що масив ніколи не порожній
     useEffect(() => {
         if (fields.length === 0) {
-            append(""); // Додаємо пустий рядок (крок/пункт)
+            append("");
         }
     }, [fields.length, append]);
 
+    const inputCls =
+        [
+            "w-full rounded-md border px-3 py-2",
+            "bg-slate-900 border-slate-600 text-slate-50 outline-none",
+            "focus:border-sky-500 focus:ring-2 focus:ring-sky-500",
+        ].join(" ");
+
     return (
-        <div className="bg-[#fafafa] rounded-[6px] p-[8px] space-y-[8px]">
-            {/* Рендеримо кожний елемент масиву як input + кнопка видалення */}
+        <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4">
+            {/* Кожен елемент масиву: input + видалити */}
             {fields.map((f, idx) => (
-                <div key={f.id} className="flex items-center gap-[8px]">
-                    {/* Регіструємо поле за індексом у масиві:
-                        namePrefix = "cards.0.steps" -> "cards.0.steps.0" | "cards.0.steps.1" ... */}
+                <div key={f.id} className="flex items-center gap-2">
                     <input
-                        className="w-full rounded-[4px] border p-[8px] text-[16px] leading-[24px]"
+                        className={inputCls}
                         {...registerAction(`${namePrefix}.${idx}`)}
                     />
                     <button
                         type="button"
-                        className="text-[12px] leading-[16px] underline"
+                        className="rounded-md bg-slate-700 px-2 py-1 text-xs text-slate-100 transition hover:bg-red-700"
                         onClick={() => remove(idx)}
                         aria-label="Видалити"
                         title="Видалити"
@@ -52,13 +56,13 @@ const StepsArray = ({control, registerAction, namePrefix, addLabel}: Props) => {
             {/* Додати новий елемент у кінець масиву */}
             <button
                 type="button"
-                className="rounded-[4px] border px-[8px] py-[4px] text-[12px] leading-[16px]"
+                className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-xs font-medium text-slate-100 transition hover:bg-slate-700"
                 onClick={() => append("")}
             >
                 {addLabel}
             </button>
         </div>
     );
-}
+};
 
 export default StepsArray;

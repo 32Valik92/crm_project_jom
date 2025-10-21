@@ -21,15 +21,19 @@ export default function HomeFeatureCardsForm({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const err = (path: string) =>
-        path.split(".").reduce((a, k) => (a ? a[k] : undefined), errors);
+    const err = (path: string) => path.split(".").reduce((a, k) => (a ? a[k] : undefined), errors);
     const cls = (has: boolean) =>
-        ["rounded-[4px] border p-[8px] w-full", has ? "border-[#dc2626]" : ""].join(" ");
+        [
+            "rounded-md border px-3 py-2 w-full",
+            "bg-slate-900 border-slate-600 text-slate-50 outline-none",
+            "focus:border-sky-500 focus:ring-2 focus:ring-sky-500",
+            has ? "border-red-600" : "",
+        ].join(" ");
 
     return (
-        <div className="space-y-[12px]">
-            <div className="rounded-[6px] border p-[12px] space-y-[8px]">
-                <div className="text-[14px] leading-[20px] font-medium">items</div>
+        <div className="space-y-4">
+            <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4">
+                <div className="text-sm font-semibold text-slate-100">items</div>
 
                 {itemsFA.fields.map((f, i) => {
                     const iconP = `items.${i}.icon`;
@@ -37,48 +41,49 @@ export default function HomeFeatureCardsForm({
                     const subtP = `items.${i}.subtitle`;
 
                     return (
-                        <div key={f.id} className="rounded-[6px] border p-[12px] space-y-[8px]">
-                            <div className="grid md:grid-cols-3 gap-[8px]">
-                                <div className="flex flex-col gap-[4px]">
+                        <div key={f.id} className="space-y-3 rounded-xl border border-slate-700 bg-slate-900 p-4">
+                            <div className="grid gap-3 md:grid-cols-3">
+                                {/* icon */}
+                                <div className="flex flex-col gap-1.5">
                                     <input className={cls(!!err(iconP))} placeholder="icon" {...registerAction(iconP)} />
                                     {!!err(iconP) && (
-                                        <span className="text-[12px] leading-[16px] text-[#dc2626]">
-                      {String(err(iconP)?.message)}
-                    </span>
+                                        <span className="text-xs text-red-500">{String(err(iconP)?.message)}</span>
                                     )}
                                 </div>
-                                <div className="flex flex-col gap-[4px]">
+
+                                {/* title */}
+                                <div className="flex flex-col gap-1.5">
                                     <input className={cls(!!err(titleP))} placeholder="title" {...registerAction(titleP)} />
                                     {!!err(titleP) && (
-                                        <span className="text-[12px] leading-[16px] text-[#dc2626]">
-                      {String(err(titleP)?.message)}
-                    </span>
+                                        <span className="text-xs text-red-500">{String(err(titleP)?.message)}</span>
                                     )}
                                 </div>
-                                <div className="flex flex-col gap-[4px]">
+
+                                {/* subtitle */}
+                                <div className="flex flex-col gap-1.5">
                                     <input className={cls(!!err(subtP))} placeholder="subtitle" {...registerAction(subtP)} />
                                     {!!err(subtP) && (
-                                        <span className="text-[12px] leading-[16px] text-[#dc2626]">
-                      {String(err(subtP)?.message)}
-                    </span>
+                                        <span className="text-xs text-red-500">{String(err(subtP)?.message)}</span>
                                     )}
                                 </div>
                             </div>
 
-                            <button
-                                type="button"
-                                className="text-[12px] leading-[16px] underline"
-                                onClick={() => itemsFA.remove(i)}
-                            >
-                                ×
-                            </button>
+                            <div className="flex justify-end">
+                                <button
+                                    type="button"
+                                    className="rounded-md bg-slate-700 px-2 py-1 text-xs text-slate-100 transition hover:bg-red-700"
+                                    onClick={() => itemsFA.remove(i)}
+                                >
+                                    ×
+                                </button>
+                            </div>
                         </div>
                     );
                 })}
 
                 <button
                     type="button"
-                    className="rounded-[4px] border px-[8px] py-[4px] text-[12px] leading-[16px]"
+                    className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-xs font-medium text-slate-100 transition hover:bg-slate-700"
                     onClick={() => itemsFA.append({ icon: "", title: "", subtitle: "" })}
                 >
                     Додати картку

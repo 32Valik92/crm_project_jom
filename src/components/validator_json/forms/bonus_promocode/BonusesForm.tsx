@@ -1,16 +1,12 @@
-// src/components/validator_json/forms/bonus_promocode/BonusesForm.tsx
 "use client";
 
-import { useEffect } from "react";
+import { JSX, useEffect } from "react";
 import { type Control, type UseFormRegister, useFieldArray } from "react-hook-form";
 
-export default function BonusPromocodeBonusesForm({
-                                                      control,
-                                                      registerAction,
-                                                  }: {
-    control: Control;
-    registerAction: UseFormRegister<any>;
-}) {
+type RowProps = { label: string; name: string; as?: "input" | "textarea" };
+type Props = { control: Control; registerAction: UseFormRegister<any>; RowComponent?: (p: RowProps) => JSX.Element };
+
+export default function BonusPromocodeBonusesForm({ control, registerAction }: Props) {
     const tabsFA = useFieldArray({ control, name: "tabs" as any });
     const cardsFA = useFieldArray({ control, name: "cards" as any });
 
@@ -22,27 +18,48 @@ export default function BonusPromocodeBonusesForm({
     }, []);
 
     return (
-        <div className="space-y-[12px]">
-            <label className="flex flex-col gap-[4px]">
-                <span className="text-[12px] leading-[16px] text-[#525252]">title</span>
-                <input className="rounded-[4px] border p-[8px]" {...registerAction("title")} />
+        <div className="space-y-5">
+            {/* title */}
+            <label className="flex flex-col gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wide">title</span>
+                <input
+                    className="rounded-md border border-slate-600 bg-slate-900 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
+                    {...registerAction("title")}
+                />
             </label>
 
-            <div className="rounded-[6px] border p-[12px] space-y-[8px]">
-                <div className="text-[14px] leading-[20px] font-medium">tabs</div>
+            {/* tabs */}
+            <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4 shadow-md">
+                <div className="text-sm font-semibold text-slate-100">tabs</div>
+
                 {tabsFA.fields.map((f, idx) => (
-                    <div className="flex items-center gap-[8px]" key={f.id}>
-                        <input className="w-full rounded-[4px] border p-[8px]" {...registerAction(`tabs.${idx}`)} />
-                        <button type="button" className="text-[12px] leading-[16px] underline" onClick={() => tabsFA.remove(idx)}>×</button>
+                    <div className="flex items-center gap-2" key={f.id}>
+                        <input
+                            className="w-full rounded-md border border-slate-600 bg-slate-900 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
+                            {...registerAction(`tabs.${idx}`)}
+                        />
+                        <button
+                            type="button"
+                            className="rounded-md bg-slate-700 px-2 py-1 text-xs text-slate-100 hover:bg-red-700 transition"
+                            onClick={() => tabsFA.remove(idx)}
+                        >
+                            ×
+                        </button>
                     </div>
                 ))}
-                <button type="button" className="rounded-[4px] border px-[8px] py-[4px] text-[12px] leading-[16px]" onClick={() => tabsFA.append("")}>
+
+                <button
+                    type="button"
+                    className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-xs font-medium text-slate-100 hover:bg-slate-700 transition"
+                    onClick={() => tabsFA.append("")}
+                >
                     Додати таб
                 </button>
             </div>
 
-            <div className="rounded-[6px] border p-[12px] space-y-[12px]">
-                <div className="text-[14px] leading-[20px] font-medium">cards</div>
+            {/* cards */}
+            <div className="space-y-4 rounded-xl border border-slate-700 bg-slate-800 p-4 shadow-md">
+                <div className="text-sm font-semibold text-slate-100">cards</div>
 
                 {cardsFA.fields.map((card, cIdx) => (
                     <CardEditor
@@ -56,21 +73,44 @@ export default function BonusPromocodeBonusesForm({
 
                 <button
                     type="button"
-                    className="rounded-[4px] border px-[8px] py-[4px] text-[12px] leading-[16px]"
-                    onClick={() => cardsFA.append({ title: "", subtitle: "", items: [{ label: "", value: "" }], ctaLabel: "" })}
+                    className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-xs font-medium text-slate-100 hover:bg-slate-700 transition"
+                    onClick={() =>
+                        cardsFA.append({ title: "", subtitle: "", items: [{ label: "", value: "" }], ctaLabel: "" })
+                    }
                 >
                     Додати картку
                 </button>
             </div>
 
-            <div className="rounded-[6px] border p-[12px] space-y-[8px]">
-                <div className="text-[14px] leading-[20px] font-medium">promocode</div>
-                <div className="grid md:grid-cols-2 gap-[8px]">
-                    <input className="rounded-[4px] border p-[8px]" placeholder="label" {...registerAction("promocode.label")} />
-                    <input className="rounded-[4px] border p-[8px]" placeholder="code" {...registerAction("promocode.code")} />
-                    <input className="rounded-[4px] border p-[8px]" placeholder="cta" {...registerAction("promocode.cta")} />
-                    <input className="rounded-[4px] border p-[8px]" placeholder="copied" {...registerAction("promocode.copied")} />
-                    <input className="rounded-[4px] border p-[8px]" placeholder="ariaCopy" {...registerAction("promocode.ariaCopy")} />
+            {/* promocode */}
+            <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4 shadow-md">
+                <div className="text-sm font-semibold text-slate-100">promocode</div>
+                <div className="grid gap-3 md:grid-cols-2">
+                    <input
+                        className="rounded-md border border-slate-600 bg-slate-900 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
+                        placeholder="label"
+                        {...registerAction("promocode.label")}
+                    />
+                    <input
+                        className="rounded-md border border-slate-600 bg-slate-900 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
+                        placeholder="code"
+                        {...registerAction("promocode.code")}
+                    />
+                    <input
+                        className="rounded-md border border-slate-600 bg-slate-900 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
+                        placeholder="cta"
+                        {...registerAction("promocode.cta")}
+                    />
+                    <input
+                        className="rounded-md border border-slate-600 bg-slate-900 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
+                        placeholder="copied"
+                        {...registerAction("promocode.copied")}
+                    />
+                    <input
+                        className="rounded-md border border-slate-600 bg-slate-900 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
+                        placeholder="ariaCopy"
+                        {...registerAction("promocode.ariaCopy")}
+                    />
                 </div>
             </div>
         </div>
@@ -96,38 +136,78 @@ function CardEditor({
     }, [cIdx]);
 
     return (
-        <div className="rounded-[6px] border p-[12px] space-y-[8px]">
-            <label className="flex flex-col gap-[4px]">
-                <span className="text-[12px] leading-[16px] text-[#525252]">cards[{cIdx}].title</span>
-                <input className="rounded-[4px] border p-[8px]" {...registerAction(`cards.${cIdx}.title`)} />
-            </label>
-            <label className="flex flex-col gap-[4px]">
-                <span className="text-[12px] leading-[16px] text-[#525252]">cards[{cIdx}].subtitle</span>
-                <input className="rounded-[4px] border p-[8px]" {...registerAction(`cards.${cIdx}.subtitle`)} />
+        <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-900 p-4">
+            <label className="flex flex-col gap-2">
+        <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
+          cards[{cIdx}].title
+        </span>
+                <input
+                    className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
+                    {...registerAction(`cards.${cIdx}.title`)}
+                />
             </label>
 
-            <div className="space-y-[8px]">
-                <div className="text-[12px] leading-[16px] font-medium">items</div>
+            <label className="flex flex-col gap-2">
+        <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
+          cards[{cIdx}].subtitle
+        </span>
+                <input
+                    className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
+                    {...registerAction(`cards.${cIdx}.subtitle`)}
+                />
+            </label>
+
+            <div className="space-y-2">
+                <div className="text-xs font-semibold text-slate-200">items</div>
+
                 {itemsFA.fields.map((it, iIdx) => (
-                    <div className="grid grid-cols-2 gap-[8px]" key={it.id}>
-                        <input className="rounded-[4px] border p-[8px]" placeholder="label" {...registerAction(`cards.${cIdx}.items.${iIdx}.label`)} />
-                        <div className="flex items-center gap-[8px]">
-                            <input className="w-full rounded-[4px] border p-[8px]" placeholder="value" {...registerAction(`cards.${cIdx}.items.${iIdx}.value`)} />
-                            <button type="button" className="text-[12px] leading-[16px] underline" onClick={() => itemsFA.remove(iIdx)}>×</button>
+                    <div className="grid grid-cols-2 gap-2" key={it.id}>
+                        <input
+                            className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
+                            placeholder="label"
+                            {...registerAction(`cards.${cIdx}.items.${iIdx}.label`)}
+                        />
+                        <div className="flex items-center gap-2">
+                            <input
+                                className="w-full rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
+                                placeholder="value"
+                                {...registerAction(`cards.${cIdx}.items.${iIdx}.value`)}
+                            />
+                            <button
+                                type="button"
+                                className="rounded-md bg-slate-700 px-2 py-1 text-xs text-slate-100 hover:bg-red-700 transition"
+                                onClick={() => itemsFA.remove(iIdx)}
+                            >
+                                ×
+                            </button>
                         </div>
                     </div>
                 ))}
-                <button type="button" className="rounded-[4px] border px-[8px] py-[4px] text-[12px] leading-[16px]" onClick={() => itemsFA.append({ label: "", value: "" })}>
+
+                <button
+                    type="button"
+                    className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-xs font-medium text-slate-100 hover:bg-slate-700 transition"
+                    onClick={() => itemsFA.append({ label: "", value: "" })}
+                >
                     Додати item
                 </button>
             </div>
 
-            <label className="flex flex-col gap-[4px]">
-                <span className="text-[12px] leading-[16px] text-[#525252]">cards[{cIdx}].ctaLabel</span>
-                <input className="rounded-[4px] border p-[8px]" {...registerAction(`cards.${cIdx}.ctaLabel`)} />
+            <label className="flex flex-col gap-2">
+        <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
+          cards[{cIdx}].ctaLabel
+        </span>
+                <input
+                    className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
+                    {...registerAction(`cards.${cIdx}.ctaLabel`)}
+                />
             </label>
 
-            <button type="button" className="rounded-[4px] border px-[8px] py-[4px] text-[12px] leading-[16px]" onClick={onRemove}>
+            <button
+                type="button"
+                className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-xs font-medium text-slate-100 hover:bg-red-700 hover:border-red-700 transition"
+                onClick={onRemove}
+            >
                 Видалити картку
             </button>
         </div>

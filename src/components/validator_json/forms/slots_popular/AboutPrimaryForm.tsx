@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import {type Control, type UseFormRegister, useFieldArray, useWatch, UseFormSetValue} from "react-hook-form";
+import {
+    type Control,
+    type UseFormRegister,
+    useFieldArray,
+    useWatch,
+    UseFormSetValue,
+} from "react-hook-form";
 
 type Props = {
     control: Control;
@@ -18,7 +24,11 @@ const KIND_OPTS = [
     { v: "ordered", label: "Ordered list" },
 ] as const;
 
-export default function SlotsPopularAboutPrimaryForm ({ control, registerAction, setValue }: Props) {
+export default function SlotsPopularAboutPrimaryForm({
+                                                         control,
+                                                         registerAction,
+                                                         setValue,
+                                                     }: Props) {
     const blocksFA = useFieldArray({ control, name: "blocks" as any });
     const didInit = useRef(false);
 
@@ -31,8 +41,9 @@ export default function SlotsPopularAboutPrimaryForm ({ control, registerAction,
     }, []);
 
     return (
-        <div className="space-y-[12px]">
+        <div className="space-y-5">
             <AddToolbar onAdd={(k) => addByKind(blocksFA.append, k)} />
+
             {blocksFA.fields.map((f, idx) => (
                 <BlockEditor
                     key={f.id}
@@ -43,24 +54,26 @@ export default function SlotsPopularAboutPrimaryForm ({ control, registerAction,
                     onRemove={() => blocksFA.remove(idx)}
                 />
             ))}
+
             <AddToolbar onAdd={(k) => addByKind(blocksFA.append, k)} />
         </div>
     );
 }
 
-// ——— допоміжні для помилок (як було в тебе) ———
-function getErr(errors: any, path: string):{message: string} {
+/* ---------------- Допоміжні ---------------- */
+function getErr(errors: any, path: string): { message: string } {
     return path.split(".").reduce((acc, key) => (acc ? acc[key] : undefined), errors);
 }
 
+/* ---------------- Toolbar ---------------- */
 function AddToolbar({ onAdd }: { onAdd: (k: string) => void }) {
     return (
-        <div className="flex flex-wrap gap-[8px]">
-            {KIND_OPTS.map(o => (
+        <div className="flex flex-wrap gap-2">
+            {KIND_OPTS.map((o) => (
                 <button
                     key={o.v}
                     type="button"
-                    className="rounded-[4px] border px-[10px] py-[6px] text-[12px] leading-[16px]"
+                    className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-xs font-medium text-slate-100 hover:bg-slate-700 hover:border-slate-500 transition"
                     onClick={() => onAdd(o.v)}
                 >
                     Додати {o.label}
@@ -70,6 +83,7 @@ function AddToolbar({ onAdd }: { onAdd: (k: string) => void }) {
     );
 }
 
+/* ---------------- Додавання блоків ---------------- */
 function addByKind(append: (v: any) => void, kind: string) {
     if (kind === "title") append({ kind, h: 2, text: "" });
     else if (kind === "paragraph") append({ kind, lines: [""] });
@@ -78,16 +92,20 @@ function addByKind(append: (v: any) => void, kind: string) {
             kind,
             alt: "",
             desktop: { src: "", height: 420 },
-            mobile:  { src: "", height: 320 },
+            mobile: { src: "", height: 320 },
         });
     else if (kind === "cta") append({ kind, label: "", href: "" });
     else if (kind === "unordered") append({ kind, intro: "", items: [""] });
     else if (kind === "ordered") append({ kind, intro: "", items: [""] });
 }
 
-
+/* ---------------- Editor ---------------- */
 function BlockEditor({
-                         control, registerAction, setValue, idx, onRemove,
+                         control,
+                         registerAction,
+                         setValue,
+                         idx,
+                         onRemove,
                      }: {
     control: Control;
     registerAction: UseFormRegister<any>;
@@ -102,37 +120,45 @@ function BlockEditor({
 
     useEffect(() => {
         if (kind !== "image") return;
-        if (typeof dHeight !== "number") setValue(`blocks.${idx}.desktop.height`, 420, { shouldDirty: true });
-        if (typeof mHeight !== "number") setValue(`blocks.${idx}.mobile.height`, 320, { shouldDirty: true });
+        if (typeof dHeight !== "number")
+            setValue(`blocks.${idx}.desktop.height`, 420, { shouldDirty: true });
+        if (typeof mHeight !== "number")
+            setValue(`blocks.${idx}.mobile.height`, 320, { shouldDirty: true });
     }, [kind, dHeight, mHeight, idx, setValue]);
 
     return (
-        <div className="rounded-[6px] border p-[12px] space-y-[10px]">
-            <div className="grid md:grid-cols-2 gap-[8px]">
+        <div className="rounded-xl border border-slate-700 bg-slate-800 p-4 space-y-4 shadow-md">
+            <div className="grid md:grid-cols-2 gap-3">
                 <select
                     className={[
-                        "rounded-[4px] border p-[8px]",
-                        getErr(errors, `blocks.${idx}.kind`) ? "border-[#dc2626]" : ""
+                        "rounded-md border border-slate-600 bg-slate-900 px-3 py-2 text-slate-50 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500 transition",
+                        getErr(errors, `blocks.${idx}.kind`) ? "border-red-600" : "",
                     ].join(" ")}
                     {...registerAction(`blocks.${idx}.kind`)}
                 >
-                    {KIND_OPTS.map(o => <option key={o.v} value={o.v}>{o.label}</option>)}
+                    {KIND_OPTS.map((o) => (
+                        <option key={o.v} value={o.v}>
+                            {o.label}
+                        </option>
+                    ))}
                 </select>
 
                 {kind === "title" && (
                     <div className="flex flex-col">
                         <select
                             className={[
-                                "rounded-[4px] border p-[8px]",
-                                getErr(errors, `blocks.${idx}.h`) ? "border-[#dc2626]" : ""
+                                "rounded-md border border-slate-600 bg-slate-900 px-3 py-2 text-slate-50 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500 transition",
+                                getErr(errors, `blocks.${idx}.h`) ? "border-red-600" : "",
                             ].join(" ")}
-                            {...registerAction(`blocks.${idx}.h`, { setValueAs: (v) => Number(v) })}
+                            {...registerAction(`blocks.${idx}.h`, {
+                                setValueAs: (v) => Number(v),
+                            })}
                         >
                             <option value={2}>h2</option>
                             <option value={3}>h3</option>
                         </select>
                         {getErr(errors, `blocks.${idx}.h`) && (
-                            <span className="text-[12px] leading-[16px] text-[#dc2626]">Вибери рівень заголовка</span>
+                            <span className="text-xs text-red-500">Вибери рівень заголовка</span>
                         )}
                     </div>
                 )}
@@ -148,7 +174,7 @@ function BlockEditor({
             )}
 
             {kind === "cta" && (
-                <div className="grid md:grid-cols-2 gap-[8px]">
+                <div className="grid md:grid-cols-2 gap-3">
                     <FieldInput
                         registerAction={registerAction}
                         errors={errors}
@@ -174,22 +200,22 @@ function BlockEditor({
             )}
 
             {kind === "image" && (
-                <div className="space-y-[8px]">
+                <div className="space-y-3">
                     <FieldInput
                         registerAction={registerAction}
                         errors={errors}
                         name={`blocks.${idx}.alt`}
                         placeholder="alt"
                     />
-                    {["desktop","mobile"].map(v => (
-                        <div key={v} className="grid md:grid-cols-2 gap-[8px]">
+                    {["desktop", "mobile"].map((v) => (
+                        <div key={v} className="grid md:grid-cols-2 gap-3">
                             <FieldInput
                                 registerAction={registerAction}
                                 errors={errors}
                                 name={`blocks.${idx}.${v}.src`}
                                 placeholder={`${v}.src`}
                             />
-                            <div className="rounded-[4px] border p-[8px] text-[12px] leading-[16px] bg-neutral-50">
+                            <div className="rounded-md border border-slate-600 bg-slate-700 px-3 py-2 text-xs text-slate-200">
                                 {v}.height: {v === "desktop" ? 420 : 320}
                             </div>
                         </div>
@@ -198,7 +224,7 @@ function BlockEditor({
             )}
 
             {(kind === "unordered" || kind === "ordered") && (
-                <div className="space-y-[8px]">
+                <div className="space-y-3">
                     <FieldInput
                         registerAction={registerAction}
                         errors={errors}
@@ -214,13 +240,18 @@ function BlockEditor({
                 </div>
             )}
 
-            <button type="button" className="rounded-[4px] border px-[10px] py-[6px] text-[12px] leading-[16px]" onClick={onRemove}>
+            <button
+                type="button"
+                className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-xs text-slate-100 hover:bg-red-700 hover:border-red-700 transition"
+                onClick={onRemove}
+            >
                 Видалити блок
             </button>
         </div>
     );
 }
 
+/* ---------------- FieldInput ---------------- */
 function FieldInput({
                         registerAction,
                         errors,
@@ -236,15 +267,18 @@ function FieldInput({
 }) {
     const hasErr = Boolean(getErr(errors, name));
     return (
-        <div className="flex flex-col gap-[4px]">
+        <div className="flex flex-col gap-1">
             <input
-                className={["rounded-[4px] border p-[8px] w-full", hasErr ? "border-[#dc2626]" : ""].join(" ")}
+                className={[
+                    "w-full rounded-md border border-slate-600 bg-slate-900 px-3 py-2 text-slate-50 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500 transition",
+                    hasErr ? "border-red-600" : "",
+                ].join(" ")}
                 placeholder={placeholder}
                 type={type}
                 {...registerAction(name)}
             />
             {hasErr && (
-                <span className="text-[12px] leading-[16px] text-[#dc2626]">
+                <span className="text-xs text-red-500">
           {String(getErr(errors, name)?.message ?? "Обов’язкове поле")}
         </span>
             )}
@@ -252,9 +286,12 @@ function FieldInput({
     );
 }
 
-
+/* ---------------- LinesEditor ---------------- */
 function LinesEditor({
-                         control, registerAction, base, errors,
+                         control,
+                         registerAction,
+                         base,
+                         errors,
                      }: {
     control: Control;
     registerAction: UseFormRegister<any>;
@@ -262,27 +299,45 @@ function LinesEditor({
     errors: any;
 }) {
     const fa = useFieldArray({ control, name: base as any });
-    useEffect(() => { if (fa.fields.length === 0) fa.append(""); /* eslint-disable-next-line */ }, []);
+    useEffect(() => {
+        if (fa.fields.length === 0) fa.append("");
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     const baseErr = getErr(errors, base);
     return (
-        <div className="space-y-[8px]">
+        <div className="space-y-2">
             {fa.fields.map((it, iIdx) => {
                 const path = `${base}.${iIdx}`;
                 const hasErr = Boolean(getErr(errors, path));
                 return (
-                    <div key={it.id} className="flex items-center gap-[8px]">
+                    <div key={it.id} className="flex items-center gap-2">
                         <input
-                            className={["w-full rounded-[4px] border p-[8px]", hasErr ? "border-[#dc2626]" : ""].join(" ")}
+                            className={[
+                                "w-full rounded-md border border-slate-600 bg-slate-900 px-3 py-2 text-slate-50 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500 transition",
+                                hasErr ? "border-red-600" : "",
+                            ].join(" ")}
                             {...registerAction(path)}
                         />
-                        <button type="button" className="text-[12px] leading-[16px] underline" onClick={() => fa.remove(iIdx)}>×</button>
+                        <button
+                            type="button"
+                            className="rounded-md bg-slate-700 px-2 py-1 text-xs text-slate-100 hover:bg-red-700 transition"
+                            onClick={() => fa.remove(iIdx)}
+                        >
+                            ×
+                        </button>
                     </div>
                 );
             })}
+
             {baseErr && Array.isArray(baseErr) && baseErr.message && (
-                <span className="text-[12px] leading-[16px] text-[#dc2626]">{String(baseErr.message)}</span>
+                <span className="text-xs text-red-500">{String(baseErr.message)}</span>
             )}
-            <button type="button" className="rounded-[4px] border px-[8px] py-[4px] text-[12px] leading-[16px]" onClick={() => fa.append("")}>
+
+            <button
+                type="button"
+                className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-xs text-slate-100 hover:bg-slate-700 transition"
+                onClick={() => fa.append("")}
+            >
                 Додати рядок
             </button>
         </div>

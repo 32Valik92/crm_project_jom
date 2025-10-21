@@ -19,46 +19,71 @@ export default function HeaderForm({
     useEffect(() => {
         if (mobileFeaturedFA.fields.length === 0) mobileFeaturedFA.append("");
         if (navFA.fields.length === 0 && sourceTemplate?.nav?.length)
-            sourceTemplate.nav.forEach((n: any, i: number) => {
+            sourceTemplate.nav.forEach((n: any) => {
                 navFA.append({
                     id: n.id,
                     label: n.label ?? "",
                     redirect: n.redirect ?? true,
-                    children: n.children?.map((c: any) => ({ id: c.id, label: c.label ?? "", redirect: c.redirect ?? true })) ?? [],
+                    children:
+                        n.children?.map((c: any) => ({
+                            id: c.id,
+                            label: c.label ?? "",
+                            redirect: c.redirect ?? true,
+                        })) ?? [],
                 });
             });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
-        <div className="space-y-[12px]">
-            <label className="flex flex-col gap-[4px]">
-                <span className="text-[12px] leading-[16px] text-[#525252]">brand</span>
-                <input className="rounded-[4px] border p-[8px]" {...registerAction("brand")} />
+        <div className="space-y-4">
+            {/* brand */}
+            <label className="flex flex-col gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">brand</span>
+                <input
+                    className="rounded-md border border-slate-600 bg-slate-900 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
+                    {...registerAction("brand")}
+                />
             </label>
 
-            <div className="grid md:grid-cols-2 gap-[8px]">
+            {/* actions */}
+            <div className="grid gap-3 md:grid-cols-2">
                 <Input label="actions.login" name="actions.login" registerAction={registerAction} />
                 <Input label="actions.signup" name="actions.signup" registerAction={registerAction} />
                 <Input label="actions.support" name="actions.support" registerAction={registerAction} />
                 <Input label="actions.language" name="actions.language" registerAction={registerAction} />
             </div>
 
-            <div className="rounded-[6px] border p-[12px] space-y-[8px]">
-                <div className="text-[14px] leading-[20px] font-medium">mobile.featured</div>
+            {/* mobile.featured */}
+            <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4 shadow-md">
+                <div className="text-sm font-semibold text-slate-100">mobile.featured</div>
                 {mobileFeaturedFA.fields.map((f, idx) => (
-                    <div className="flex items-center gap-[8px]" key={f.id}>
-                        <input className="w-full rounded-[4px] border p-[8px]" {...registerAction(`mobile.featured.${idx}`)} />
-                        <button type="button" className="text-[12px] leading-[16px] underline" onClick={() => mobileFeaturedFA.remove(idx)}>×</button>
+                    <div className="flex items-center gap-2" key={f.id}>
+                        <input
+                            className="w-full rounded-md border border-slate-600 bg-slate-900 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
+                            {...registerAction(`mobile.featured.${idx}`)}
+                        />
+                        <button
+                            type="button"
+                            className="rounded-md bg-slate-700 px-2 py-1 text-xs text-slate-100 transition hover:bg-red-700"
+                            onClick={() => mobileFeaturedFA.remove(idx)}
+                        >
+                            ×
+                        </button>
                     </div>
                 ))}
-                <button type="button" className="rounded-[4px] border px-[8px] py-[4px] text-[12px] leading-[16px]" onClick={() => mobileFeaturedFA.append("")}>
+                <button
+                    type="button"
+                    className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-xs font-medium text-slate-100 transition hover:bg-slate-700"
+                    onClick={() => mobileFeaturedFA.append("")}
+                >
                     Додати item
                 </button>
             </div>
 
-            <div className="rounded-[6px] border p-[12px] space-y-[12px]">
-                <div className="text-[14px] leading-[20px] font-medium">nav</div>
+            {/* nav */}
+            <div className="space-y-4 rounded-xl border border-slate-700 bg-slate-800 p-4 shadow-md">
+                <div className="text-sm font-semibold text-slate-100">nav</div>
                 {navFA.fields.map((n, nIdx) => (
                     <NavItemEditor
                         key={n.id}
@@ -74,11 +99,22 @@ export default function HeaderForm({
     );
 }
 
-function Input({ label, name, registerAction }: { label: string; name: string; registerAction: UseFormRegister<any> }) {
+function Input({
+                   label,
+                   name,
+                   registerAction,
+               }: {
+    label: string;
+    name: string;
+    registerAction: UseFormRegister<any>;
+}) {
     return (
-        <label className="flex flex-col gap-[4px]">
-            <span className="text-[12px] leading-[16px] text-[#525252]">{label}</span>
-            <input className="rounded-[4px] border p-[8px]" {...registerAction(name)} />
+        <label className="flex flex-col gap-2">
+            <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">{label}</span>
+            <input
+                className="rounded-md border border-slate-600 bg-slate-900 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
+                {...registerAction(name)}
+            />
         </label>
     );
 }
@@ -109,25 +145,41 @@ function NavItemEditor({
     }, [templateItem?.children?.length]);
 
     return (
-        <div className="rounded-[6px] border p-[12px] space-y-[8px]">
-            <div className="grid md:grid-cols-2 gap-[8px]">
-                <div className="rounded-[4px] border p-[8px] text-[12px] leading-[16px] bg-neutral-50">{String(id)}</div>
-                <input className="rounded-[4px] border p-[8px]" placeholder="label" {...registerAction(`nav.${nIdx}.label`)} />
+        <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-900 p-4">
+            <div className="grid gap-3 md:grid-cols-2">
+                <div className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-xs text-slate-200">
+                    {String(id)}
+                </div>
+                <input
+                    className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
+                    placeholder="label"
+                    {...registerAction(`nav.${nIdx}.label`)}
+                />
             </div>
 
             {childrenFA.fields.length > 0 && (
-                <div className="space-y-[8px]">
-                    <div className="text-[12px] leading-[16px] font-medium">children</div>
+                <div className="space-y-2">
+                    <div className="text-xs font-semibold text-slate-200">children</div>
                     {childrenFA.fields.map((c, cIdx) => (
-                        <div key={c.id} className="grid md:grid-cols-2 gap-[8px]">
-                            <div className="rounded-[4px] border p-[8px] text-[12px] leading-[16px] bg-neutral-50">{String(templateItem?.children?.[cIdx]?.id ?? "")}</div>
-                            <input className="rounded-[4px] border p-[8px]" placeholder="label" {...registerAction(`nav.${nIdx}.children.${cIdx}.label`)} />
+                        <div key={c.id} className="grid gap-3 md:grid-cols-2">
+                            <div className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-xs text-slate-200">
+                                {String(templateItem?.children?.[cIdx]?.id ?? "")}
+                            </div>
+                            <input
+                                className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
+                                placeholder="label"
+                                {...registerAction(`nav.${nIdx}.children.${cIdx}.label`)}
+                            />
                         </div>
                     ))}
                 </div>
             )}
 
-            <button type="button" className="rounded-[4px] border px-[8px] py-[4px] text-[12px] leading-[16px]" onClick={onRemove}>
+            <button
+                type="button"
+                className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-xs font-medium text-slate-100 transition hover:bg-red-700 hover:border-red-700"
+                onClick={onRemove}
+            >
                 Видалити пункт
             </button>
         </div>

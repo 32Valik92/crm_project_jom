@@ -1,4 +1,3 @@
-// src/components/validator_json/forms/slots/CasinoForm.tsx
 "use client";
 
 import { useEffect } from "react";
@@ -9,9 +8,9 @@ function getErr(errors: any, path: string) {
 }
 
 export default function HomeCasinoForm({
-                                            control,
-                                            registerAction,
-                                        }: {
+                                           control,
+                                           registerAction,
+                                       }: {
     control: Control;
     registerAction: UseFormRegister<any>;
 }) {
@@ -25,72 +24,99 @@ export default function HomeCasinoForm({
     const errors = (control as any)._formState?.errors ?? {};
 
     return (
-        <div className="space-y-[12px]">
-            <label className="flex flex-col gap-[4px]">
-                <span className="text-[12px] leading-[16px] text-[#525252]">title</span>
+        <div className="space-y-4">
+            {/* title */}
+            <label className="flex flex-col gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wide">title</span>
                 <input
-                    className={["rounded-[4px] border p-[8px]", getErr(errors, "title") ? "border-[#dc2626]" : ""].join(" ")}
+                    className={[
+                        "rounded-md border border-slate-600 bg-slate-900 px-3 py-2 text-slate-50 outline-none",
+                        "focus:border-sky-500 focus:ring-2 focus:ring-sky-500 transition",
+                        getErr(errors, "title") ? "border-red-600" : "",
+                    ].join(" ")}
                     {...registerAction("title")}
                 />
-                {getErr(errors, "title") && (
-                    <span className="text-[12px] leading-[16px] text-[#dc2626]">Обов’язкове поле</span>
-                )}
+                {getErr(errors, "title") && <span className="text-xs text-red-500">Обов’язкове поле</span>}
             </label>
 
-            <label className="flex flex-col gap-[4px]">
-                <span className="text-[12px] leading-[16px] text-[#525252]">subtitle</span>
+            {/* subtitle */}
+            <label className="flex flex-col gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wide">subtitle</span>
                 <input
-                    className={["rounded-[4px] border p-[8px]", getErr(errors, "subtitle") ? "border-[#dc2626]" : ""].join(" ")}
+                    className={[
+                        "rounded-md border border-slate-600 bg-slate-900 px-3 py-2 text-slate-50 outline-none",
+                        "focus:border-sky-500 focus:ring-2 focus:ring-sky-500 transition",
+                        getErr(errors, "subtitle") ? "border-red-600" : "",
+                    ].join(" ")}
                     {...registerAction("subtitle")}
                 />
-                {getErr(errors, "subtitle") && (
-                    <span className="text-[12px] leading-[16px] text-[#dc2626]">Обов’язкове поле</span>
-                )}
+                {getErr(errors, "subtitle") && <span className="text-xs text-red-500">Обов’язкове поле</span>}
             </label>
 
-            <div className="rounded-[6px] border p-[12px] space-y-[12px]">
-                <div className="text-[14px] leading-[20px] font-medium">cards</div>
+            {/* cards */}
+            <div className="space-y-4 rounded-xl border border-slate-700 bg-slate-800 p-4 shadow-md">
+                <div className="text-sm font-semibold text-slate-100">cards</div>
 
                 {cardsFA.fields.map((card, idx) => (
-                    <div key={card.id} className="rounded-[6px] border p-[12px] space-y-[8px]">
-                        <label className="flex flex-col gap-[4px]">
-                            <span className="text-[12px] leading-[16px] text-[#525252]">cards[{idx}].title</span>
+                    <div key={card.id} className="space-y-3 rounded-xl border border-slate-700 bg-slate-900 p-4">
+                        {/* card title */}
+                        <label className="flex flex-col gap-2">
+              <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
+                cards[{idx}].title
+              </span>
                             <input
-                                className={["rounded-[4px] border p-[8px]", getErr(errors, `cards.${idx}.title`) ? "border-[#dc2626]" : ""].join(" ")}
+                                className={[
+                                    "rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-slate-50 outline-none",
+                                    "focus:border-sky-500 focus:ring-2 focus:ring-sky-500 transition",
+                                    getErr(errors, `cards.${idx}.title`) ? "border-red-600" : "",
+                                ].join(" ")}
                                 {...registerAction(`cards.${idx}.title`)}
                             />
                             {getErr(errors, `cards.${idx}.title`) && (
-                                <span className="text-[12px] leading-[16px] text-[#dc2626]">Обов’язкове поле</span>
+                                <span className="text-xs text-red-500">Обов’язкове поле</span>
                             )}
                         </label>
 
-                        <div className="grid md:grid-cols-2 gap-[8px]">
-                            <label className="flex flex-col gap-[4px]">
-                                <span className="text-[12px] leading-[16px] text-[#525252]">cards[{idx}].image.src</span>
+                        {/* image fields */}
+                        <div className="grid gap-3 md:grid-cols-2">
+                            <label className="flex flex-col gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
+                  cards[{idx}].image.src
+                </span>
                                 <input
-                                    className={["rounded-[4px] border p-[8px]", getErr(errors, `cards.${idx}.image.src`) ? "border-[#dc2626]" : ""].join(" ")}
+                                    className={[
+                                        "rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-slate-50 outline-none",
+                                        "focus:border-sky-500 focus:ring-2 focus:ring-sky-500 transition",
+                                        getErr(errors, `cards.${idx}.image.src`) ? "border-red-600" : "",
+                                    ].join(" ")}
                                     {...registerAction(`cards.${idx}.image.src`)}
                                 />
                                 {getErr(errors, `cards.${idx}.image.src`) && (
-                                    <span className="text-[12px] leading-[16px] text-[#dc2626]">Обов’язкове поле</span>
+                                    <span className="text-xs text-red-500">Обов’язкове поле</span>
                                 )}
                             </label>
 
-                            <label className="flex flex-col gap-[4px]">
-                                <span className="text-[12px] leading-[16px] text-[#525252]">cards[{idx}].image.alt</span>
+                            <label className="flex flex-col gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
+                  cards[{idx}].image.alt
+                </span>
                                 <input
-                                    className={["rounded-[4px] border p-[8px]", getErr(errors, `cards.${idx}.image.alt`) ? "border-[#dc2626]" : ""].join(" ")}
+                                    className={[
+                                        "rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-slate-50 outline-none",
+                                        "focus:border-sky-500 focus:ring-2 focus:ring-sky-500 transition",
+                                        getErr(errors, `cards.${idx}.image.alt`) ? "border-red-600" : "",
+                                    ].join(" ")}
                                     {...registerAction(`cards.${idx}.image.alt`)}
                                 />
                                 {getErr(errors, `cards.${idx}.image.alt`) && (
-                                    <span className="text-[12px] leading-[16px] text-[#dc2626]">Обов’язкове поле</span>
+                                    <span className="text-xs text-red-500">Обов’язкове поле</span>
                                 )}
                             </label>
                         </div>
 
                         <button
                             type="button"
-                            className="rounded-[4px] border px-[8px] py-[4px] text-[12px] leading-[16px]"
+                            className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-xs font-medium text-slate-100 hover:bg-red-700 hover:border-red-700 transition"
                             onClick={() => cardsFA.remove(idx)}
                         >
                             Видалити картку
@@ -100,7 +126,7 @@ export default function HomeCasinoForm({
 
                 <button
                     type="button"
-                    className="rounded-[4px] border px-[8px] py-[4px] text-[12px] leading-[16px]"
+                    className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-xs font-medium text-slate-100 hover:bg-slate-700 transition"
                     onClick={() => cardsFA.append({ title: "", image: { src: "", alt: "" } })}
                 >
                     Додати картку

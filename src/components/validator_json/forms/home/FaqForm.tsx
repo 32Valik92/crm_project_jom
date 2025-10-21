@@ -15,30 +15,33 @@ export default function HomeFaqForm({
     const errors: any = (control as any)?._formState?.errors ?? {};
 
     useEffect(() => {
-        if (itemsFA.fields.length === 0)
-            itemsFA.append({ id: "1", question: "", answer: "" });
+        if (itemsFA.fields.length === 0) itemsFA.append({ id: "1", question: "", answer: "" });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const err = (path: string) =>
-        path.split(".").reduce((a, k) => (a ? a[k] : undefined), errors);
+    const err = (path: string) => path.split(".").reduce((a, k) => (a ? a[k] : undefined), errors);
     const cls = (has: boolean) =>
-        ["rounded-[4px] border p-[8px] w-full", has ? "border-[#dc2626]" : ""].join(" ");
+        [
+            "rounded-md border px-3 py-2 w-full",
+            "bg-slate-900 border-slate-600 text-slate-50 outline-none",
+            "focus:border-sky-500 focus:ring-2 focus:ring-sky-500",
+            has ? "border-red-600" : "",
+        ].join(" ");
 
     return (
-        <div className="space-y-[12px]">
-            <div className="flex flex-col gap-[4px]">
-                <span className="text-[12px] leading-[16px] text-[#525252]">title</span>
+        <div className="space-y-4">
+            {/* title */}
+            <div className="flex flex-col gap-1.5">
+                <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">title</span>
                 <input className={cls(!!err("title"))} {...registerAction("title")} />
                 {!!err("title") && (
-                    <span className="text-[12px] leading-[16px] text-[#dc2626]">
-            {String(err("title")?.message)}
-          </span>
+                    <span className="text-xs text-red-500">{String(err("title")?.message)}</span>
                 )}
             </div>
 
-            <div className="space-y-[8px] rounded-[6px] border p-[12px]">
-                <div className="text-[14px] leading-[20px] font-medium">FAQ items</div>
+            {/* FAQ items */}
+            <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4">
+                <div className="text-sm font-semibold text-slate-100">FAQ items</div>
 
                 {itemsFA.fields.map((f, i) => {
                     const idPath = `items.${i}.id`;
@@ -50,26 +53,25 @@ export default function HomeFaqForm({
                     const aErr = !!err(aPath);
 
                     return (
-                        <div key={f.id} className="rounded-[4px] border p-[12px] space-y-[8px]">
-                            <div className="grid md:grid-cols-3 gap-[8px]">
-                                <input
-                                    className={cls(idErr)}
-                                    placeholder="id"
-                                    {...registerAction(idPath)}
-                                />
+                        <div key={f.id} className="space-y-2 rounded-xl border border-slate-700 bg-slate-900 p-4">
+                            <div className="grid gap-2 md:grid-cols-3">
+                                <input className={cls(idErr)} placeholder="id" {...registerAction(idPath)} />
                                 <input
                                     className={cls(qErr)}
                                     placeholder="question"
                                     {...registerAction(qPath)}
                                 />
-                                <button
-                                    type="button"
-                                    className="text-[12px] leading-[16px] underline"
-                                    onClick={() => itemsFA.remove(i)}
-                                >
-                                    ×
-                                </button>
+                                <div className="flex items-center justify-end">
+                                    <button
+                                        type="button"
+                                        className="rounded-md bg-slate-700 px-2 py-1 text-xs text-slate-100 transition hover:bg-red-700"
+                                        onClick={() => itemsFA.remove(i)}
+                                    >
+                                        ×
+                                    </button>
+                                </div>
                             </div>
+
                             <textarea
                                 className={cls(aErr)}
                                 rows={3}
@@ -82,7 +84,7 @@ export default function HomeFaqForm({
 
                 <button
                     type="button"
-                    className="rounded-[4px] border px-[8px] py-[4px] text-[12px] leading-[16px]"
+                    className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-xs font-medium text-slate-100 transition hover:bg-slate-700"
                     onClick={() =>
                         itemsFA.append({
                             id: String(itemsFA.fields.length + 1),

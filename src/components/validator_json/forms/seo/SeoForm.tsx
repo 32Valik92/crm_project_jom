@@ -51,9 +51,12 @@ export default function SeoForm({
         p.split(".").reduce((a: any, k) => (a ? a[k] : undefined), errors);
 
     const cls = (bad: boolean) =>
-        ["rounded-[4px] border p-[8px] w-full", bad ? "border-[#dc2626]" : ""].join(
-            " "
-        );
+        [
+            "rounded-md border px-3 py-2 w-full",
+            "bg-slate-900 border-slate-600 text-slate-50 outline-none",
+            "focus:border-sky-500 focus:ring-2 focus:ring-sky-500",
+            bad ? "border-red-600" : "",
+        ].join(" ");
 
     const nextFreeKey = SEO_KEYS.find((k) => !usedKeys.has(k));
 
@@ -82,24 +85,24 @@ export default function SeoForm({
     }, [errors]);
 
     return (
-        <div className="space-y-[12px]">
+        <div className="space-y-4">
             {errorDetails.length > 0 && (
-                <div className="rounded-md border border-[#fecaca] bg-[#fef2f2] p-[8px] text-[12px] leading-[16px] text-[#b91c1c]">
-                    <div className="mb-[4px]">
+                <div className="rounded-md border border-red-700 bg-red-900 p-3 text-xs leading-5 text-red-200">
+                    <div className="mb-1.5 font-semibold">
                         Перевір поля SEO — знайдено {errorDetails.length} помил
                         {errorDetails.length === 1 ? "ку" : errorDetails.length < 5 ? "ки" : "ок"}:
                     </div>
-                    <ul className="list-disc pl-[16px]">
+                    <ul className="list-disc pl-4 space-y-0.5">
                         {errorDetails.map((e, i) => (
                             <li key={i}>
-                                <span className="font-medium">{e.where}:</span> {e.msg}
+                                <span className="font-semibold text-red-100">{e.where}:</span> {e.msg}
                             </li>
                         ))}
                     </ul>
                 </div>
             )}
 
-            <div className="rounded-[6px] border p-[12px] space-y-[12px]">
+            <div className="rounded-xl border border-slate-700 bg-slate-800 p-4 space-y-4">
                 {rowsFA.fields.map((row, idx) => (
                     <SeoRow
                         key={row.id}
@@ -119,7 +122,7 @@ export default function SeoForm({
 
                 <button
                     type="button"
-                    className="rounded-[4px] border px-[8px] py-[4px] text-[12px] leading-[16px] disabled:opacity-50"
+                    className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-xs font-medium text-slate-100 hover:bg-slate-700 transition disabled:opacity-60 disabled:cursor-not-allowed"
                     onClick={() => {
                         if (!nextFreeKey) return;
                         rowsFA.append({ key: nextFreeKey });
@@ -180,15 +183,13 @@ function SeoRow({
     const descError = !!(selectedKey && err(`${base}.description`));
 
     return (
-        <div className="rounded-[6px] border p-[12px] space-y-[8px]">
-            <div className="grid md:grid-cols-3 gap-[8px]">
-                <div className="flex flex-col gap-[4px]">
-                    <span className="text-[12px] leading-[16px] text-[#525252]">page</span>
+        <div className="rounded-xl border border-slate-700 bg-slate-900 p-4 space-y-3">
+            <div className="grid gap-3 md:grid-cols-3">
+                <div className="flex flex-col gap-1.5">
+                    <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">page</span>
                     <select
                         className={cls(keyError)}
-                        {...registerAction(keyField as any, {
-                            required: "Вибери сторінку",
-                        })}
+                        {...registerAction(keyField as any, { required: "Вибери сторінку" })}
                         aria-invalid={keyError || undefined}
                     >
                         <option value="">— select page —</option>
@@ -202,14 +203,14 @@ function SeoRow({
                         })}
                     </select>
                     {keyError && (
-                        <span className="text-[12px] leading-[16px] text-[#dc2626]">
+                        <span className="text-xs text-red-500">
               {String(err(keyField)?.message ?? "Вибери сторінку")}
             </span>
                     )}
                 </div>
 
-                <div className="md:col-span-2 flex flex-col gap-[4px]">
-                    <span className="text-[12px] leading-[16px] text-[#525252]">title</span>
+                <div className="md:col-span-2 flex flex-col gap-1.5">
+                    <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">title</span>
                     {selectedKey ? (
                         <>
                             <input
@@ -220,22 +221,22 @@ function SeoRow({
                                 aria-invalid={titleError || undefined}
                             />
                             {titleError && (
-                                <span className="text-[12px] leading-[16px] text-[#dc2626]">
+                                <span className="text-xs text-red-500">
                   {String(err(`${base}.title`)?.message)}
                 </span>
                             )}
                         </>
                     ) : (
                         <input
-                            className="rounded-[4px] border p-[8px] w-full bg-neutral-50"
+                            className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 w-full text-slate-400"
                             disabled
                         />
                     )}
                 </div>
             </div>
 
-            <div className="flex flex-col gap-[4px]">
-                <span className="text-[12px] leading-[16px] text-[#525252]">description</span>
+            <div className="flex flex-col gap-1.5">
+                <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">description</span>
                 {selectedKey ? (
                     <>
             <textarea
@@ -247,7 +248,7 @@ function SeoRow({
                 aria-invalid={descError || undefined}
             />
                         {descError && (
-                            <span className="text-[12px] leading-[16px] text-[#dc2626]">
+                            <span className="text-xs text-red-500">
                 {String(err(`${base}.description`)?.message)}
               </span>
                         )}
@@ -255,7 +256,7 @@ function SeoRow({
                 ) : (
                     <textarea
                         rows={3}
-                        className="rounded-[4px] border p-[8px] w-full bg-neutral-50"
+                        className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 w-full text-slate-400"
                         disabled
                     />
                 )}
@@ -263,7 +264,7 @@ function SeoRow({
 
             <button
                 type="button"
-                className="rounded-[4px] border px-[8px] py-[4px] text-[12px] leading-[16px]"
+                className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-xs font-medium text-slate-100 hover:bg-red-700 hover:border-red-700 transition"
                 onClick={() => removeRow(selectedKey)}
             >
                 Видалити

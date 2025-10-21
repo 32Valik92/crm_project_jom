@@ -1,4 +1,3 @@
-// src/components/validator_json/BlockFormDialog.tsx (повна заміна — прибрано `values`, додано reset після submit)
 "use client";
 
 import {useForm} from "react-hook-form";
@@ -57,6 +56,7 @@ import HomeSupportForm from "@/components/validator_json/forms/home/SupportForm"
 import HomeTopFeatureForm from "@/components/validator_json/forms/home/TopFeatureForm";
 import HomeVerificationForm from "@/components/validator_json/forms/home/VerificationForm";
 import SeoForm from "./forms/seo/SeoForm";
+import SlotsFruitCocktailAboutPrimaryForm from "@/components/validator_json/forms/slots_fruitcocktail/AboutPrimaryForm";
 
 /** ---------- API ---------- */
 type Props = {
@@ -67,9 +67,13 @@ type Props = {
     onSave: (v: any) => void;
 };
 
-const BlockFormDialog = ({schema, block, initialValues, onCancel, onSave}: Props) => {
+const BlockFormDialog = ({ schema, block, initialValues, onCancel, onSave }: Props) => {
     return (
-        <dialog id="formDialog" className="rounded-[12px] p-[0px]">
+        <dialog
+            id="formDialog"
+            // скляний вигляд діалогу + закруглення + тінь
+            className="p-0 rounded-2xl border border-slate-200/60 shadow-2xl backdrop:backdrop-blur-sm backdrop:bg-black/50 bg-white text-slate-800 dark:bg-[#0f172a] dark:text-slate-100 dark:border-white/10"
+        >
             <FormContent
                 schema={schema}
                 block={block}
@@ -77,6 +81,15 @@ const BlockFormDialog = ({schema, block, initialValues, onCancel, onSave}: Props
                 onCancel={onCancel}
                 onSave={onSave}
             />
+
+            {/* стиль бекдропа, якщо Tailwind не підхопить variant */}
+            <style jsx global>{`
+        #formDialog::backdrop {
+          background: rgba(0, 0, 0, 0.55);
+          -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+        }
+      `}</style>
         </dialog>
     );
 };
@@ -84,7 +97,7 @@ const BlockFormDialog = ({schema, block, initialValues, onCancel, onSave}: Props
 export default BlockFormDialog;
 
 /** ---------- ВНУТРІШНЄ ВМІСТ ДІАЛОГУ ---------- */
-function FormContent({schema, block, initialValues, onCancel, onSave}: Props) {
+function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) {
     const form = useForm<any>({
         resolver: schema ? zodResolver(schema) : undefined,
         defaultValues: initialValues,
@@ -92,8 +105,7 @@ function FormContent({schema, block, initialValues, onCancel, onSave}: Props) {
 
     if (!block) return null;
 
-    const {register, handleSubmit, control, formState: {errors}, reset, watch, setValue} = form;
-
+    const { register, handleSubmit, control, formState: { errors }, reset, watch, setValue } = form;
     const draft = watch();
 
     const onSubmit = handleSubmit((values) => {
@@ -102,8 +114,35 @@ function FormContent({schema, block, initialValues, onCancel, onSave}: Props) {
     });
 
     return (
-        <form onSubmit={onSubmit} className="w-[90vw] max-w-[768px] space-y-[16px] p-[24px]">
-            <h3 className="text-[18px] font-semibold leading-[28px]">{block}</h3>
+        <form
+            onSubmit={onSubmit}
+            className="w-[92vw] max-w-[900px] overflow-hidden rounded-2xl"
+        >
+            {/* Хедер форми */}
+            <div
+                className="sticky top-0 z-10 border-b border-slate-200/70 bg-gradient-to-r from-sky-50 to-white
+                   dark:from-sky-950/30 dark:to-transparent dark:border-white/10"
+            >
+                <div className="px-6 py-4">
+                    <h3 className="text-[18px] sm:text-[20px] font-semibold leading-[28px] tracking-tight">
+            <span className="bg-gradient-to-r from-sky-600 to-sky-400 bg-clip-text text-transparent dark:from-sky-300 dark:to-sky-200">
+              {block}
+            </span>
+                    </h3>
+                    <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                        Заповніть поля блоку та збережіть зміни
+                    </p>
+                </div>
+            </div>
+
+            {/* Основний контент (скролиться) */}
+            <div
+                className="max-h-[70vh] overflow-y-auto px-6 py-5 space-y-4
+                   [scrollbar-width:thin] [&::-webkit-scrollbar]:w-2
+                   [&::-webkit-scrollbar-thumb]:rounded-full
+                   [&::-webkit-scrollbar-thumb]:bg-slate-300/70
+                   dark:[&::-webkit-scrollbar-thumb]:bg-white/20"
+            >
 
             {block === "about_primary" &&
                 <AboutPrimaryForm
@@ -326,6 +365,14 @@ function FormContent({schema, block, initialValues, onCancel, onSave}: Props) {
                 />
             )}
 
+                {block === "slots_fruitcocktail_about_primary" && (
+                    <SlotsFruitCocktailAboutPrimaryForm
+                        control={control}
+                        registerAction={register}
+                        setValue={setValue}
+                    />
+                )}
+
             {block === "slots_plinko_about_primary" && (
                 <SlotsPlinkoAboutPrimaryForm
                     control={control}
@@ -382,12 +429,32 @@ function FormContent({schema, block, initialValues, onCancel, onSave}: Props) {
                     setValue={form.setValue}
                 />
             )}
+            </div>
 
-            <div className="flex justify-end gap-[12px] pt-[8px]">
-                <button type="button" className="rounded-[4px] border px-[16px] py-[8px]" onClick={onCancel}>
+            {/* Футер з діями (липкий) */}
+            <div
+                className="sticky bottom-0 z-10 border-t border-slate-200/70 bg-white/90 backdrop-blur
+                   px-6 py-4 flex justify-end gap-3
+                   dark:bg-[#0f172a]/90 dark:border-white/10"
+            >
+                <button
+                    type="button"
+                    onClick={onCancel}
+                    className="rounded-xl border border-slate-300/70 px-4 py-2 text-sm font-medium
+                     hover:bg-slate-50 active:scale-[0.99] transition
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2
+                     dark:border-white/15 dark:hover:bg-white/5 dark:ring-offset-[#0f172a]"
+                >
                     Скасувати
                 </button>
-                <button type="submit" className="rounded-[4px] bg-[#000000] px-[16px] py-[8px] text-[#ffffff]">
+
+                <button
+                    type="submit"
+                    className="rounded-xl bg-gradient-to-r from-sky-600 to-sky-500 px-4 py-2 text-sm font-semibold text-white shadow
+                     hover:from-sky-500 hover:to-sky-400 active:scale-[0.99] transition
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 focus-visible:ring-offset-2
+                     dark:ring-offset-[#0f172a]"
+                >
                     Зберегти блок
                 </button>
             </div>

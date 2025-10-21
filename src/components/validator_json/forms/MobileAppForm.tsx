@@ -5,35 +5,32 @@ import { useFieldArray, type Control, type UseFormRegister } from "react-hook-fo
 import { AppMobileApp } from "@/lib/schemas";
 import StepsArray from "@/components/validator_json/forms/StepsArray";
 
-// - control: інстанс RHF control для підключення useFieldArray
-// - registerAction: функція реєстрації полів (alias для register)
 type Props = {
-    control: Control; // Можна звузити до Control<AppMobileApp> для кращої типізації
+    control: Control; // можна звузити до Control<AppMobileApp>
     registerAction: UseFormRegister<AppMobileApp>;
 };
 
 const MobileAppForm = ({ control, registerAction }: Props) => {
-    // Масив карток: cards: { title: string; steps: string[] }[]
+    // cards: { title: string; steps: string[] }[]
     const { fields: cardFields, append: addCard, remove: delCard } = useFieldArray({
         control,
-        name: "cards", // шлях у форм-стейті
+        name: "cards",
     });
 
-    // Вкладений масив: compare.rows: { label: string; items: string[] }[]
+    // compare.rows: { label: string; items: string[] }[]
     const { fields: rowFields, append: addRow, remove: delRow } = useFieldArray({
         control,
-        name: "compare.rows", // шлях до глибоко вкладеного масиву
+        name: "compare.rows",
     });
 
-    // Гарантуємо мінімум 1 картку при маунті/очищенні
+    // Мінімум 1 картка
     useEffect(() => {
         if (cardFields.length === 0) {
-            // нова карта з пустим заголовком та одним кроком
             addCard({ title: "", steps: [""] });
         }
     }, [cardFields.length, addCard]);
 
-    // Гарантуємо мінімум 1 рядок у compare.rows
+    // Мінімум 1 рядок порівняння
     useEffect(() => {
         if (rowFields.length === 0) {
             addRow({ label: "", items: [""] });
@@ -43,70 +40,65 @@ const MobileAppForm = ({ control, registerAction }: Props) => {
     return (
         <div className="space-y-4">
             {/* Заголовок (brand + tail) */}
-            <div className="grid gap-2 rounded border p-3">
-                <span className="text-sm font-medium">title</span>
-                {/* title.brand */}
+            <div className="grid gap-2 rounded-xl border border-slate-700 bg-slate-800 p-4 shadow-md">
+                <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">title</span>
+
                 <input
-                    className="rounded border p-2"
+                    className="rounded-md border border-slate-600 bg-slate-900 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
                     {...registerAction("title.brand")}
                     placeholder="brand"
                 />
-                {/* title.tail */}
+
                 <input
-                    className="rounded border p-2"
+                    className="rounded-md border border-slate-600 bg-slate-900 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
                     {...registerAction("title.tail")}
                     placeholder="tail"
                 />
             </div>
 
-            {/* Короткий вступний текст lead */}
-            <label className="flex flex-col gap-1">
-                <span className="text-xs text-neutral-600">lead</span>
+            {/* lead */}
+            <label className="flex flex-col gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wide">lead</span>
                 <textarea
-                    className="rounded border p-2"
+                    className="rounded-md border border-slate-600 bg-slate-900 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
                     rows={3}
                     {...registerAction("lead")}
                 />
             </label>
 
-            {/* ---- Блок Cards ---- */}
-            <div className="rounded border p-3 space-y-3">
-                <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium">cards</span>
-                    {/* Додати ще одну картку */}
+            {/* Cards */}
+            <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4 shadow-md">
+                <div className="flex items-center justify-between">
+                    <span className="text-sm font-semibold text-slate-100">cards</span>
                     <button
                         type="button"
-                        className="rounded border px-2 py-1 text-sm"
+                        className="rounded-md border border-slate-600 bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-100 hover:bg-slate-700 transition"
                         onClick={() => addCard({ title: "", steps: [""] })}
                     >
                         + Додати картку
                     </button>
                 </div>
 
-                {/* Перелік існуючих карток */}
                 {cardFields.map((cf, i) => (
-                    <div key={cf.id} className="border rounded-lg p-3">
-                        <div className="flex justify-between items-center mb-2">
-                            <span className="text-sm font-semibold">Картка #{i + 1}</span>
-                            {/* Видалити картку */}
+                    <div key={cf.id} className="rounded-xl border border-slate-700 bg-slate-900 p-4">
+                        <div className="mb-3 flex items-center justify-between">
+                            <span className="text-sm font-semibold text-slate-100">Картка #{i + 1}</span>
                             <button
                                 type="button"
-                                className="text-xs underline"
+                                className="rounded-md bg-slate-700 px-2 py-1 text-xs text-slate-100 hover:bg-red-700 transition"
                                 onClick={() => delCard(i)}
                             >
                                 Видалити
                             </button>
                         </div>
 
-                        {/* Заголовок картки */}
                         <input
-                            className="rounded border p-2 w-full mb-2"
+                            className="mb-3 w-full rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
                             {...registerAction(`cards.${i}.title`)}
                             placeholder="title"
                         />
 
-                        {/* Масив кроків для картки i.
-                            StepsArray відповідає лише за простий масив рядків (steps: string[]) */}
+                        {/* steps: string[] */}
                         <StepsArray
                             control={control}
                             registerAction={registerAction}
@@ -117,53 +109,48 @@ const MobileAppForm = ({ control, registerAction }: Props) => {
                 ))}
             </div>
 
-            {/* ---- Блок Compare ---- */}
-            <div className="rounded border p-3 space-y-3">
-                {/* Заголовок секції compare */}
-                <label className="flex flex-col gap-1">
-                    <span className="text-xs text-neutral-600">compare.title</span>
+            {/* Compare */}
+            <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4 shadow-md">
+                {/* compare.title */}
+                <label className="flex flex-col gap-2">
+                    <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">compare.title</span>
                     <input
-                        className="rounded border p-2"
+                        className="rounded-md border border-slate-600 bg-slate-900 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
                         {...registerAction("compare.title")}
                     />
                 </label>
 
-                {/* Керування масивом compare.rows */}
-                <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium">compare.rows</span>
-                    {/* Додати новий рядок порівняння */}
+                <div className="flex items-center justify-between">
+                    <span className="text-sm font-semibold text-slate-100">compare.rows</span>
                     <button
                         type="button"
-                        className="rounded border px-2 py-1 text-sm"
+                        className="rounded-md border border-slate-600 bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-100 hover:bg-slate-700 transition"
                         onClick={() => addRow({ label: "", items: [""] })}
                     >
                         + Додати рядок
                     </button>
                 </div>
 
-                {/* Перелік рядків у порівнянні */}
                 {rowFields.map((rf, i) => (
-                    <div key={rf.id} className="border rounded-lg p-3">
-                        <div className="flex justify-between items-center mb-2">
-                            <span className="text-sm font-semibold">Рядок #{i + 1}</span>
-                            {/* Видалити рядок */}
+                    <div key={rf.id} className="rounded-xl border border-slate-700 bg-slate-900 p-4">
+                        <div className="mb-3 flex items-center justify-between">
+                            <span className="text-sm font-semibold text-slate-100">Рядок #{i + 1}</span>
                             <button
                                 type="button"
-                                className="text-xs underline"
+                                className="rounded-md bg-slate-700 px-2 py-1 text-xs text-slate-100 hover:bg-red-700 transition"
                                 onClick={() => delRow(i)}
                             >
                                 Видалити
                             </button>
                         </div>
 
-                        {/* Назва/мітка рядка */}
                         <input
-                            className="rounded border p-2 w-full mb-2"
+                            className="mb-3 w-full rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
                             {...registerAction(`compare.rows.${i}.label`)}
                             placeholder="label"
                         />
 
-                        {/* Масив пунктів для рядка i (items: string[]) */}
+                        {/* items: string[] */}
                         <StepsArray
                             control={control}
                             registerAction={registerAction}
@@ -174,13 +161,16 @@ const MobileAppForm = ({ control, registerAction }: Props) => {
                 ))}
             </div>
 
-            {/* Заклик до дії (cta) */}
-            <label className="flex flex-col gap-1">
-                <span className="text-xs text-neutral-600">cta</span>
-                <input className="rounded border p-2" {...registerAction("cta")} />
+            {/* CTA */}
+            <label className="flex flex-col gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wide">cta</span>
+                <input
+                    className="rounded-md border border-slate-600 bg-slate-900 px-3 py-2 text-slate-50 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
+                    {...registerAction("cta")}
+                />
             </label>
         </div>
     );
-}
+};
 
 export default MobileAppForm;

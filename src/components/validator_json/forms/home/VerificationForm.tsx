@@ -12,27 +12,30 @@ export default function HomeVerificationForm({
 }) {
     const err = (p: string) => p.split(".").reduce((a, k) => (a ? a[k] : undefined), errors ?? {});
     const cls = (bad: boolean) =>
-        ["rounded-[4px] border p-[8px] w-full", bad ? "border-[#dc2626]" : ""].join(" ");
+        [
+            "rounded-md border px-3 py-2 w-full",
+            "bg-slate-900 border-slate-600 text-slate-50 outline-none",
+            "focus:border-sky-500 focus:ring-2 focus:ring-sky-500",
+            bad ? "border-red-600" : "",
+        ].join(" ");
 
     return (
-        <div className="space-y-[12px]">
-            <div className="flex flex-col gap-[4px]">
-                <span className="text-[12px] leading-[16px] text-[#525252]">title</span>
+        <div className="space-y-4">
+            {/* title */}
+            <div className="flex flex-col gap-1.5">
+                <span className="text-xs font-semibold uppercase tracking-wide">title</span>
                 <input className={cls(!!err("title"))} {...registerAction("title")} />
                 {!!err("title") && (
-                    <span className="text-[12px] leading-[16px] text-[#dc2626]">
-            {String(err("title")?.message)}
-          </span>
+                    <span className="text-xs text-red-500">{String(err("title")?.message)}</span>
                 )}
             </div>
 
-            <div className="flex flex-col gap-[4px]">
-                <span className="text-[12px] leading-[16px] text-[#525252]">text</span>
+            {/* text */}
+            <div className="flex flex-col gap-1.5">
+                <span className="text-xs font-semibold uppercase tracking-wide">text</span>
                 <textarea className={cls(!!err("text"))} rows={5} {...registerAction("text")} />
                 {!!err("text") && (
-                    <span className="text-[12px] leading-[16px] text-[#dc2626]">
-            {String(err("text")?.message)}
-          </span>
+                    <span className="text-xs text-red-500">{String(err("text")?.message)}</span>
                 )}
             </div>
         </div>

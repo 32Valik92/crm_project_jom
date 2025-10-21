@@ -23,7 +23,13 @@ export default function HomeRegistrationGuideForm({
     }, []);
 
     const err = (p: string) => p.split(".").reduce((a, k) => (a ? a[k] : undefined), errors);
-    const cls = (bad: boolean) => ["rounded-[4px] border p-[8px] w-full", bad ? "border-[#dc2626]" : ""].join(" ");
+    const cls = (bad: boolean) =>
+        [
+            "rounded-md border px-3 py-2 w-full",
+            "bg-slate-900 border-slate-600 text-slate-50 outline-none",
+            "focus:border-sky-500 focus:ring-2 focus:ring-sky-500",
+            bad ? "border-red-600" : "",
+        ].join(" ");
 
     function nextId(): number {
         const arr = steps ?? [];
@@ -32,19 +38,19 @@ export default function HomeRegistrationGuideForm({
     }
 
     return (
-        <div className="space-y-[16px]">
+        <div className="space-y-4">
             {/* title */}
-            <div className="flex flex-col gap-[4px]">
-                <span className="text-[12px] leading-[16px] text-[#525252]">title</span>
+            <div className="flex flex-col gap-1.5">
+                <span className="text-xs font-semibold uppercase tracking-wide">title</span>
                 <input className={cls(!!err("title"))} {...registerAction("title")} />
                 {!!err("title") && (
-                    <span className="text-[12px] leading-[16px] text-[#dc2626]">{String(err("title")?.message)}</span>
+                    <span className="text-xs text-red-500">{String(err("title")?.message)}</span>
                 )}
             </div>
 
             {/* steps */}
-            <div className="space-y-[8px] rounded-[6px] border p-[12px]">
-                <div className="text-[14px] leading-[20px] font-medium">steps</div>
+            <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4">
+                <div className="text-sm font-semibold text-slate-100">steps</div>
 
                 {stepsFA.fields.map((row, rIdx) => {
                     const idPath = `steps.${rIdx}.id`;
@@ -53,36 +59,39 @@ export default function HomeRegistrationGuideForm({
                     const textErr = !!err(textPath);
 
                     return (
-                        <div key={row.id} className="rounded-[6px] border p-[12px] space-y-[8px]">
-                            <div className="grid md:grid-cols-5 gap-[8px]">
-                                <div className="flex flex-col gap-[4px] md:col-span-1">
-                                    <span className="text-[12px] leading-[16px] text-[#525252]">{idPath}</span>
+                        <div key={row.id} className="space-y-3 rounded-xl border border-slate-700 bg-slate-900 p-4">
+                            <div className="grid gap-2 md:grid-cols-5">
+                                {/* id */}
+                                <div className="flex flex-col gap-1.5 md:col-span-1">
+                  <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
+                    {idPath}
+                  </span>
                                     <input
                                         className={cls(idErr)}
                                         type="number"
                                         {...registerAction(idPath, { valueAsNumber: true })}
                                     />
                                     {idErr && (
-                                        <span className="text-[12px] leading-[16px] text-[#dc2626]">
-                      {String(err(idPath)?.message)}
-                    </span>
+                                        <span className="text-xs text-red-500">{String(err(idPath)?.message)}</span>
                                     )}
                                 </div>
 
-                                <div className="flex flex-col gap-[4px] md:col-span-3">
-                                    <span className="text-[12px] leading-[16px] text-[#525252]">{textPath}</span>
+                                {/* text */}
+                                <div className="flex flex-col gap-1.5 md:col-span-3">
+                  <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
+                    {textPath}
+                  </span>
                                     <input className={cls(textErr)} {...registerAction(textPath)} />
                                     {textErr && (
-                                        <span className="text-[12px] leading-[16px] text-[#dc2626]">
-                      {String(err(textPath)?.message)}
-                    </span>
+                                        <span className="text-xs text-red-500">{String(err(textPath)?.message)}</span>
                                     )}
                                 </div>
 
-                                <div className="md:col-span-1 flex items-end">
+                                {/* remove */}
+                                <div className="md:col-span-1 flex items-end justify-end">
                                     <button
                                         type="button"
-                                        className="text-[12px] leading-[16px] underline"
+                                        className="rounded-md bg-slate-700 px-2 py-1 text-xs text-slate-100 transition hover:bg-red-700"
                                         onClick={() => stepsFA.remove(rIdx)}
                                     >
                                         ×
@@ -95,7 +104,7 @@ export default function HomeRegistrationGuideForm({
 
                 <button
                     type="button"
-                    className="rounded-[4px] border px-[8px] py-[4px] text-[12px] leading-[16px]"
+                    className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-xs font-medium text-slate-100 transition hover:bg-slate-700"
                     onClick={() => stepsFA.append({ id: nextId(), text: "" })}
                 >
                     Додати крок
