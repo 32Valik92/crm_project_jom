@@ -1,4 +1,4 @@
-// app/validator/page.tsx (фрагмент) — оновлення generateZip
+// app/validator/page.tsx
 "use client";
 
 import {useState} from "react";
@@ -41,10 +41,11 @@ import {indexForFooter} from "@/lib/generators/footer";
 import {indexForHeader} from "@/lib/generators/header";
 
 const ValidatorPage = () => {
-    const [localeFolder, setLocaleFolder] = useState<string>("cs");
+    const [localeFolder, setLocaleFolder] = useState<string>("");
     const [page, setPage] = useState<PageKey | "">("");
     const [block, setBlock] = useState<BlockKey | "">("");
     const [data, setData] = useState<Partial<Record<BlockKey, AnyBlockValue>>>({});
+    const [domain, setDomain] = useState<string>("");
 
     const availableBlocks: BlockKey[] = page ? PAGES[page].blocks : [];
 
@@ -60,7 +61,7 @@ const ValidatorPage = () => {
     }
 
     async function generateZip(): Promise<void> {
-        if (!localeFolder) return;
+        if (!localeFolder || !domain) return;
         const zip = new JSZip();
 
         if (data.about_primary) {
@@ -340,8 +341,8 @@ const ValidatorPage = () => {
             )
         );
 
-        const blob = await zip.generateAsync({type: "blob"});
-        saveAs(blob, `${localeFolder}.zip`);
+        const blob = await zip.generateAsync({ type: "blob" });
+        saveAs(blob, `${domain}.zip`);
     }
 
     const schema: ZodTypeAny | null = block ? BLOCK_SCHEMAS[block] : null;
@@ -354,6 +355,8 @@ const ValidatorPage = () => {
             <SelectorsBar
                 localeFolder={localeFolder}
                 setLocaleFolder={setLocaleFolder}
+                domain={domain}
+                setDomain={setDomain}
                 page={page}
                 setPage={(p) => {
                     setPage(p);
@@ -363,6 +366,7 @@ const ValidatorPage = () => {
                 setBlock={setBlock}
                 availableBlocks={availableBlocks}
             />
+
 
             <div className="flex gap-[12px]">
                 <button
