@@ -1,12 +1,18 @@
-// app/validator/page.tsx
 "use client";
 
-import {useState} from "react";
+import { useState, useMemo, useRef, lazy, Suspense } from "react";
+import type { ZodTypeAny } from "zod";
 import JSZip from "jszip";
 import {saveAs} from "file-saver";
 
-import {type AnyBlockValue, BLOCK_META, BLOCK_SCHEMAS, type BlockKey, type PageKey, PAGES,} from "@/lib/schemas";
-
+import {
+    type AnyBlockValue,
+    BLOCK_META,
+    BLOCK_SCHEMAS,
+    type BlockKey,
+    type PageKey,
+    PAGES,
+} from "@/lib/schemas";
 import {
     indexForAbout,
     indexForApp,
@@ -14,7 +20,8 @@ import {
     indexForBonusCashback,
     indexForBonusDeposit,
     indexForBonusFreespin,
-    indexForBonusPromocode, indexForHome,
+    indexForBonusPromocode,
+    indexForHome,
     indexForResponsibleGame,
     indexForSlots,
     indexForSlotsAviator,
@@ -27,18 +34,23 @@ import {
     indexForSportsbook,
     indexForSportsbookBasketball,
     indexForSportsbookFootball,
-    rootIndex
+    rootIndex,
 } from "@/lib/generators";
+import { indexForBonusFreebet } from "@/lib/generators/bonus_freebet";
+import { indexForContacts } from "@/lib/generators/contacts";
+import { indexForFaq } from "@/lib/generators/faq";
+import { indexForFooter } from "@/lib/generators/footer";
+import { indexForHeader } from "@/lib/generators/header";
 
-import type {ZodTypeAny} from "zod";
-import DataSummary from "@/components/validator_json/DataSummary";
-import SelectorsBar from "@/components/validator_json/SelectorsBar";
-import BlockFormDialog from "@/components/validator_json/BlockFormDialog";
-import {indexForBonusFreebet} from "@/lib/generators/bonus_freebet";
-import {indexForContacts} from "@/lib/generators/contacts";
-import {indexForFaq} from "@/lib/generators/faq";
-import {indexForFooter} from "@/lib/generators/footer";
-import {indexForHeader} from "@/lib/generators/header";
+const DataSummary = lazy(() => import("@/components/validator_json/DataSummary"));
+const SelectorsBar = lazy(() => import("@/components/validator_json/SelectorsBar"));
+const BlockFormDialog = lazy(() => import("@/components/validator_json/BlockFormDialog"));
+
+type FolderConfig = {
+    folderName: string;
+    files: { name: string; data: AnyBlockValue | undefined }[];
+    indexGenerator: () => string;
+};
 
 const ValidatorPage = () => {
     const [localeFolder, setLocaleFolder] = useState<string>("");
@@ -46,303 +58,271 @@ const ValidatorPage = () => {
     const [block, setBlock] = useState<BlockKey | "">("");
     const [data, setData] = useState<Partial<Record<BlockKey, AnyBlockValue>>>({});
     const [domain, setDomain] = useState<string>("");
+    const dialogRef = useRef<HTMLDialogElement>(null);
 
-    const availableBlocks: BlockKey[] = page ? PAGES[page].blocks : [];
+    const availableBlocks = useMemo(() => (page ? PAGES[page].blocks : []), [page]);
 
     function openBlock(): void {
         if (!block) return;
-        (document.getElementById("formDialog") as HTMLDialogElement | null)?.showModal();
+        dialogRef.current?.showModal();
     }
 
     function saveBlock(values: AnyBlockValue): void {
         if (!block) return;
-        setData((prev) => ({...prev, [block]: values}));
-        (document.getElementById("formDialog") as HTMLDialogElement | null)?.close();
+        setData((prev) => ({ ...prev, [block]: values }));
+        dialogRef.current?.close();
+    }
+
+    function addFolderToZip(zip: any, localeFolder: string, config: FolderConfig): void {
+        const folder = zip.folder(`${localeFolder}/${config.folderName}`)!;
+        config.files.forEach(({ name, data }) => {
+            if (data) folder.file(`${name}.json`, JSON.stringify(data, null, 2));
+        });
+        folder.file("index.ts", config.indexGenerator());
     }
 
     async function generateZip(): Promise<void> {
         if (!localeFolder || !domain) return;
         const zip = new JSZip();
 
-        if (data.about_primary) {
-            const about = zip.folder(`${localeFolder}/about`)!;
-            about.file("about_primary.json", JSON.stringify(data.about_primary, null, 2));
-            about.file("index.ts", indexForAbout());
+        const folderConfigs: FolderConfig[] = [
+            {
+                folderName: "about",
+                files: [{ name: "about_primary", data: data.about_primary }],
+                indexGenerator: indexForAbout,
+            },
+            {
+                folderName: "app",
+                files: [
+                    { name: "about_primary", data: data.app_about_primary },
+                    { name: "mobile_app", data: data.mobile_app },
+                ],
+                indexGenerator: indexForApp,
+            },
+            {
+                folderName: "bonus",
+                files: [
+                    { name: "about_primary", data: data.bonus_about_primary },
+                    { name: "bonuses", data: data.bonus_bonuses },
+                    { name: "hero", data: data.bonus_hero },
+                ],
+                indexGenerator: indexForBonus,
+            },
+            {
+                folderName: "bonus_cashback",
+                files: [{ name: "blocks", data: data.bonus_cashback_about_primary }],
+                indexGenerator: indexForBonusCashback,
+            },
+            {
+                folderName: "bonus_deposit",
+                files: [
+                    { name: "about_primary", data: data.bonus_deposit_about_primary },
+                    { name: "bonuses", data: data.bonus_deposit_bonuses },
+                ],
+                indexGenerator: indexForBonusDeposit,
+            },
+            {
+                folderName: "bonus_freebet",
+                files: [
+                    { name: "about_primary", data: data.bonus_freebet_about_primary },
+                    { name: "bonuses", data: data.bonus_freebet_bonuses },
+                ],
+                indexGenerator: indexForBonusFreebet,
+            },
+            {
+                folderName: "bonus_freespin",
+                files: [
+                    { name: "about_primary", data: data.bonus_freespin_about_primary },
+                    { name: "bonuses", data: data.bonus_freespin_bonuses },
+                ],
+                indexGenerator: indexForBonusFreespin,
+            },
+            {
+                folderName: "bonus_promocode",
+                files: [
+                    { name: "about_primary", data: data.bonus_promocode_about_primary },
+                    { name: "bonuses", data: data.bonus_promocode_bonuses },
+                ],
+                indexGenerator: indexForBonusPromocode,
+            },
+            {
+                folderName: "contacts",
+                files: [{ name: "about_primary", data: data.contacts_about_primary }],
+                indexGenerator: indexForContacts,
+            },
+            {
+                folderName: "faq",
+                files: [{ name: "about_primary", data: data.faq_about_primary }],
+                indexGenerator: indexForFaq,
+            },
+            {
+                folderName: "footer",
+                files: [{ name: "footer", data: data.footer_footer }],
+                indexGenerator: indexForFooter,
+            },
+            {
+                folderName: "header",
+                files: [{ name: "header", data: data.header_header }],
+                indexGenerator: indexForHeader,
+            },
+            {
+                folderName: "home",
+                files: [
+                    { name: "about", data: data.home_about },
+                    { name: "about_primary", data: data.home_about_primary },
+                    { name: "bonuses", data: data.home_bonuses },
+                    { name: "casino", data: data.home_casino },
+                    { name: "faq", data: data.home_faq },
+                    { name: "feature_cards", data: data.home_feature_cards },
+                    { name: "hero", data: data.home_hero },
+                    { name: "how_to_start", data: data.home_how_to_start },
+                    { name: "mobile_app", data: data.home_mobile_app },
+                    { name: "payments", data: data.home_payments },
+                    { name: "registration_guide", data: data.home_registration_guide },
+                    { name: "sports", data: data.home_sports },
+                    { name: "support", data: data.home_support },
+                    { name: "top_feature", data: data.home_top_feature },
+                    { name: "verification", data: data.home_verification },
+                ],
+                indexGenerator: indexForHome,
+            },
+            {
+                folderName: "responsiblegame",
+                files: [{ name: "about_primary", data: data.responsiblegame_about_primary }],
+                indexGenerator: indexForResponsibleGame,
+            },
+            {
+                folderName: "slots",
+                files: [
+                    { name: "about_primary", data: data.slots_about_primary },
+                    { name: "casino", data: data.slots_casino },
+                    { name: "hero", data: data.slots_hero },
+                ],
+                indexGenerator: indexForSlots,
+            },
+            {
+                folderName: "slots_aviator",
+                files: [{ name: "about_primary", data: data.slots_aviator_about_primary }],
+                indexGenerator: indexForSlotsAviator,
+            },
+            {
+                folderName: "slots_bookofdead",
+                files: [{ name: "about_primary", data: data.slots_bookofdead_about_primary }],
+                indexGenerator: indexForSlotsBookOfDead,
+            },
+            {
+                folderName: "slots_bookofradeluxe",
+                files: [{ name: "about_primary", data: data.slots_bookofradeluxe_about_primary }],
+                indexGenerator: indexForSlotsBookOfRaDeluxe,
+            },
+            {
+                folderName: "slots_chickenroad",
+                files: [{ name: "about_primary", data: data.slots_chickenroad_about_primary }],
+                indexGenerator: indexForSlotsChickenRoad,
+            },
+            {
+                folderName: "slots_fruitcocktail",
+                files: [{ name: "about_primary", data: data.slots_fruitcocktail_about_primary }],
+                indexGenerator: indexForSlotsFruitCocktail,
+            },
+            {
+                folderName: "slots_plinko",
+                files: [{ name: "about_primary", data: data.slots_plinko_about_primary }],
+                indexGenerator: indexForSlotsPlinko,
+            },
+            {
+                folderName: "slots_popular",
+                files: [
+                    { name: "about_primary", data: data.slots_popular_about_primary },
+                    { name: "casino", data: data.slots_popular_casino },
+                ],
+                indexGenerator: indexForSlotsPopular,
+            },
+            {
+                folderName: "sportsbook",
+                files: [
+                    { name: "about_primary", data: data.sportsbook_about_primary },
+                    { name: "hero", data: data.sportsbook_hero },
+                ],
+                indexGenerator: indexForSportsbook,
+            },
+            {
+                folderName: "sportsbook_basketball",
+                files: [{ name: "about_primary", data: data.sportsbook_basketball_about_primary }],
+                indexGenerator: indexForSportsbookBasketball,
+            },
+            {
+                folderName: "sportsbook_football",
+                files: [{ name: "about_primary", data: data.sportsbook_football_about_primary }],
+                indexGenerator: indexForSportsbookFootball,
+            },
+        ];
+
+        try {
+            folderConfigs.forEach((config) => {
+                if (config.files.some(({ data }) => data)) {
+                    addFolderToZip(zip, localeFolder, config);
+                }
+            });
+
+            if (data.seo_seo) {
+                zip.file(`${localeFolder}/seo.json`, JSON.stringify(data.seo_seo, null, 2));
+            }
+
+            zip.file(
+                `${localeFolder}/index.ts`,
+                rootIndex(
+                    Boolean(data.about_primary),
+                    Boolean(data.app_about_primary || data.mobile_app),
+                    Boolean(data.bonus_about_primary || data.bonus_bonuses || data.bonus_hero),
+                    Boolean(data.bonus_cashback_about_primary),
+                    Boolean(data.bonus_deposit_about_primary || data.bonus_deposit_bonuses),
+                    Boolean(data.bonus_freebet_about_primary || data.bonus_freebet_bonuses),
+                    Boolean(data.bonus_freespin_about_primary || data.bonus_freespin_bonuses),
+                    Boolean(data.bonus_promocode_about_primary || data.bonus_promocode_bonuses),
+                    Boolean(data.contacts_about_primary),
+                    Boolean(data.faq_about_primary),
+                    Boolean(data.footer_footer),
+                    Boolean(data.header_header),
+                    Boolean(
+                        data.home_about ||
+                        data.home_about_primary ||
+                        data.home_bonuses ||
+                        data.home_casino ||
+                        data.home_faq ||
+                        data.home_feature_cards ||
+                        data.home_hero ||
+                        data.home_how_to_start ||
+                        data.home_mobile_app ||
+                        data.home_payments ||
+                        data.home_registration_guide ||
+                        data.home_sports ||
+                        data.home_support ||
+                        data.home_top_feature ||
+                        data.home_verification
+                    ),
+                    Boolean(data.responsiblegame_about_primary),
+                    Boolean(data.slots_about_primary || data.slots_casino || data.slots_hero),
+                    Boolean(data.slots_aviator_about_primary),
+                    Boolean(data.slots_bookofdead_about_primary),
+                    Boolean(data.slots_bookofradeluxe_about_primary),
+                    Boolean(data.slots_chickenroad_about_primary),
+                    Boolean(data.slots_fruitcocktail_about_primary),
+                    Boolean(data.slots_plinko_about_primary),
+                    Boolean(data.slots_popular_about_primary || data.slots_popular_casino),
+                    Boolean(data.sportsbook_about_primary || data.sportsbook_hero),
+                    Boolean(data.sportsbook_basketball_about_primary),
+                    Boolean(data.sportsbook_football_about_primary),
+                    Boolean(data.seo_seo)
+                )
+            );
+
+            const blob = await zip.generateAsync({ type: "blob" });
+            saveAs(blob, `${domain}.zip`);
+        } catch (error) {
+            console.error("Error generating ZIP file:", error);
+            alert("Не вдалося згенерувати ZIP-файл. Перевірте консоль для деталей.");
         }
-
-        const hasApp = Boolean(data.app_about_primary || data.mobile_app);
-        if (hasApp) {
-            const app = zip.folder(`${localeFolder}/app`)!;
-            if (data.app_about_primary)
-                app.file("about_primary.json", JSON.stringify(data.app_about_primary, null, 2));
-            if (data.mobile_app)
-                app.file("mobile_app.json", JSON.stringify(data.mobile_app, null, 2));
-            app.file("index.ts", indexForApp());
-        }
-
-        const hasBonus = Boolean(data.bonus_about_primary || data.bonus_bonuses || data.bonus_hero);
-        if (hasBonus) {
-            const bonus = zip.folder(`${localeFolder}/bonus`)!;
-            if (data.bonus_about_primary)
-                bonus.file("about_primary.json", JSON.stringify(data.bonus_about_primary, null, 2));
-            if (data.bonus_bonuses)
-                bonus.file("bonuses.json", JSON.stringify(data.bonus_bonuses, null, 2));
-            if (data.bonus_hero)
-                bonus.file("hero.json", JSON.stringify(data.bonus_hero, null, 2));
-            bonus.file("index.ts", indexForBonus());
-        }
-
-        const hasBonusCashback = Boolean(data.bonus_cashback_about_primary);
-        if (hasBonusCashback) {
-            const bonusCashback = zip.folder(`${localeFolder}/bonus_cashback`)!;
-            bonusCashback.file("blocks.json", JSON.stringify(data.bonus_cashback_about_primary, null, 2));
-            bonusCashback.file("index.ts", indexForBonusCashback());
-        }
-
-        const hasBonusDeposit = Boolean(data.bonus_deposit_about_primary || data.bonus_deposit_bonuses);
-        if (hasBonusDeposit) {
-            const bonusDeposit = zip.folder(`${localeFolder}/bonus_deposit`)!;
-            if (data.bonus_deposit_about_primary)
-                bonusDeposit.file("about_primary.json", JSON.stringify(data.bonus_deposit_about_primary, null, 2));
-            if (data.bonus_deposit_bonuses)
-                bonusDeposit.file("bonuses.json", JSON.stringify(data.bonus_deposit_bonuses, null, 2));
-            bonusDeposit.file("index.ts", indexForBonusDeposit());
-        }
-
-        const hasBonusFreebet = Boolean(data.bonus_freebet_about_primary || data.bonus_freebet_bonuses);
-        if (hasBonusFreebet) {
-            const bonusFreebet = zip.folder(`${localeFolder}/bonus_freebet`)!;
-            if (data.bonus_freebet_about_primary)
-                bonusFreebet.file("about_primary.json", JSON.stringify(data.bonus_freebet_about_primary, null, 2));
-            if (data.bonus_freebet_bonuses)
-                bonusFreebet.file("bonuses.json", JSON.stringify(data.bonus_freebet_bonuses, null, 2));
-            bonusFreebet.file("index.ts", indexForBonusFreebet());
-        }
-
-        const hasBonusFreespin = Boolean(data.bonus_freespin_about_primary || data.bonus_freespin_bonuses);
-        if (hasBonusFreespin) {
-            const bonusFreespin = zip.folder(`${localeFolder}/bonus_freespin`)!;
-            if (data.bonus_freespin_about_primary)
-                bonusFreespin.file("about_primary.json", JSON.stringify(data.bonus_freespin_about_primary, null, 2));
-            if (data.bonus_freespin_bonuses)
-                bonusFreespin.file("bonuses.json", JSON.stringify(data.bonus_freespin_bonuses, null, 2));
-            bonusFreespin.file("index.ts", indexForBonusFreespin());
-        }
-
-        const hasBonusPromocode = Boolean(data.bonus_promocode_about_primary || data.bonus_promocode_bonuses);
-        if (hasBonusPromocode) {
-            const bonusPromocode = zip.folder(`${localeFolder}/bonus_promocode`)!;
-            if (data.bonus_promocode_about_primary)
-                bonusPromocode.file("about_primary.json", JSON.stringify(data.bonus_promocode_about_primary, null, 2));
-            if (data.bonus_promocode_bonuses)
-                bonusPromocode.file("bonuses.json", JSON.stringify(data.bonus_promocode_bonuses, null, 2));
-            bonusPromocode.file("index.ts", indexForBonusPromocode());
-        }
-
-        const hasContacts = Boolean(data.contacts_about_primary);
-        if (hasContacts) {
-            const contacts = zip.folder(`${localeFolder}/contacts`)!;
-            if (data.contacts_about_primary)
-                contacts.file("about_primary.json", JSON.stringify(data.contacts_about_primary, null, 2));
-            contacts.file("index.ts", indexForContacts());
-        }
-
-        const hasFaq = Boolean(data.faq_about_primary);
-        if (hasFaq) {
-            const faq = zip.folder(`${localeFolder}/faq`)!;
-            if (data.faq_about_primary)
-                faq.file("about_primary.json", JSON.stringify(data.faq_about_primary, null, 2));
-            faq.file("index.ts", indexForFaq());
-        }
-
-        const hasFooter = Boolean(data.footer_footer);
-        if (hasFooter) {
-            const footer = zip.folder(`${localeFolder}/footer`)!;
-            if (data.footer_footer)
-                footer.file("footer.json", JSON.stringify(data.footer_footer, null, 2));
-            footer.file("index.ts", indexForFooter());
-        }
-
-        const hasHeader = Boolean(data.header_header);
-        if (hasHeader) {
-            const header = zip.folder(`${localeFolder}/header`)!;
-            if (data.header_header)
-                header.file("header.json", JSON.stringify(data.header_header, null, 2));
-            header.file("index.ts", indexForHeader());
-        }
-
-        const hasHome =
-            Boolean(data.home_about) ||
-            Boolean(data.home_about_primary) ||
-            Boolean(data.home_bonuses) ||
-            Boolean(data.home_casino) ||
-            Boolean(data.home_faq) ||
-            Boolean(data.home_feature_cards) ||
-            Boolean(data.home_hero) ||
-            Boolean(data.home_how_to_start) ||
-            Boolean(data.home_mobile_app) ||
-            Boolean(data.home_payments) ||
-            Boolean(data.home_registration_guide) ||
-            Boolean(data.home_sports) ||
-            Boolean(data.home_support) ||
-            Boolean(data.home_top_feature) ||
-            Boolean(data.home_verification);
-        if (hasHome) {
-            const home = zip.folder(`${localeFolder}/home`)!;
-
-            if (data.home_about) home.file("about.json", JSON.stringify(data.home_about, null, 2));
-            if (data.home_about_primary) home.file("about_primary.json", JSON.stringify(data.home_about_primary, null, 2));
-            if (data.home_bonuses) home.file("bonuses.json", JSON.stringify(data.home_bonuses, null, 2));
-            if (data.home_casino) home.file("casino.json", JSON.stringify(data.home_casino, null, 2));
-            if (data.home_faq) home.file("faq.json", JSON.stringify(data.home_faq, null, 2));
-            if (data.home_feature_cards) home.file("feature_cards.json", JSON.stringify(data.home_feature_cards, null, 2));
-            if (data.home_hero) home.file("hero.json", JSON.stringify(data.home_hero, null, 2));
-            if (data.home_how_to_start) home.file("how_to_start.json", JSON.stringify(data.home_how_to_start, null, 2));
-            if (data.home_mobile_app) home.file("mobile_app.json", JSON.stringify(data.home_mobile_app, null, 2));
-            if (data.home_payments) home.file("payments.json", JSON.stringify(data.home_payments, null, 2));
-            if (data.home_registration_guide) home.file("registration_guide.json", JSON.stringify(data.home_registration_guide, null, 2));
-            if (data.home_sports) home.file("sports.json", JSON.stringify(data.home_sports, null, 2));
-            if (data.home_support) home.file("support.json", JSON.stringify(data.home_support, null, 2));
-            if (data.home_top_feature) home.file("top_feature.json", JSON.stringify(data.home_top_feature, null, 2));
-            if (data.home_verification) home.file("verification.json", JSON.stringify(data.home_verification, null, 2));
-
-            home.file("index.ts", indexForHome());
-        }
-
-        const hasResponsibleGame = Boolean(data.responsiblegame_about_primary);
-
-        if (hasResponsibleGame) {
-            const rg = zip.folder(`${localeFolder}/responsiblegame`)!;
-            rg.file("about_primary.json", JSON.stringify(data.responsiblegame_about_primary, null, 2));
-            rg.file("index.ts", indexForResponsibleGame());
-        }
-
-        const hasSlots = Boolean(data.slots_about_primary || data.slots_casino || data.slots_hero);
-
-        if (hasSlots) {
-            const slots = zip.folder(`${localeFolder}/slots`)!;
-            if (data.slots_about_primary) slots.file("about_primary.json", JSON.stringify(data.slots_about_primary, null, 2));
-            if (data.slots_casino) slots.file("casino.json", JSON.stringify(data.slots_casino, null, 2));
-            if (data.slots_hero) slots.file("hero.json", JSON.stringify(data.slots_hero, null, 2));
-            slots.file("index.ts", indexForSlots());
-        }
-
-        const hasSlotsAviator = Boolean(data.slots_aviator_about_primary);
-        if (hasSlotsAviator) {
-            const sa = zip.folder(`${localeFolder}/slots_aviator`)!;
-            if (data.slots_aviator_about_primary)
-                sa.file("about_primary.json", JSON.stringify(data.slots_aviator_about_primary, null, 2));
-            sa.file("index.ts", indexForSlotsAviator());
-        }
-
-        const hasSlotsBookOfDead = Boolean(data.slots_bookofdead_about_primary);
-        if (hasSlotsBookOfDead) {
-            const folder = zip.folder(`${localeFolder}/slots_bookofdead`)!;
-            folder.file("about_primary.json", JSON.stringify(data.slots_bookofdead_about_primary, null, 2));
-            folder.file("index.ts", indexForSlotsBookOfDead());
-        }
-
-        const hasSlotsBookOfRaDeluxe = Boolean(data.slots_bookofradeluxe_about_primary);
-        if (hasSlotsBookOfRaDeluxe) {
-            const folder = zip.folder(`${localeFolder}/slots_bookofradeluxe`)!;
-            folder.file("about_primary.json", JSON.stringify(data.slots_bookofradeluxe_about_primary, null, 2));
-            folder.file("index.ts", indexForSlotsBookOfRaDeluxe());
-        }
-
-        const hasSlotsChickenRoad = Boolean(data.slots_chickenroad_about_primary);
-        if (hasSlotsChickenRoad) {
-            const folder = zip.folder(`${localeFolder}/slots_chickenroad`)!;
-            folder.file("about_primary.json", JSON.stringify(data.slots_chickenroad_about_primary, null, 2));
-            folder.file("index.ts", indexForSlotsChickenRoad());
-        }
-
-        const hasSlotsFruitCocktail = Boolean(data.slots_fruitcocktail_about_primary);
-        if (hasSlotsFruitCocktail) {
-            const folder = zip.folder(`${localeFolder}/slots_fruitcocktail`)!;
-            folder.file("about_primary.json", JSON.stringify(data.slots_fruitcocktail_about_primary, null, 2));
-            folder.file("index.ts", indexForSlotsFruitCocktail());
-        }
-
-        const hasSlotsPlinko = Boolean(data.slots_plinko_about_primary);
-        if (hasSlotsPlinko) {
-            const folder = zip.folder(`${localeFolder}/slots_plinko`)!;
-            folder.file("about_primary.json", JSON.stringify(data.slots_plinko_about_primary, null, 2));
-            folder.file("index.ts", indexForSlotsPlinko());
-        }
-
-        const hasSlotsPopular = Boolean(data.slots_popular_about_primary || data.slots_popular_casino);
-        if (hasSlotsPopular) {
-            const folder = zip.folder(`${localeFolder}/slots_popular`)!;
-            if (data.slots_popular_about_primary)
-                folder.file("about_primary.json", JSON.stringify(data.slots_popular_about_primary, null, 2));
-            if (data.slots_popular_casino)
-                folder.file("casino.json", JSON.stringify(data.slots_popular_casino, null, 2));
-            folder.file("index.ts", indexForSlotsPopular());
-        }
-
-        const hasSportsbook = Boolean(data.sportsbook_about_primary || data.sportsbook_hero);
-        if (hasSportsbook) {
-            const folder = zip.folder(`${localeFolder}/sportsbook`)!;
-            if (data.sportsbook_about_primary)
-                folder.file("about_primary.json", JSON.stringify(data.sportsbook_about_primary, null, 2));
-            if (data.sportsbook_hero)
-                folder.file("hero.json", JSON.stringify(data.sportsbook_hero, null, 2));
-            folder.file("index.ts", indexForSportsbook());
-        }
-
-        const hasSportsbookBasketball = Boolean(data.sportsbook_basketball_about_primary);
-        if (hasSportsbookBasketball) {
-            const folder = zip.folder(`${localeFolder}/sportsbook_basketball`)!;
-            folder.file("about_primary.json", JSON.stringify(data.sportsbook_basketball_about_primary, null, 2));
-            folder.file("index.ts", indexForSportsbookBasketball());
-        }
-
-        const hasSportsbookFootball = Boolean(data.sportsbook_football_about_primary);
-        if (hasSportsbookFootball) {
-            const folder = zip.folder(`${localeFolder}/sportsbook_football`)!;
-            folder.file("about_primary.json", JSON.stringify(data.sportsbook_football_about_primary, null, 2));
-            folder.file("index.ts", indexForSportsbookFootball());
-        }
-
-        const hasSeo = Boolean(data.seo_seo);
-        if (hasSeo) {
-            zip.file(`${localeFolder}/seo.json`, JSON.stringify(data.seo_seo, null, 2));
-        }
-
-        zip.file(
-            `${localeFolder}/index.ts`,
-            rootIndex(
-                Boolean(data.about_primary),
-                hasApp,
-                hasBonus,
-                hasBonusCashback,
-                hasBonusDeposit,
-                hasBonusFreebet,
-                hasBonusFreespin,
-                hasBonusPromocode,
-                hasContacts,
-                hasFaq,
-                hasFooter,
-                hasHeader,
-                hasHome,
-                hasResponsibleGame,
-                hasSlots,
-                hasSlotsAviator,
-                hasSlotsBookOfDead,
-                hasSlotsBookOfRaDeluxe,
-                hasSlotsChickenRoad,
-                hasSlotsFruitCocktail,
-                hasSlotsPlinko,
-                hasSlotsPopular,
-                hasSportsbook,
-                hasSportsbookBasketball,
-                hasSportsbookFootball,
-                hasSeo,
-            )
-        );
-
-        const blob = await zip.generateAsync({ type: "blob" });
-        saveAs(blob, `${domain}.zip`);
     }
 
     const schema: ZodTypeAny | null = block ? BLOCK_SCHEMAS[block] : null;
@@ -352,21 +332,22 @@ const ValidatorPage = () => {
         <div className="flex flex-col gap-[24px]">
             <h1 className="text-[24px] font-bold leading-[32px]">Валідатор JSON</h1>
 
-            <SelectorsBar
-                localeFolder={localeFolder}
-                setLocaleFolder={setLocaleFolder}
-                domain={domain}
-                setDomain={setDomain}
-                page={page}
-                setPage={(p) => {
-                    setPage(p);
-                    setBlock("");
-                }}
-                block={block}
-                setBlock={setBlock}
-                availableBlocks={availableBlocks}
-            />
-
+            <Suspense fallback={<div>Loading Selectors...</div>}>
+                <SelectorsBar
+                    localeFolder={localeFolder}
+                    setLocaleFolder={setLocaleFolder}
+                    domain={domain}
+                    setDomain={setDomain}
+                    page={page}
+                    setPage={(p) => {
+                        setPage(p);
+                        setBlock("");
+                    }}
+                    block={block}
+                    setBlock={setBlock}
+                    availableBlocks={availableBlocks}
+                />
+            </Suspense>
 
             <div className="flex gap-[12px]">
                 <button
@@ -376,25 +357,27 @@ const ValidatorPage = () => {
                 >
                     Відкрити форму блоку
                 </button>
-
                 <button className="rounded-[4px] border px-[16px] py-[8px]" onClick={generateZip}>
                     Згенерувати ZIP
                 </button>
             </div>
 
-            <DataSummary data={data} BLOCK_META={BLOCK_META}/>
+            <Suspense fallback={<div>Loading Summary...</div>}>
+                <DataSummary data={data} BLOCK_META={BLOCK_META} />
+            </Suspense>
 
-            <BlockFormDialog
-                schema={schema}
-                block={block}
-                initialValues={draft ?? {}}
-                onCancel={() =>
-                    (document.getElementById("formDialog") as HTMLDialogElement | null)?.close()
-                }
-                onSave={saveBlock}
-            />
+            <Suspense fallback={<div>Loading Form...</div>}>
+                <BlockFormDialog
+                    schema={schema}
+                    block={block}
+                    initialValues={draft ?? {}}
+                    onCancel={() => dialogRef.current?.close()}
+                    onSave={saveBlock}
+                    ref={dialogRef}
+                />
+            </Suspense>
         </div>
     );
-}
+};
 
 export default ValidatorPage;
