@@ -69,26 +69,42 @@ type Props = {
 
 };
 
-const BlockFormDialog = forwardRef<HTMLDialogElement, Props>(({ schema, block, initialValues, onCancel, onSave }, ref) => {
-    return (
-        <dialog
-            ref={ref}
-            id="formDialog"
-            className="p-0 rounded-2xl border border-slate-200/60 shadow-2xl backdrop:backdrop-blur-sm backdrop:bg-black/50 bg-white text-slate-800 dark:bg-[#0f172a] dark:text-slate-100 dark:border-white/10"
-        >
-            <Suspense fallback={<div>Loading form...</div>}>
-                <FormContent schema={schema} block={block} initialValues={initialValues} onCancel={onCancel} onSave={onSave} />
-            </Suspense>
-            <style jsx global>{`
-        #formDialog::backdrop {
-          background: rgba(0, 0, 0, 0.55);
-          -webkit-backdrop-filter: blur(6px);
-          backdrop-filter: blur(6px);
-        }
-      `}</style>
-        </dialog>
-    );
-});
+const BlockFormDialog = forwardRef<HTMLDialogElement, Props>(
+    ({ schema, block, initialValues, onCancel, onSave }, ref) => {
+        return (
+            <>
+                <dialog
+                    ref={ref}
+                    id="formDialog"
+                    className=" p-0  rounded-2xl  border border-slate-200/60  shadow-2xl  backdrop:backdrop-blur-sm  backdrop:bg-black/50  bg-white  text-slate-800  dark:bg-[#0f172a]  dark:text-slate-100  dark:border-white/10 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+  "
+                >
+
+                <Suspense fallback={<div>Loading form...</div>}>
+                        <FormContent
+                            schema={schema}
+                            block={block}
+                            initialValues={initialValues}
+                            onCancel={onCancel}
+                            onSave={onSave}
+                        />
+                    </Suspense>
+                </dialog>
+
+                <style>
+                    {`
+            #formDialog::backdrop {
+              background: rgba(0, 0, 0, 0.55);
+              -webkit-backdrop-filter: blur(6px);
+              backdrop-filter: blur(6px);
+            }
+          `}
+                </style>
+            </>
+        );
+    }
+);
+
 
 BlockFormDialog.displayName = "BlockFormDialog";
 
