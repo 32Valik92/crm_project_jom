@@ -2,14 +2,24 @@
 "use client";
 
 import { useEffect } from "react";
-import { type Control, type UseFormRegister, useFieldArray } from "react-hook-form";
+import {
+    type Control,
+    type UseFormRegister,
+    useFieldArray,
+    UseFormSetValue,
+} from "react-hook-form";
+import ImageUploader from "@/components/validator_json/ImageUploader";
 
 export default function HomeTopFeatureForm({
                                                control,
                                                registerAction,
+                                               setValue,
+                                               page,
                                            }: {
     control: Control;
     registerAction: UseFormRegister<any>;
+    setValue: UseFormSetValue<any>;
+    page?: string;
 }) {
     const cardsFA = useFieldArray({ control, name: "cards" as any });
     const errors: any = (control as any)?._formState?.errors ?? {};
@@ -30,13 +40,13 @@ export default function HomeTopFeatureForm({
             bad ? "border-red-600" : "",
         ].join(" ");
 
+    const basePath = `${page ?? "home"}/top-feature`;
+
     return (
         <div className="space-y-4">
             {/* title */}
             <div className="flex flex-col gap-1.5">
-        <span className="text-xs font-semibold uppercase tracking-wide">
-          title
-        </span>
+                <span className="text-xs font-semibold uppercase tracking-wide">title</span>
                 <input className={cls(!!err("title"))} {...registerAction("title")} />
                 {!!err("title") && (
                     <span className="text-xs text-red-500">{String(err("title")?.message)}</span>
@@ -50,16 +60,29 @@ export default function HomeTopFeatureForm({
                 {cardsFA.fields.map((card, cIdx) => {
                     const base = `cards.${cIdx}`;
                     return (
-                        <div key={card.id} className="space-y-3 rounded-xl border border-slate-700 bg-slate-900 p-4">
-                            <div className="grid gap-2 md:grid-cols-5">
-                                {/* srcImg */}
+                        <div
+                            key={card.id}
+                            className="space-y-3 rounded-xl border border-slate-700 bg-slate-900 p-4"
+                        >
+                            <div className="grid gap-2 md:grid-cols-5 items-start">
+                                {/* srcImg → ImageUploader */}
                                 <div className="md:col-span-2 flex flex-col gap-1.5">
                   <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
                     {base}.srcImg
                   </span>
-                                    <input className={cls(!!err(`${base}.srcImg`))} {...registerAction(`${base}.srcImg`)} />
+                                    <ImageUploader
+                                        page={page ?? "home"}
+                                        block={"home_top_feature"}
+                                        fieldPath={`${base}.srcImg`} // куди записати шлях
+                                        basePath={basePath}          // images/<page>/top-feature/
+                                        variant={`card-${cIdx}`}     // стабільний унікальний ключ
+                                        setValue={setValue}
+                                        label="Завантажити зображення"
+                                    />
                                     {!!err(`${base}.srcImg`) && (
-                                        <span className="text-xs text-red-500">{String(err(`${base}.srcImg`)?.message)}</span>
+                                        <span className="text-xs text-red-500">
+                      {String(err(`${base}.srcImg`)?.message)}
+                    </span>
                                     )}
                                 </div>
 
@@ -70,7 +93,9 @@ export default function HomeTopFeatureForm({
                   </span>
                                     <input className={cls(!!err(`${base}.altImg`))} {...registerAction(`${base}.altImg`)} />
                                     {!!err(`${base}.altImg`) && (
-                                        <span className="text-xs text-red-500">{String(err(`${base}.altImg`)?.message)}</span>
+                                        <span className="text-xs text-red-500">
+                      {String(err(`${base}.altImg`)?.message)}
+                    </span>
                                     )}
                                 </div>
 
@@ -81,7 +106,9 @@ export default function HomeTopFeatureForm({
                   </span>
                                     <input className={cls(!!err(`${base}.title`))} {...registerAction(`${base}.title`)} />
                                     {!!err(`${base}.title`) && (
-                                        <span className="text-xs text-red-500">{String(err(`${base}.title`)?.message)}</span>
+                                        <span className="text-xs text-red-500">
+                      {String(err(`${base}.title`)?.message)}
+                    </span>
                                     )}
                                 </div>
                             </div>

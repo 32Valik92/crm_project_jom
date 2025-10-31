@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
-import { type Control, type UseFormRegister, useFieldArray } from "react-hook-form";
+import {
+    type Control,
+    type UseFormRegister,
+    useFieldArray,
+    UseFormSetValue,
+} from "react-hook-form";
+import ImageUploader from "@/components/validator_json/ImageUploader";
 
 function getErr(errors: any, path: string) {
     return path.split(".").reduce((acc, key) => (acc ? acc[key] : undefined), errors);
@@ -10,18 +16,25 @@ function getErr(errors: any, path: string) {
 export default function SlotsCasinoForm({
                                            control,
                                            registerAction,
+                                           setValue,
+                                           page,
                                        }: {
     control: Control;
     registerAction: UseFormRegister<any>;
+    setValue: UseFormSetValue<any>;
+    /** опційно, приходить з BlockFormDialog → ValidatorPage */
+    page?: string;
 }) {
     const cardsFA = useFieldArray({ control, name: "cards" as any });
 
     useEffect(() => {
-        if (cardsFA.fields.length === 0) cardsFA.append({ title: "", image: { src: "", alt: "" } });
+        if (cardsFA.fields.length === 0)
+            cardsFA.append({ title: "", image: { src: "", alt: "" } });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cardsFA.fields.length]);
 
     const errors = (control as any)._formState?.errors ?? {};
+    const basePath = `${page ?? "slots"}/casino`;
 
     return (
         <div className="space-y-4">
@@ -36,7 +49,9 @@ export default function SlotsCasinoForm({
                     ].join(" ")}
                     {...registerAction("title")}
                 />
-                {getErr(errors, "title") && <span className="text-xs text-red-500">Обов’язкове поле</span>}
+                {getErr(errors, "title") && (
+                    <span className="text-xs text-red-500">Обов’язкове поле</span>
+                )}
             </label>
 
             {/* subtitle */}
@@ -50,7 +65,9 @@ export default function SlotsCasinoForm({
                     ].join(" ")}
                     {...registerAction("subtitle")}
                 />
-                {getErr(errors, "subtitle") && <span className="text-xs text-red-500">Обов’язкове поле</span>}
+                {getErr(errors, "subtitle") && (
+                    <span className="text-xs text-red-500">Обов’язкове поле</span>
+                )}
             </label>
 
             {/* cards */}
@@ -78,23 +95,27 @@ export default function SlotsCasinoForm({
                         </label>
 
                         {/* image fields */}
-                        <div className="grid gap-3 md:grid-cols-2">
-                            <label className="flex flex-col gap-2">
+                        <div className="grid gap-3 md:grid-cols-2 items-start">
+                            {/* ЗАМІНА src на ImageUploader */}
+                            <div className="flex flex-col gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
                   cards[{idx}].image.src
                 </span>
-                                <input
-                                    className={[
-                                        "rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-slate-50 outline-none",
-                                        "focus:border-sky-500 focus:ring-2 focus:ring-sky-500 transition",
-                                        getErr(errors, `cards.${idx}.image.src`) ? "border-red-600" : "",
-                                    ].join(" ")}
-                                    {...registerAction(`cards.${idx}.image.src`)}
+                                <ImageUploader
+                                    page={page ?? "home"}
+                                    block={"home_casino"}
+                                    fieldPath={`cards.${idx}.image.src`}
+                                    // для зручності складатимемо в images/<page>/casino/
+                                    basePath={basePath}
+                                    // необов’язково, але додасться до імені
+                                    variant={`card-${idx}`}
+                                    setValue={setValue}
+                                    label="Завантажити зображення"
                                 />
                                 {getErr(errors, `cards.${idx}.image.src`) && (
                                     <span className="text-xs text-red-500">Обов’язкове поле</span>
                                 )}
-                            </label>
+                            </div>
 
                             <label className="flex flex-col gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">

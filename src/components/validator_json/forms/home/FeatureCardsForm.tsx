@@ -2,14 +2,25 @@
 "use client";
 
 import { useEffect } from "react";
-import { type Control, type UseFormRegister, useFieldArray } from "react-hook-form";
+import {
+    type Control,
+    type UseFormRegister,
+    useFieldArray,
+    UseFormSetValue,
+} from "react-hook-form";
+import ImageUploader from "@/components/validator_json/ImageUploader";
 
 export default function HomeFeatureCardsForm({
                                                  control,
                                                  registerAction,
+                                                 setValue,
+                                                 page,
                                              }: {
     control: Control;
     registerAction: UseFormRegister<any>;
+    setValue: UseFormSetValue<any>;
+    /** опційно, прийде з BlockFormDialog → ValidatorPage */
+    page?: string;
 }) {
     const itemsFA = useFieldArray({ control, name: "items" as any });
     const errors: any = (control as any)?._formState?.errors ?? {};
@@ -30,6 +41,8 @@ export default function HomeFeatureCardsForm({
             has ? "border-red-600" : "",
         ].join(" ");
 
+    const basePath = `${page ?? "home"}/feature-cards`;
+
     return (
         <div className="space-y-4">
             <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4">
@@ -42,10 +55,21 @@ export default function HomeFeatureCardsForm({
 
                     return (
                         <div key={f.id} className="space-y-3 rounded-xl border border-slate-700 bg-slate-900 p-4">
-                            <div className="grid gap-3 md:grid-cols-3">
-                                {/* icon */}
+                            <div className="grid gap-3 md:grid-cols-3 items-start">
+                                {/* icon: заміна на ImageUploader */}
                                 <div className="flex flex-col gap-1.5">
-                                    <input className={cls(!!err(iconP))} placeholder="icon" {...registerAction(iconP)} />
+                  <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
+                    items[{i}].icon
+                  </span>
+                                    <ImageUploader
+                                        page={page ?? "home"}
+                                        block={"home_feature_cards"}
+                                        fieldPath={iconP}          // у JSON покладеться /images/<...>
+                                        basePath={basePath}        // images/<page>/feature-cards/
+                                        variant={`item-${i}`}      // для стабільного імені
+                                        setValue={setValue}
+                                        label="Завантажити іконку"
+                                    />
                                     {!!err(iconP) && (
                                         <span className="text-xs text-red-500">{String(err(iconP)?.message)}</span>
                                     )}

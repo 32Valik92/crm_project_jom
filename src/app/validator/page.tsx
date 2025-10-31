@@ -1,18 +1,12 @@
 "use client";
 
-import { useState, useMemo, useRef, lazy, Suspense } from "react";
-import type { ZodTypeAny } from "zod";
+import {lazy, Suspense, useMemo, useRef, useState} from "react";
+import type {ZodTypeAny} from "zod";
 import JSZip from "jszip";
 import {saveAs} from "file-saver";
+import {ImageStoreProvider, useImageStore} from "@/components/validator_json/imageStore";
 
-import {
-    type AnyBlockValue,
-    BLOCK_META,
-    BLOCK_SCHEMAS,
-    type BlockKey,
-    type PageKey,
-    PAGES,
-} from "@/lib/schemas";
+import {type AnyBlockValue, BLOCK_META, BLOCK_SCHEMAS, type BlockKey, type PageKey, PAGES,} from "@/lib/schemas";
 import {
     indexForAbout,
     indexForApp,
@@ -36,11 +30,11 @@ import {
     indexForSportsbookFootball,
     rootIndex,
 } from "@/lib/generators";
-import { indexForBonusFreebet } from "@/lib/generators/bonus_freebet";
-import { indexForContacts } from "@/lib/generators/contacts";
-import { indexForFaq } from "@/lib/generators/faq";
-import { indexForFooter } from "@/lib/generators/footer";
-import { indexForHeader } from "@/lib/generators/header";
+import {indexForBonusFreebet} from "@/lib/generators/bonus_freebet";
+import {indexForContacts} from "@/lib/generators/contacts";
+import {indexForFaq} from "@/lib/generators/faq";
+import {indexForFooter} from "@/lib/generators/footer";
+import {indexForHeader} from "@/lib/generators/header";
 
 const DataSummary = lazy(() => import("@/components/validator_json/DataSummary"));
 const SelectorsBar = lazy(() => import("@/components/validator_json/SelectorsBar"));
@@ -52,7 +46,19 @@ type FolderConfig = {
     indexGenerator: () => string;
 };
 
+// 🔹 ЗОВНІШНІЙ компонент: лише провайдер
 const ValidatorPage = () => {
+    return (
+        <ImageStoreProvider>
+            <ValidatorPageInner/>
+        </ImageStoreProvider>
+    );
+};
+
+export default ValidatorPage;
+
+// 🔹 ВНУТРІШНІЙ компонент: тут уже можна викликати useImageStore()
+const ValidatorPageInner = () => {
     const [localeFolder, setLocaleFolder] = useState<string>("");
     const [page, setPage] = useState<PageKey | "">("");
     const [block, setBlock] = useState<BlockKey | "">("");
@@ -69,198 +75,201 @@ const ValidatorPage = () => {
 
     function saveBlock(values: AnyBlockValue): void {
         if (!block) return;
-        setData((prev) => ({ ...prev, [block]: values }));
+        setData((prev) => ({...prev, [block]: values}));
         dialogRef.current?.close();
     }
 
     function addFolderToZip(zip: any, localeFolder: string, config: FolderConfig): void {
         const folder = zip.folder(`${localeFolder}/${config.folderName}`)!;
-        config.files.forEach(({ name, data }) => {
+        config.files.forEach(({name, data}) => {
             if (data) folder.file(`${name}.json`, JSON.stringify(data, null, 2));
         });
         folder.file("index.ts", config.indexGenerator());
     }
 
+    const imageStore = useImageStore();
+
     async function generateZip(): Promise<void> {
+
         if (!localeFolder || !domain) return;
         const zip = new JSZip();
 
         const folderConfigs: FolderConfig[] = [
             {
                 folderName: "about",
-                files: [{ name: "about_primary", data: data.about_primary }],
+                files: [{name: "about_primary", data: data.about_primary}],
                 indexGenerator: indexForAbout,
             },
             {
                 folderName: "app",
                 files: [
-                    { name: "about_primary", data: data.app_about_primary },
-                    { name: "mobile_app", data: data.mobile_app },
+                    {name: "about_primary", data: data.app_about_primary},
+                    {name: "mobile_app", data: data.mobile_app},
                 ],
                 indexGenerator: indexForApp,
             },
             {
                 folderName: "bonus",
                 files: [
-                    { name: "about_primary", data: data.bonus_about_primary },
-                    { name: "bonuses", data: data.bonus_bonuses },
-                    { name: "hero", data: data.bonus_hero },
+                    {name: "about_primary", data: data.bonus_about_primary},
+                    {name: "bonuses", data: data.bonus_bonuses},
+                    {name: "hero", data: data.bonus_hero},
                 ],
                 indexGenerator: indexForBonus,
             },
             {
                 folderName: "bonus_cashback",
-                files: [{ name: "blocks", data: data.bonus_cashback_about_primary }],
+                files: [{name: "blocks", data: data.bonus_cashback_about_primary}],
                 indexGenerator: indexForBonusCashback,
             },
             {
                 folderName: "bonus_deposit",
                 files: [
-                    { name: "about_primary", data: data.bonus_deposit_about_primary },
-                    { name: "bonuses", data: data.bonus_deposit_bonuses },
+                    {name: "about_primary", data: data.bonus_deposit_about_primary},
+                    {name: "bonuses", data: data.bonus_deposit_bonuses},
                 ],
                 indexGenerator: indexForBonusDeposit,
             },
             {
                 folderName: "bonus_freebet",
                 files: [
-                    { name: "about_primary", data: data.bonus_freebet_about_primary },
-                    { name: "bonuses", data: data.bonus_freebet_bonuses },
+                    {name: "about_primary", data: data.bonus_freebet_about_primary},
+                    {name: "bonuses", data: data.bonus_freebet_bonuses},
                 ],
                 indexGenerator: indexForBonusFreebet,
             },
             {
                 folderName: "bonus_freespin",
                 files: [
-                    { name: "about_primary", data: data.bonus_freespin_about_primary },
-                    { name: "bonuses", data: data.bonus_freespin_bonuses },
+                    {name: "about_primary", data: data.bonus_freespin_about_primary},
+                    {name: "bonuses", data: data.bonus_freespin_bonuses},
                 ],
                 indexGenerator: indexForBonusFreespin,
             },
             {
                 folderName: "bonus_promocode",
                 files: [
-                    { name: "about_primary", data: data.bonus_promocode_about_primary },
-                    { name: "bonuses", data: data.bonus_promocode_bonuses },
+                    {name: "about_primary", data: data.bonus_promocode_about_primary},
+                    {name: "bonuses", data: data.bonus_promocode_bonuses},
                 ],
                 indexGenerator: indexForBonusPromocode,
             },
             {
                 folderName: "contacts",
-                files: [{ name: "about_primary", data: data.contacts_about_primary }],
+                files: [{name: "about_primary", data: data.contacts_about_primary}],
                 indexGenerator: indexForContacts,
             },
             {
                 folderName: "faq",
-                files: [{ name: "about_primary", data: data.faq_about_primary }],
+                files: [{name: "about_primary", data: data.faq_about_primary}],
                 indexGenerator: indexForFaq,
             },
             {
                 folderName: "footer",
-                files: [{ name: "footer", data: data.footer_footer }],
+                files: [{name: "footer", data: data.footer_footer}],
                 indexGenerator: indexForFooter,
             },
             {
                 folderName: "header",
-                files: [{ name: "header", data: data.header_header }],
+                files: [{name: "header", data: data.header_header}],
                 indexGenerator: indexForHeader,
             },
             {
                 folderName: "home",
                 files: [
-                    { name: "about", data: data.home_about },
-                    { name: "about_primary", data: data.home_about_primary },
-                    { name: "bonuses", data: data.home_bonuses },
-                    { name: "casino", data: data.home_casino },
-                    { name: "faq", data: data.home_faq },
-                    { name: "feature_cards", data: data.home_feature_cards },
-                    { name: "hero", data: data.home_hero },
-                    { name: "how_to_start", data: data.home_how_to_start },
-                    { name: "mobile_app", data: data.home_mobile_app },
-                    { name: "payments", data: data.home_payments },
-                    { name: "registration_guide", data: data.home_registration_guide },
-                    { name: "sports", data: data.home_sports },
-                    { name: "support", data: data.home_support },
-                    { name: "top_feature", data: data.home_top_feature },
-                    { name: "verification", data: data.home_verification },
+                    {name: "about", data: data.home_about},
+                    {name: "about_primary", data: data.home_about_primary},
+                    {name: "bonuses", data: data.home_bonuses},
+                    {name: "casino", data: data.home_casino},
+                    {name: "faq", data: data.home_faq},
+                    {name: "feature_cards", data: data.home_feature_cards},
+                    {name: "hero", data: data.home_hero},
+                    {name: "how_to_start", data: data.home_how_to_start},
+                    {name: "mobile_app", data: data.home_mobile_app},
+                    {name: "payments", data: data.home_payments},
+                    {name: "registration_guide", data: data.home_registration_guide},
+                    {name: "sports", data: data.home_sports},
+                    {name: "support", data: data.home_support},
+                    {name: "top_feature", data: data.home_top_feature},
+                    {name: "verification", data: data.home_verification},
                 ],
                 indexGenerator: indexForHome,
             },
             {
                 folderName: "responsiblegame",
-                files: [{ name: "about_primary", data: data.responsiblegame_about_primary }],
+                files: [{name: "about_primary", data: data.responsiblegame_about_primary}],
                 indexGenerator: indexForResponsibleGame,
             },
             {
                 folderName: "slots",
                 files: [
-                    { name: "about_primary", data: data.slots_about_primary },
-                    { name: "casino", data: data.slots_casino },
-                    { name: "hero", data: data.slots_hero },
+                    {name: "about_primary", data: data.slots_about_primary},
+                    {name: "casino", data: data.slots_casino},
+                    {name: "hero", data: data.slots_hero},
                 ],
                 indexGenerator: indexForSlots,
             },
             {
                 folderName: "slots_aviator",
-                files: [{ name: "about_primary", data: data.slots_aviator_about_primary }],
+                files: [{name: "about_primary", data: data.slots_aviator_about_primary}],
                 indexGenerator: indexForSlotsAviator,
             },
             {
                 folderName: "slots_bookofdead",
-                files: [{ name: "about_primary", data: data.slots_bookofdead_about_primary }],
+                files: [{name: "about_primary", data: data.slots_bookofdead_about_primary}],
                 indexGenerator: indexForSlotsBookOfDead,
             },
             {
                 folderName: "slots_bookofradeluxe",
-                files: [{ name: "about_primary", data: data.slots_bookofradeluxe_about_primary }],
+                files: [{name: "about_primary", data: data.slots_bookofradeluxe_about_primary}],
                 indexGenerator: indexForSlotsBookOfRaDeluxe,
             },
             {
                 folderName: "slots_chickenroad",
-                files: [{ name: "about_primary", data: data.slots_chickenroad_about_primary }],
+                files: [{name: "about_primary", data: data.slots_chickenroad_about_primary}],
                 indexGenerator: indexForSlotsChickenRoad,
             },
             {
                 folderName: "slots_fruitcocktail",
-                files: [{ name: "about_primary", data: data.slots_fruitcocktail_about_primary }],
+                files: [{name: "about_primary", data: data.slots_fruitcocktail_about_primary}],
                 indexGenerator: indexForSlotsFruitCocktail,
             },
             {
                 folderName: "slots_plinko",
-                files: [{ name: "about_primary", data: data.slots_plinko_about_primary }],
+                files: [{name: "about_primary", data: data.slots_plinko_about_primary}],
                 indexGenerator: indexForSlotsPlinko,
             },
             {
                 folderName: "slots_popular",
                 files: [
-                    { name: "about_primary", data: data.slots_popular_about_primary },
-                    { name: "casino", data: data.slots_popular_casino },
+                    {name: "about_primary", data: data.slots_popular_about_primary},
+                    {name: "casino", data: data.slots_popular_casino},
                 ],
                 indexGenerator: indexForSlotsPopular,
             },
             {
                 folderName: "sportsbook",
                 files: [
-                    { name: "about_primary", data: data.sportsbook_about_primary },
-                    { name: "hero", data: data.sportsbook_hero },
+                    {name: "about_primary", data: data.sportsbook_about_primary},
+                    {name: "hero", data: data.sportsbook_hero},
                 ],
                 indexGenerator: indexForSportsbook,
             },
             {
                 folderName: "sportsbook_basketball",
-                files: [{ name: "about_primary", data: data.sportsbook_basketball_about_primary }],
+                files: [{name: "about_primary", data: data.sportsbook_basketball_about_primary}],
                 indexGenerator: indexForSportsbookBasketball,
             },
             {
                 folderName: "sportsbook_football",
-                files: [{ name: "about_primary", data: data.sportsbook_football_about_primary }],
+                files: [{name: "about_primary", data: data.sportsbook_football_about_primary}],
                 indexGenerator: indexForSportsbookFootball,
             },
         ];
 
         try {
             folderConfigs.forEach((config) => {
-                if (config.files.some(({ data }) => data)) {
+                if (config.files.some(({data}) => data)) {
                     addFolderToZip(zip, localeFolder, config);
                 }
             });
@@ -317,7 +326,15 @@ const ValidatorPage = () => {
                 )
             );
 
-            const blob = await zip.generateAsync({ type: "blob" });
+            const imagesFolder = zip.folder(`images`)!; // сусідня папка, НЕ в локалі
+            const bag = imageStore.all();
+            for (const [filename, {file}] of Object.entries(bag)) {
+                const arr = await file.arrayBuffer();
+                imagesFolder.file(filename, arr); // кладемо оригінальний файл без зміни формату
+            }
+
+
+            const blob = await zip.generateAsync({type: "blob"});
             saveAs(blob, `${domain}.zip`);
         } catch (error) {
             console.error("Error generating ZIP file:", error);
@@ -363,7 +380,7 @@ const ValidatorPage = () => {
             </div>
 
             <Suspense fallback={<div>Loading Summary...</div>}>
-                <DataSummary data={data} BLOCK_META={BLOCK_META} />
+                <DataSummary data={data} BLOCK_META={BLOCK_META}/>
             </Suspense>
 
             <Suspense fallback={<div>Loading Form...</div>}>
@@ -374,10 +391,9 @@ const ValidatorPage = () => {
                     onCancel={() => dialogRef.current?.close()}
                     onSave={saveBlock}
                     ref={dialogRef}
+                    page={page}
                 />
             </Suspense>
         </div>
     );
 };
-
-export default ValidatorPage;

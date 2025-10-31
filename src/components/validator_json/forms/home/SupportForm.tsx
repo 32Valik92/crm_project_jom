@@ -2,14 +2,24 @@
 "use client";
 
 import { useEffect } from "react";
-import { type Control, type UseFormRegister, useFieldArray } from "react-hook-form";
+import {
+    type Control,
+    type UseFormRegister,
+    useFieldArray,
+    UseFormSetValue,
+} from "react-hook-form";
+import ImageUploader from "@/components/validator_json/ImageUploader";
 
 export default function HomeSupportForm({
                                             control,
                                             registerAction,
+                                            setValue,
+                                            page,
                                         }: {
     control: Control;
     registerAction: UseFormRegister<any>;
+    setValue: UseFormSetValue<any>;
+    page?: string;
 }) {
     const itemsFA = useFieldArray({ control, name: "items" as any });
     const errors: any = (control as any)?._formState?.errors ?? {};
@@ -30,6 +40,8 @@ export default function HomeSupportForm({
             bad ? "border-red-600" : "",
         ].join(" ");
 
+    const basePath = `${page ?? "home"}/support`;
+
     return (
         <div className="space-y-4">
             {/* title */}
@@ -48,16 +60,29 @@ export default function HomeSupportForm({
                 {itemsFA.fields.map((row, rIdx) => {
                     const base = `items.${rIdx}`;
                     return (
-                        <div key={row.id} className="space-y-3 rounded-xl border border-slate-700 bg-slate-900 p-4">
-                            <div className="grid gap-2 md:grid-cols-5">
-                                {/* icon */}
+                        <div
+                            key={row.id}
+                            className="space-y-3 rounded-xl border border-slate-700 bg-slate-900 p-4"
+                        >
+                            <div className="grid gap-2 md:grid-cols-5 items-start">
+                                {/* icon -> ImageUploader */}
                                 <div className="md:col-span-2 flex flex-col gap-1.5">
                   <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
                     {base}.icon
                   </span>
-                                    <input className={cls(!!err(`${base}.icon`))} {...registerAction(`${base}.icon`)} />
+                                    <ImageUploader
+                                        page={page ?? "home"}
+                                        block={"home_support"}
+                                        fieldPath={`${base}.icon`} // шлях запишеться сюди
+                                        basePath={basePath}         // images/<page>/support/
+                                        variant={`item-${rIdx}`}    // стабільний суфікс
+                                        setValue={setValue}
+                                        label="Завантажити іконку"
+                                    />
                                     {!!err(`${base}.icon`) && (
-                                        <span className="text-xs text-red-500">{String(err(`${base}.icon`)?.message)}</span>
+                                        <span className="text-xs text-red-500">
+                      {String(err(`${base}.icon`)?.message)}
+                    </span>
                                     )}
                                 </div>
 
@@ -68,7 +93,9 @@ export default function HomeSupportForm({
                   </span>
                                     <input className={cls(!!err(`${base}.label`))} {...registerAction(`${base}.label`)} />
                                     {!!err(`${base}.label`) && (
-                                        <span className="text-xs text-red-500">{String(err(`${base}.label`)?.message)}</span>
+                                        <span className="text-xs text-red-500">
+                      {String(err(`${base}.label`)?.message)}
+                    </span>
                                     )}
                                 </div>
 
@@ -79,7 +106,9 @@ export default function HomeSupportForm({
                   </span>
                                     <input className={cls(!!err(`${base}.value`))} {...registerAction(`${base}.value`)} />
                                     {!!err(`${base}.value`) && (
-                                        <span className="text-xs text-red-500">{String(err(`${base}.value`)?.message)}</span>
+                                        <span className="text-xs text-red-500">
+                      {String(err(`${base}.value`)?.message)}
+                    </span>
                                     )}
                                 </div>
 

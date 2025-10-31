@@ -66,11 +66,12 @@ type Props = {
     initialValues: any;
     onCancel: () => void;
     onSave: (v: any) => void;
-
+    page?: string;
 };
 
+
 const BlockFormDialog = forwardRef<HTMLDialogElement, Props>(
-    ({ schema, block, initialValues, onCancel, onSave }, ref) => {
+    ({ schema, block, initialValues, onCancel, onSave, page }, ref) => {
         return (
             <>
                 <dialog
@@ -81,13 +82,14 @@ const BlockFormDialog = forwardRef<HTMLDialogElement, Props>(
                 >
 
                 <Suspense fallback={<div>Loading form...</div>}>
-                        <FormContent
-                            schema={schema}
-                            block={block}
-                            initialValues={initialValues}
-                            onCancel={onCancel}
-                            onSave={onSave}
-                        />
+                    <FormContent
+                        schema={schema}
+                        block={block}
+                        initialValues={initialValues}
+                        onCancel={onCancel}
+                        onSave={onSave}
+                        page={page}
+                    />
                     </Suspense>
                 </dialog>
 
@@ -108,7 +110,7 @@ const BlockFormDialog = forwardRef<HTMLDialogElement, Props>(
 
 BlockFormDialog.displayName = "BlockFormDialog";
 
-function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) {
+function FormContent({ schema, block, initialValues, onCancel, onSave, page }: Props) {
     const form = useForm<any>({
         resolver: schema ? zodResolver(schema) : undefined,
         defaultValues: initialValues,
@@ -153,7 +155,9 @@ function FormContent({ schema, block, initialValues, onCancel, onSave }: Props) 
                     registerAction={register}
                     setValue={setValue}
                     errors={errors}
-                    sourceTemplate={draft} // Для форм, які потребують draft, наприклад header_header
+                    sourceTemplate={draft} // Для форм, які потребують draft
+                    page={page}
+                    block={block}
                 />
             </div>
 
