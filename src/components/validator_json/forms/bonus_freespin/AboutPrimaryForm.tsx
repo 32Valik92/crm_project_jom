@@ -3,6 +3,7 @@
 import {useEffect, useRef} from "react";
 import {type Control, useFieldArray, type UseFormRegister, UseFormSetValue, useWatch,} from "react-hook-form";
 import ImageUploader from "@/components/validator_json/ImageUploader";
+import {HeightBox} from "@/common-functions/validator/height-box";
 
 type Props = {
     page?: string;
@@ -117,6 +118,7 @@ function BlockEditor({
 
     const PAGE_KEY = "img";
     const BLOCK_KEY = "rename";
+    const basePath = "bonus/freespin";
 
     useEffect(() => {
         if (kind !== "image") return;
@@ -217,13 +219,10 @@ function BlockEditor({
                                 variant={v}
                                 label={`${v}.src`}
                                 setValue={setValue}
-                                basePath="bonus/freespin"
+                                basePath={basePath}
                             />
 
-                            <div
-                                className="rounded-md border border-slate-600 bg-slate-700 px-3 py-2 text-xs text-slate-200">
-                                {v}.height: {v === "desktop" ? 420 : 320}
-                            </div>
+                            <HeightBox label={`${v}.height: ${v === "desktop" ? 420 : 320}`} />
                         </div>
                     ))}
                 </div>

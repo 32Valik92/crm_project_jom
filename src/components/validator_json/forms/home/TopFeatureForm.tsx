@@ -77,7 +77,6 @@ export default function HomeTopFeatureForm({
                                         basePath={basePath}          // images/<page>/top-feature/
                                         variant={`card-${cIdx}`}     // стабільний унікальний ключ
                                         setValue={setValue}
-                                        label="Завантажити зображення"
                                     />
                                     {!!err(`${base}.srcImg`) && (
                                         <span className="text-xs text-red-500">

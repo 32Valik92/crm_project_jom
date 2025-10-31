@@ -110,7 +110,6 @@ export default function SlotsCasinoForm({
                                     // необов’язково, але додасться до імені
                                     variant={`card-${idx}`}
                                     setValue={setValue}
-                                    label="Завантажити зображення"
                                 />
                                 {getErr(errors, `cards.${idx}.image.src`) && (
                                     <span className="text-xs text-red-500">Обов’язкове поле</span>

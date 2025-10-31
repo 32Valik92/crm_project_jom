@@ -87,7 +87,6 @@ export default function HomeSportsForm({
                                         basePath={basePath}        // images/<page>/sports/
                                         variant={`card-${cIdx}`}   // стабільний суфікс
                                         setValue={setValue}
-                                        label="Завантажити іконку"
                                     />
                                     {!!err(`${base}.icon`) && (
                                         <span className="text-xs text-red-500">

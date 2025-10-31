@@ -7,10 +7,11 @@ import {useImageStore} from "./imageStore";
 async function hashFile(file: File): Promise<string> {
     const buf = await file.arrayBuffer();
     const digest = await crypto.subtle.digest("SHA-1", buf);
-    return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,"0")).join("").slice(0,8);
+    return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 8);
 }
-const slug = (s:string) => (s||"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
-const normalizeFolderPath = (p?:string) => p ? p.replace(/^\/+|\/+$/g,"") : "";
+
+const slug = (s: string) => (s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+const normalizeFolderPath = (p?: string) => p ? p.replace(/^\/+|\/+$/g, "") : "";
 
 type Props = {
     page: string;
@@ -39,12 +40,15 @@ export default function ImageUploader({
 
     return (
         <div className="w-full">
-            <label htmlFor={id} className="block text-xs text-slate-300 mb-1">
-                {label ?? "Зображення"}
-            </label>
+            {label && (
+                <label htmlFor={id} className="block text-xs text-slate-300 mb-1">
+                    {label}
+                </label>
+            )}
 
             {/* Візуально як інпут: одна висота, рамка, фон */}
-            <div className="rounded-md border border-slate-600 bg-slate-900 px-3 py-2 h-[42px] flex items-center justify-between">
+            <div
+                className="rounded-md border border-slate-600 bg-slate-900 px-3 py-2 h-[42px] flex items-center justify-between">
                 <div className="text-sm text-slate-200 truncate pr-3">
                     {filenameUI || "Виберіть файл • Файл не вибрано"}
                 </div>
@@ -78,7 +82,7 @@ export default function ImageUploader({
 
                     // шлях у JSON
                     const jsonPath = `/images/${pathInsideImages}`;
-                    setValue(fieldPath, jsonPath, { shouldDirty: true });
+                    setValue(fieldPath, jsonPath, {shouldDirty: true});
 
                     // реєстрація у сторі (для ZIP)
                     store.register(pathInsideImages, file);

@@ -77,7 +77,6 @@ export default function HomeSupportForm({
                                         basePath={basePath}         // images/<page>/support/
                                         variant={`item-${rIdx}`}    // стабільний суфікс
                                         setValue={setValue}
-                                        label="Завантажити іконку"
                                     />
                                     {!!err(`${base}.icon`) && (
                                         <span className="text-xs text-red-500">
