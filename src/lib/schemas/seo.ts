@@ -1,4 +1,3 @@
-// src/lib/schemas/seo.ts
 import { z } from "zod";
 
 export const seo_schema = z.object({

@@ -46,7 +46,6 @@ export default function ImageUploader({
                 </label>
             )}
 
-            {/* Візуально як інпут: одна висота, рамка, фон */}
             <div
                 className="rounded-md border border-slate-600 bg-slate-900 px-3 py-2 h-[42px] flex items-center justify-between">
                 <div className="text-sm text-slate-200 truncate pr-3">
@@ -63,7 +62,6 @@ export default function ImageUploader({
                 </div>
             </div>
 
-            {/* Реальний file input схований */}
             <input
                 id={id}
                 type="file"
@@ -80,14 +78,11 @@ export default function ImageUploader({
                     const filenameOnly = `${nameBase}__${h}.${ext}`;
                     const pathInsideImages = folder ? `${folder}/${filenameOnly}` : filenameOnly;
 
-                    // шлях у JSON
                     const jsonPath = `/images/${pathInsideImages}`;
                     setValue(fieldPath, jsonPath, {shouldDirty: true});
 
-                    // реєстрація у сторі (для ZIP)
                     store.register(pathInsideImages, file);
 
-                    // прев’ю
                     const url = URL.createObjectURL(file);
                     setPreview(url);
                 }}

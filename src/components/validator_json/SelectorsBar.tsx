@@ -45,7 +45,6 @@ const SelectorsBar = ({
                 }
             `}</style>
 
-            {/* --- ДОМЕН --- */}
             <label
                 className={[
                     "group relative flex flex-col gap-2 rounded-2xl border p-4 bg-slate-900",
@@ -71,7 +70,6 @@ const SelectorsBar = ({
                 />
             </label>
 
-            {/* --- ВИБІР ЛОКАЛІ --- */}
             <label
                 className={[
                     "group relative flex flex-col gap-2 rounded-2xl border p-4 bg-slate-900",
@@ -97,7 +95,6 @@ const SelectorsBar = ({
                 />
             </label>
 
-            {/* --- ВИБІР СТОРІНКИ --- */}
             <label
                 className={[
                     "group relative flex flex-col gap-2 rounded-2xl border",
@@ -139,7 +136,6 @@ const SelectorsBar = ({
                 </div>
             </label>
 
-            {/* --- ВИБІР БЛОКУ --- */}
             <label
                 className={[
                     "group relative flex flex-col gap-2 rounded-2xl border",

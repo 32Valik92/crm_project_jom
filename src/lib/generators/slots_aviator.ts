@@ -1,4 +1,3 @@
-// src/lib/generators/slots_aviator.ts
 export function indexForSlotsAviator() {
     return `import about_primary from "./about_primary.json";
 

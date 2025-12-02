@@ -11,7 +11,6 @@ export default function Header() {
     return (
         <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0b1220]/90 backdrop-blur-md">
             <div className="mx-auto flex max-w-[1120px] items-center justify-between px-5 py-3 sm:py-4">
-                {/* Logo */}
                 <Link
                     href="/"
                     className="relative text-lg font-bold tracking-tight text-sky-300 transition-transform hover:scale-[1.05]"
@@ -20,7 +19,6 @@ export default function Header() {
                     <span className="absolute -bottom-[2px] left-0 h-[2px] w-full bg-sky-400/60 scale-x-0 transition-transform group-hover:scale-x-100 origin-left"></span>
                 </Link>
 
-                {/* Navigation */}
                 <nav className="flex items-center gap-1 sm:gap-2 text-sm">
                     {NAV_ITEMS.map((item, i) => {
                         const isActive = item.startsWith

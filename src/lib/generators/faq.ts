@@ -1,4 +1,3 @@
-// src/lib/generators/faq.ts
 export function indexForFaq() {
     return `import about_primary from "./about_primary.json";
 

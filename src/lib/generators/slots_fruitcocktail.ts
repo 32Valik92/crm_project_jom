@@ -1,4 +1,3 @@
-// src/lib/generators/slots_fruitcocktail.ts
 export function indexForSlotsFruitCocktail() {
     return `import about_primary from "./about_primary.json";
 

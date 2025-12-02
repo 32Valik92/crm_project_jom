@@ -1,4 +1,3 @@
-// src/lib/generators/footer.ts
 export function indexForFooter() {
     return `import footer from "./footer.json";
 

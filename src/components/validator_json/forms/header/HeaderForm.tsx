@@ -1,4 +1,3 @@
-// src/components/validator_json/forms/header/HeaderForm.tsx
 "use client";
 
 import { useEffect } from "react";
@@ -32,12 +31,11 @@ export default function HeaderForm({
                         })) ?? [],
                 });
             });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
         <div className="space-y-4">
-            {/* brand */}
+            
             <label className="flex flex-col gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">brand</span>
                 <input
@@ -46,7 +44,7 @@ export default function HeaderForm({
                 />
             </label>
 
-            {/* actions */}
+            
             <div className="grid gap-3 md:grid-cols-2">
                 <Input label="actions.login" name="actions.login" registerAction={registerAction} />
                 <Input label="actions.signup" name="actions.signup" registerAction={registerAction} />
@@ -54,7 +52,7 @@ export default function HeaderForm({
                 <Input label="actions.language" name="actions.language" registerAction={registerAction} />
             </div>
 
-            {/* mobile.featured */}
+            
             <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4 shadow-md">
                 <div className="text-sm font-semibold text-slate-100">mobile.featured</div>
                 {mobileFeaturedFA.fields.map((f, idx) => (
@@ -141,7 +139,6 @@ function NavItemEditor({
                 childrenFA.append({ id: c.id, label: c.label ?? "", redirect: c.redirect ?? true })
             );
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [templateItem?.children?.length]);
 
     return (

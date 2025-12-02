@@ -26,14 +26,12 @@ body {
 }
 
 @layer utilities {
-  /* Кастомний скролбар у стилі сайту */
   .scrollbar-custom {
     scrollbar-width: thin;
     scrollbar-color: #0ea5e9 #334155;
     overflow-y: auto;
   }
 
-  /* WebKit (Chrome, Safari, Edge) */
   .scrollbar-custom::-webkit-scrollbar {
     width: 6px;
   }
@@ -55,7 +53,6 @@ body {
     box-shadow: 0 0 8px rgba(14, 165, 233, 0.5);
   }
 
-  /* Плавне з’явлення скролбару */
   .scrollbar-custom {
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }

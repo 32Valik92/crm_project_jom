@@ -1,4 +1,3 @@
-// src/lib/generators/bonus_freebet.ts
 export function indexForBonusFreebet() {
     return `import about_primary from "./about_primary.json";
 import bonuses from "./bonuses.json";

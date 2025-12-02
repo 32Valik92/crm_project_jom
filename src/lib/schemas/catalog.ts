@@ -1,4 +1,3 @@
-// src/lib/schemas/catalog.ts (додай)
 export type PageKey =
     | "about" | "app"
     | "bonus" | "bonus_cashback" | "bonus_deposit" | "bonus_freebet" | "bonus_freespin" | "bonus_promocode"

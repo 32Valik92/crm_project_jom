@@ -28,13 +28,13 @@ export default function SeoForm({
 }) {
     const rowsFA = useFieldArray({ control, name: "__seo_rows" as any });
 
-    // 👉 фікс дубля на старті (StrictMode)
+
     const didInit = useRef(false);
     useEffect(() => {
         if (didInit.current) return;
         if (rowsFA.fields.length === 0) rowsFA.append({ key: "home" });
         didInit.current = true;
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, []);
 
     const rows =
@@ -60,7 +60,7 @@ export default function SeoForm({
 
     const nextFreeKey = SEO_KEYS.find((k) => !usedKeys.has(k));
 
-    // 👉 зручний детальний summary помилок
+
     const errorDetails = useMemo(() => {
         const list: Array<{ where: string; msg: string }> = [];
         const seoErr = (errors as any)?.seo ?? {};
@@ -159,21 +159,21 @@ function SeoRow({
     const keyField = `__seo_rows.${idx}.key`;
     const selectedKey = useWatch({ control, name: keyField }) as string | undefined;
 
-    // стабільні watch, щоб не ламати хуки
+
     const watchBase = selectedKey ?? "__none__";
     const [titleVal, descVal] = useWatch({
         control,
         name: [`seo.${watchBase}.title`, `seo.${watchBase}.description`],
     }) as [unknown, unknown];
 
-    // після вибору сторінки гарантуємо наявність полів
+
     useEffect(() => {
         if (!selectedKey) return;
         if (typeof titleVal !== "string")
             setValue(`seo.${selectedKey}.title`, "", { shouldDirty: true });
         if (typeof descVal !== "string")
             setValue(`seo.${selectedKey}.description`, "", { shouldDirty: true });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, [selectedKey, titleVal, descVal]);
 
     const base = selectedKey ? `seo.${selectedKey}` : "";

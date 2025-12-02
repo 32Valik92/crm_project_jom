@@ -22,7 +22,6 @@ export default function SlotsCasinoForm({
     control: Control;
     registerAction: UseFormRegister<any>;
     setValue: UseFormSetValue<any>;
-    /** опційно, приходить з BlockFormDialog → ValidatorPage */
     page?: string;
 }) {
     const cardsFA = useFieldArray({ control, name: "cards" as any });
@@ -30,7 +29,7 @@ export default function SlotsCasinoForm({
     useEffect(() => {
         if (cardsFA.fields.length === 0)
             cardsFA.append({ title: "", image: { src: "", alt: "" } });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, [cardsFA.fields.length]);
 
     const errors = (control as any)._formState?.errors ?? {};
@@ -38,7 +37,7 @@ export default function SlotsCasinoForm({
 
     return (
         <div className="space-y-4">
-            {/* title */}
+            
             <label className="flex flex-col gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wide">title</span>
                 <input
@@ -54,7 +53,7 @@ export default function SlotsCasinoForm({
                 )}
             </label>
 
-            {/* subtitle */}
+            
             <label className="flex flex-col gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wide">subtitle</span>
                 <input
@@ -70,13 +69,13 @@ export default function SlotsCasinoForm({
                 )}
             </label>
 
-            {/* cards */}
+            
             <div className="space-y-4 rounded-xl border border-slate-700 bg-slate-800 p-4 shadow-md">
                 <div className="text-sm font-semibold text-slate-100">cards</div>
 
                 {cardsFA.fields.map((card, idx) => (
                     <div key={card.id} className="space-y-3 rounded-xl border border-slate-700 bg-slate-900 p-4">
-                        {/* card title */}
+                        
                         <label className="flex flex-col gap-2">
               <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
                 cards[{idx}].title
@@ -94,9 +93,9 @@ export default function SlotsCasinoForm({
                             )}
                         </label>
 
-                        {/* image fields */}
+                        
                         <div className="grid gap-3 md:grid-cols-2 items-start">
-                            {/* ЗАМІНА src на ImageUploader */}
+                            
                             <div className="flex flex-col gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
                   cards[{idx}].image.src
@@ -105,9 +104,9 @@ export default function SlotsCasinoForm({
                                     page={page ?? "home"}
                                     block={"home_casino"}
                                     fieldPath={`cards.${idx}.image.src`}
-                                    // для зручності складатимемо в images/<page>/casino/
+
                                     basePath={basePath}
-                                    // необов’язково, але додасться до імені
+
                                     variant={`card-${idx}`}
                                     setValue={setValue}
                                 />

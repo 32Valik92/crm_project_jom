@@ -1,4 +1,3 @@
-// src/lib/schemas/home/feature_cards.ts
 import { z } from "zod";
 
 export const home_feature_cards_schema = z.object({

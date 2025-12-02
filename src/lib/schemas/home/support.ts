@@ -1,4 +1,3 @@
-// src/lib/schemas/home/support.ts
 import { z } from "zod";
 
 export const home_support_schema = z.object({

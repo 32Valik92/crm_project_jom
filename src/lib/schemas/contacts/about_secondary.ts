@@ -1,4 +1,3 @@
-// src/lib/schemas/contacts/about_secondary.ts
 import { z } from "zod";
 
 const imageVariant = z.object({ src: z.string().min(1), height: z.number().int().nonnegative() });

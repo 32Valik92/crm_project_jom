@@ -1,4 +1,3 @@
-// src/lib/schemas/bonus_promocode/bonuses.ts
 import { z } from "zod";
 
 const item = z.object({ label: z.string().min(1, "Обов'язково"), value: z.string().min(1, "Обов'язково") });

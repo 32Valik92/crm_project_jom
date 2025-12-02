@@ -1,4 +1,3 @@
-// src/lib/generators/slots_plinko.ts
 export function indexForSlotsPlinko() {
     return `import about_primary from "./about_primary.json";
 

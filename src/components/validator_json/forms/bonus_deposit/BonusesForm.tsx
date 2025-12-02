@@ -14,12 +14,12 @@ export default function BonusDepositBonusesForm({ control, registerAction }: Pro
         if (tabsFA.fields.length === 0) tabsFA.append("");
         if (cardsFA.fields.length === 0)
             cardsFA.append({ title: "", subtitle: "", items: [{ label: "", value: "" }], ctaLabel: "" });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, []);
 
     return (
         <div className="space-y-5">
-            {/* title */}
+            
             <label className="flex flex-col gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wide">title</span>
                 <input
@@ -28,7 +28,7 @@ export default function BonusDepositBonusesForm({ control, registerAction }: Pro
                 />
             </label>
 
-            {/* tabs */}
+            
             <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4 shadow-md">
                 <div className="text-sm font-semibold text-slate-100">tabs</div>
 
@@ -57,7 +57,7 @@ export default function BonusDepositBonusesForm({ control, registerAction }: Pro
                 </button>
             </div>
 
-            {/* cards */}
+            
             <div className="space-y-4 rounded-xl border border-slate-700 bg-slate-800 p-4 shadow-md">
                 <div className="text-sm font-semibold text-slate-100">cards</div>
 
@@ -82,7 +82,7 @@ export default function BonusDepositBonusesForm({ control, registerAction }: Pro
                 </button>
             </div>
 
-            {/* promocode */}
+            
             <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4 shadow-md">
                 <div className="text-sm font-semibold text-slate-100">promocode</div>
                 <div className="grid gap-3 md:grid-cols-2">
@@ -132,7 +132,7 @@ function CardEditor({
 
     useEffect(() => {
         if (itemsFA.fields.length === 0) itemsFA.append({ label: "", value: "" });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, [cIdx]);
 
     return (

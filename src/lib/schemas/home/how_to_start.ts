@@ -1,4 +1,3 @@
-// src/lib/schemas/home/how_to_start.ts
 import { z } from "zod";
 
 export const home_how_to_start_schema = z.object({

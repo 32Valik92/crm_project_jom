@@ -1,5 +1,3 @@
-// lib/generators/index.ts
-// Експортуємо генератори для index.ts файлів кожного розділу локалі
 export {indexForAbout} from "./about";
 export {indexForApp} from "./app";
 export {indexForBonus} from "./bonus";

@@ -1,4 +1,3 @@
-// src/lib/schemas/home/verification.ts
 import { z } from "zod";
 
 export const home_verification_schema = z.object({

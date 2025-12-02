@@ -1,4 +1,3 @@
-// src/components/validator_json/forms/home/VerificationForm.tsx
 "use client";
 
 import { type UseFormRegister } from "react-hook-form";
@@ -21,7 +20,7 @@ export default function HomeVerificationForm({
 
     return (
         <div className="space-y-4">
-            {/* title */}
+            
             <div className="flex flex-col gap-1.5">
                 <span className="text-xs font-semibold uppercase tracking-wide">title</span>
                 <input className={cls(!!err("title"))} {...registerAction("title")} />
@@ -30,7 +29,6 @@ export default function HomeVerificationForm({
                 )}
             </div>
 
-            {/* text */}
             <div className="flex flex-col gap-1.5">
                 <span className="text-xs font-semibold uppercase tracking-wide">text</span>
                 <textarea className={cls(!!err("text"))} rows={5} {...registerAction("text")} />

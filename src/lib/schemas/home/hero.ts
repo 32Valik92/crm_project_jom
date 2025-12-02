@@ -1,4 +1,3 @@
-// lib/schemas/bonus/hero.ts
 import { z } from "zod";
 
 export const home_hero_schema = z.object({

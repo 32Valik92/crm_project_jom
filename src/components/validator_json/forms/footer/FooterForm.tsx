@@ -1,4 +1,3 @@
-// src/components/validator_json/forms/footer/FooterForm.tsx
 "use client";
 
 import { useEffect } from "react";
@@ -17,12 +16,11 @@ export default function FooterForm({
         if (columnsFA.fields.length === 0) {
             columnsFA.append({ links: [{ label: "", href: "" }] });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
         <div className="space-y-4">
-            {/* tagline */}
+            
             <label className="flex flex-col gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wide">tagline</span>
                 <input
@@ -35,7 +33,7 @@ export default function FooterForm({
                 />
             </label>
 
-            {/* columns */}
+            
             <div className="space-y-4 rounded-xl border border-slate-700 bg-slate-800 p-4 shadow-md">
                 <div className="text-sm font-semibold text-slate-100">columns</div>
 
@@ -61,7 +59,7 @@ export default function FooterForm({
                 </button>
             </div>
 
-            {/* bottom */}
+            
             <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4 shadow-md">
                 <div className="text-sm font-semibold text-slate-100">bottom</div>
                 <input
@@ -93,7 +91,6 @@ function ColumnEditor({
 
     useEffect(() => {
         if (linksFA.fields.length === 0) linksFA.append({ label: "", href: "" });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cIdx]);
 
     return (

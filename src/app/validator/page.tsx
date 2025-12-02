@@ -46,7 +46,6 @@ type FolderConfig = {
     indexGenerator: () => string;
 };
 
-// 🔹 ЗОВНІШНІЙ компонент: лише провайдер
 const ValidatorPage = () => {
     return (
         <ImageStoreProvider>
@@ -57,7 +56,6 @@ const ValidatorPage = () => {
 
 export default ValidatorPage;
 
-// 🔹 ВНУТРІШНІЙ компонент: тут уже можна викликати useImageStore()
 const ValidatorPageInner = () => {
     const [localeFolder, setLocaleFolder] = useState<string>("");
     const [page, setPage] = useState<PageKey | "">("");
@@ -326,11 +324,11 @@ const ValidatorPageInner = () => {
                 )
             );
 
-            const imagesFolder = zip.folder(`images`)!; // сусідня папка, НЕ в локалі
+            const imagesFolder = zip.folder(`images`)!;
             const bag = imageStore.all();
             for (const [filename, {file}] of Object.entries(bag)) {
                 const arr = await file.arrayBuffer();
-                imagesFolder.file(filename, arr); // кладемо оригінальний файл без зміни формату
+                imagesFolder.file(filename, arr);
             }
 
 

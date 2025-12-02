@@ -1,4 +1,3 @@
-// src/lib/schemas/footer/footer.ts
 import { z } from "zod";
 
 const link = z.object({

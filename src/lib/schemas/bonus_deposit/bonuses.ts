@@ -1,4 +1,3 @@
-// src/lib/schemas/bonus_deposit/bonuses.ts
 import { z } from "zod";
 
 const itemSchema = z.object({

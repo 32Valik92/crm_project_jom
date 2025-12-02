@@ -1,4 +1,3 @@
-// src/lib/schemas/home/sports.ts
 import { z } from "zod";
 
 export const home_sports_schema = z.object({

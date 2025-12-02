@@ -1,4 +1,4 @@
-// src/components/validator_json/forms/home/TopFeatureForm.tsx
+
 "use client";
 
 import { useEffect } from "react";
@@ -28,7 +28,7 @@ export default function HomeTopFeatureForm({
         if (cardsFA.fields.length === 0) {
             cardsFA.append({ srcImg: "", altImg: "", title: "", description: "" });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, []);
 
     const err = (p: string) => p.split(".").reduce((a, k) => (a ? a[k] : undefined), errors);
@@ -44,7 +44,7 @@ export default function HomeTopFeatureForm({
 
     return (
         <div className="space-y-4">
-            {/* title */}
+            
             <div className="flex flex-col gap-1.5">
                 <span className="text-xs font-semibold uppercase tracking-wide">title</span>
                 <input className={cls(!!err("title"))} {...registerAction("title")} />
@@ -53,7 +53,7 @@ export default function HomeTopFeatureForm({
                 )}
             </div>
 
-            {/* cards */}
+            
             <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4">
                 <div className="text-sm font-semibold text-slate-100">cards</div>
 
@@ -65,7 +65,7 @@ export default function HomeTopFeatureForm({
                             className="space-y-3 rounded-xl border border-slate-700 bg-slate-900 p-4"
                         >
                             <div className="grid gap-2 md:grid-cols-5 items-start">
-                                {/* srcImg → ImageUploader */}
+
                                 <div className="md:col-span-2 flex flex-col gap-1.5">
                   <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
                     {base}.srcImg
@@ -73,9 +73,9 @@ export default function HomeTopFeatureForm({
                                     <ImageUploader
                                         page={page ?? "home"}
                                         block={"home_top_feature"}
-                                        fieldPath={`${base}.srcImg`} // куди записати шлях
-                                        basePath={basePath}          // images/<page>/top-feature/
-                                        variant={`card-${cIdx}`}     // стабільний унікальний ключ
+                                        fieldPath={`${base}.srcImg`}
+                                        basePath={basePath}
+                                        variant={`card-${cIdx}`}
                                         setValue={setValue}
                                     />
                                     {!!err(`${base}.srcImg`) && (
@@ -85,7 +85,7 @@ export default function HomeTopFeatureForm({
                                     )}
                                 </div>
 
-                                {/* altImg */}
+
                                 <div className="md:col-span-1 flex flex-col gap-1.5">
                   <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
                     {base}.altImg
@@ -98,7 +98,7 @@ export default function HomeTopFeatureForm({
                                     )}
                                 </div>
 
-                                {/* title */}
+                                
                                 <div className="md:col-span-2 flex flex-col gap-1.5">
                   <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
                     {base}.title
@@ -112,7 +112,7 @@ export default function HomeTopFeatureForm({
                                 </div>
                             </div>
 
-                            {/* description */}
+                            
                             <div className="flex flex-col gap-1.5">
                 <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
                   {base}.description
@@ -129,7 +129,7 @@ export default function HomeTopFeatureForm({
                                 )}
                             </div>
 
-                            {/* remove */}
+
                             <div className="flex justify-end">
                                 <button
                                     type="button"

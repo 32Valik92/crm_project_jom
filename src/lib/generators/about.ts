@@ -1,4 +1,3 @@
-/** Генератор index.ts для папки /about */
 export function indexForAbout() {
     return `import about_primary from "./about_primary.json";
 

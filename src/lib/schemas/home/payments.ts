@@ -1,4 +1,3 @@
-// src/lib/schemas/home/payments.ts
 import { z } from "zod";
 
 const tableSchema = z.object({

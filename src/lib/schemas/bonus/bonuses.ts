@@ -1,4 +1,3 @@
-// lib/schemas/bonus/bonuses.ts
 import { z } from "zod";
 
 const itemSchema = z.object({

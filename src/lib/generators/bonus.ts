@@ -1,4 +1,3 @@
-// lib/generators/bonus.ts
 export function indexForBonus() {
     return `import about_primary from "./about_primary.json";
 import bonuses from "./bonuses.json";

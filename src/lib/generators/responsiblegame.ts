@@ -1,4 +1,3 @@
-// src/lib/generators/responsiblegame.ts
 export function indexForResponsibleGame() {
     return `import about_primary from "./about_primary.json";
 

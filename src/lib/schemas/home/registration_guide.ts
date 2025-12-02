@@ -1,4 +1,3 @@
-// src/lib/schemas/home/registration_guide.ts
 import { z } from "zod";
 
 export const home_registration_guide_schema = z.object({

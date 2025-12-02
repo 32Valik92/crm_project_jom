@@ -5,7 +5,6 @@ import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import type {BlockKey} from "@/lib/schemas";
 
-// Мапа форм для ледачого завантаження
 const FORM_COMPONENTS = {
 	about_primary: lazy(() => import("@/components/validator_json/forms/AboutPrimaryForm")),
 	app_about_primary: lazy(() => import("@/components/validator_json/forms/AppAboutPrimaryForm")),
@@ -83,7 +82,7 @@ const BlockFormDialog = forwardRef<HTMLDialogElement, Props>(
 
 					<Suspense fallback={<div>Loading form...</div>}>
 						<FormContent
-							key={`${page ?? ''}::${block ?? ''}`}             // ← додано
+							key={`${page ?? ''}::${block ?? ''}`}
 							schema={schema}
 							block={block}
 							initialValues={initialValues}
@@ -120,7 +119,6 @@ function FormContent({schema, block, initialValues, onCancel, onSave, page}: Pro
 
 	const { register, handleSubmit, control, formState: { errors }, reset, watch, setValue } = form;
 
-	// ← КЛЮЧОВЕ: при зміні блоку або initialValues — повний reset
 	useEffect(() => {
 		reset(initialValues ?? {});
 	}, [block, page, schema, initialValues, reset]);
@@ -129,10 +127,9 @@ function FormContent({schema, block, initialValues, onCancel, onSave, page}: Pro
 
 	const onSubmit = handleSubmit((values) => {
 		onSave(values);
-		reset(initialValues ?? {}); // після збереження — повернутись до актуального дефолту
+		reset(initialValues ?? {});
 	});
 
-	// Мемоїзація компонента форми
 	const FormComponent = useMemo(() => {
 		if (!block || !(block in FORM_COMPONENTS)) return null;
 		return FORM_COMPONENTS[block as keyof typeof FORM_COMPONENTS];

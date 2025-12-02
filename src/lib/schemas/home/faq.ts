@@ -1,4 +1,3 @@
-// src/lib/schemas/home/faq.ts
 import { z } from "zod";
 
 export const home_faq_schema = z.object({

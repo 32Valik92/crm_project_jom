@@ -1,4 +1,3 @@
-// src/components/validator_json/forms/home/HowToStartForm.tsx
 "use client";
 
 import { useEffect } from "react";
@@ -17,7 +16,6 @@ export default function HomeHowToStartForm({
     useEffect(() => {
         if (stepsFA.fields.length === 0)
             stepsFA.append({ id: "1", text: "", highlight: false });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const err = (path: string) =>
@@ -33,7 +31,7 @@ export default function HomeHowToStartForm({
 
     return (
         <div className="space-y-4">
-            {/* title */}
+            
             <div className="flex flex-col gap-1.5">
                 <span className="text-xs font-semibold uppercase tracking-wide">title</span>
                 <input className={cls(!!err("title"))} {...registerAction("title")} />
@@ -42,7 +40,7 @@ export default function HomeHowToStartForm({
                 )}
             </div>
 
-            {/* steps */}
+            
             <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4">
                 <div className="text-sm font-semibold text-slate-100">steps</div>
 

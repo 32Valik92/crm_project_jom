@@ -1,4 +1,3 @@
-// src/components/validator_json/forms/home/RegistrationGuideForm.tsx
 "use client";
 
 import { useEffect } from "react";
@@ -19,7 +18,6 @@ export default function HomeRegistrationGuideForm({
         if (stepsFA.fields.length === 0) {
             stepsFA.append({ id: 1, text: "" });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const err = (p: string) => p.split(".").reduce((a, k) => (a ? a[k] : undefined), errors);
@@ -39,7 +37,7 @@ export default function HomeRegistrationGuideForm({
 
     return (
         <div className="space-y-4">
-            {/* title */}
+            
             <div className="flex flex-col gap-1.5">
                 <span className="text-xs font-semibold uppercase tracking-wide">title</span>
                 <input className={cls(!!err("title"))} {...registerAction("title")} />
@@ -48,7 +46,7 @@ export default function HomeRegistrationGuideForm({
                 )}
             </div>
 
-            {/* steps */}
+            
             <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4">
                 <div className="text-sm font-semibold text-slate-100">steps</div>
 
@@ -61,7 +59,7 @@ export default function HomeRegistrationGuideForm({
                     return (
                         <div key={row.id} className="space-y-3 rounded-xl border border-slate-700 bg-slate-900 p-4">
                             <div className="grid gap-2 md:grid-cols-5">
-                                {/* id */}
+
                                 <div className="flex flex-col gap-1.5 md:col-span-1">
                   <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
                     {idPath}
@@ -76,7 +74,6 @@ export default function HomeRegistrationGuideForm({
                                     )}
                                 </div>
 
-                                {/* text */}
                                 <div className="flex flex-col gap-1.5 md:col-span-3">
                   <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
                     {textPath}
@@ -87,7 +84,6 @@ export default function HomeRegistrationGuideForm({
                                     )}
                                 </div>
 
-                                {/* remove */}
                                 <div className="md:col-span-1 flex items-end justify-end">
                                     <button
                                         type="button"

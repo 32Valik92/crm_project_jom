@@ -1,4 +1,3 @@
-// src/lib/schemas/home/top_feature.ts
 import { z } from "zod";
 
 export const home_top_feature_schema = z.object({

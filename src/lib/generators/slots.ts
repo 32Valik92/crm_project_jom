@@ -1,4 +1,3 @@
-// src/lib/generators/slots.ts
 export function indexForSlots() {
     return `import about_primary from "./about_primary.json";
 import casino from "./casino.json";

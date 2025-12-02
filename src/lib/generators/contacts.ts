@@ -1,4 +1,3 @@
-// src/lib/generators/contacts.ts
 export function indexForContacts() {
     return `import about_primary from "./about_primary.json";
 

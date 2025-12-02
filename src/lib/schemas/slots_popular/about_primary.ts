@@ -1,4 +1,3 @@
-// src/lib/schemas/slots_aviator/about_primary.ts
 import { z } from "zod";
 
 const imageVariant = z.object({ src: z.string().min(1), height: z.number().int().nonnegative() });

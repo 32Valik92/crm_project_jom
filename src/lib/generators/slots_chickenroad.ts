@@ -1,4 +1,3 @@
-// src/lib/generators/slots_chickenroad.ts
 export function indexForSlotsChickenRoad() {
     return `import about_primary from "./about_primary.json";
 

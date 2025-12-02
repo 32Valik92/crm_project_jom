@@ -1,4 +1,3 @@
-// src/components/validator_json/forms/home/PaymentsForm.tsx
 "use client";
 
 import { useEffect } from "react";
@@ -20,7 +19,7 @@ export default function HomePaymentsForm({
             depRowsFA.append({ method: "", min: "", processing: "", fees: "" });
         if (wdrRowsFA.fields.length === 0)
             wdrRowsFA.append({ method: "", min: "", processing: "", fees: "" });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, []);
 
     const err = (p: string) => p.split(".").reduce((a, k) => (a ? a[k] : undefined), errors);
@@ -34,7 +33,7 @@ export default function HomePaymentsForm({
 
     return (
         <div className="space-y-4">
-            {/* title */}
+            
             <div className="flex flex-col gap-1.5">
         <span className="text-xs font-semibold uppercase tracking-wide">
           title
@@ -45,7 +44,7 @@ export default function HomePaymentsForm({
                 )}
             </div>
 
-            {/* subtitle */}
+            
             <div className="flex flex-col gap-1.5">
         <span className="text-xs font-semibold uppercase tracking-wide">
           subtitle
@@ -56,7 +55,7 @@ export default function HomePaymentsForm({
                 )}
             </div>
 
-            {/* sections */}
+            
             <SectionTable
                 prefix="deposit"
                 control={control}
@@ -77,7 +76,7 @@ export default function HomePaymentsForm({
                 cls={cls}
             />
 
-            {/* note */}
+            
             <div className="flex flex-col gap-1.5">
         <span className="text-xs font-semibold uppercase tracking-wide">
           note
@@ -112,7 +111,7 @@ function SectionTable({
         <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4">
             <div className="text-sm font-semibold text-slate-100">{prefix}</div>
 
-            {/* section title */}
+            
             <div className="flex flex-col gap-1.5">
         <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
           {prefix}.title
@@ -125,7 +124,7 @@ function SectionTable({
                 )}
             </div>
 
-            {/* columns */}
+            
             <div className="grid gap-2 md:grid-cols-4">
                 {(["method", "min", "processing", "fees"] as const).map((c) => {
                     const p = `${prefix}.columns.${c}`;
@@ -143,7 +142,7 @@ function SectionTable({
                 })}
             </div>
 
-            {/* rows table */}
+
             <div className="space-y-2">
                 <div className="text-xs font-semibold text-slate-200">{prefix}.rows</div>
 

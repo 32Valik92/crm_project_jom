@@ -1,4 +1,3 @@
-// kind of options in about component
 export const KIND_OPTS_ABOUT_CUSTOM_BLOCK = [
 	{ value: "title", label: "Title" },
 	{ value: "paragraph", label: "Paragraph" },

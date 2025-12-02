@@ -21,7 +21,7 @@ export default function SlotsPopularAboutPrimaryForm({
     if (blocksFA.fields.length === 0)
       blocksFA.append({kind: "title", h: 2, text: ""});
     didInit.current = true;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   return (

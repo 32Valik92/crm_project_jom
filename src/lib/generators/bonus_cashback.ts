@@ -1,4 +1,3 @@
-/** Генератор index.ts для папки /bonus_cashback */
 export function indexForBonusCashback() {
     return `import about_primary from "./about_primary.json";
 

@@ -38,7 +38,7 @@ export default function SlotsPopularCasinoForm({
 
     return (
         <div className="space-y-4">
-            {/* title */}
+            
             <label className="flex flex-col gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wide">title</span>
                 <input
@@ -54,7 +54,7 @@ export default function SlotsPopularCasinoForm({
                 )}
             </label>
 
-            {/* subtitle */}
+            
             <label className="flex flex-col gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wide">subtitle</span>
                 <input
@@ -70,13 +70,13 @@ export default function SlotsPopularCasinoForm({
                 )}
             </label>
 
-            {/* cards */}
+            
             <div className="space-y-4 rounded-xl border border-slate-700 bg-slate-800 p-4 shadow-md">
                 <div className="text-sm font-semibold text-slate-100">cards</div>
 
                 {cardsFA.fields.map((card, idx) => (
                     <div key={card.id} className="space-y-3 rounded-xl border border-slate-700 bg-slate-900 p-4">
-                        {/* card title */}
+                        
                         <label className="flex flex-col gap-2">
               <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
                 cards[{idx}].title
@@ -94,9 +94,9 @@ export default function SlotsPopularCasinoForm({
                             )}
                         </label>
 
-                        {/* image fields */}
+                        
                         <div className="grid gap-3 md:grid-cols-2 items-start">
-                            {/* ЗАМІНА src на ImageUploader */}
+                            
                             <div className="flex flex-col gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">
                   cards[{idx}].image.src

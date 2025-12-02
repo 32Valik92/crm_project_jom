@@ -1,4 +1,4 @@
-// src/components/validator_json/forms/StepsArray.tsx
+
 "use client";
 
 import { useEffect } from "react";
@@ -12,13 +12,13 @@ type Props = {
 };
 
 const StepsArray = ({ control, registerAction, namePrefix, addLabel }: Props) => {
-    // Підключаємо масив за вказаним шляхом namePrefix
+
     const { fields, append, remove } = useFieldArray({
         control,
         name: namePrefix as any,
     });
 
-    // Гарантуємо, що масив ніколи не порожній
+
     useEffect(() => {
         if (fields.length === 0) {
             append("");
@@ -34,7 +34,6 @@ const StepsArray = ({ control, registerAction, namePrefix, addLabel }: Props) =>
 
     return (
         <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4">
-            {/* Кожен елемент масиву: input + видалити */}
             {fields.map((f, idx) => (
                 <div key={f.id} className="flex items-center gap-2">
                     <input
@@ -53,7 +52,6 @@ const StepsArray = ({ control, registerAction, namePrefix, addLabel }: Props) =>
                 </div>
             ))}
 
-            {/* Додати новий елемент у кінець масиву */}
             <button
                 type="button"
                 className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 text-xs font-medium text-slate-100 transition hover:bg-slate-700"

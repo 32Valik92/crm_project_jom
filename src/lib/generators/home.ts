@@ -1,4 +1,3 @@
-// src/lib/generators/home.ts
 export function indexForHome() {
     return `import about from "./about.json";
 import about_primary from "./about_primary.json";

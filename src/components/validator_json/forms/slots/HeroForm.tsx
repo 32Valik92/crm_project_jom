@@ -7,7 +7,7 @@ type Props = { registerAction: UseFormRegister<any> };
 export default function SlotsHeroForm({ registerAction }: Props) {
     return (
         <div className="space-y-4 rounded-xl border border-slate-700 bg-slate-800 p-4">
-            {/* badge */}
+            
             <label className="flex flex-col gap-2">
         <span className="text-xs font-medium text-slate-100 uppercase tracking-wide">
           badge
@@ -19,7 +19,7 @@ export default function SlotsHeroForm({ registerAction }: Props) {
                 />
             </label>
 
-            {/* title */}
+            
             <label className="flex flex-col gap-2">
         <span className="text-xs font-medium text-slate-100 uppercase tracking-wide">
           title
@@ -31,7 +31,7 @@ export default function SlotsHeroForm({ registerAction }: Props) {
                 />
             </label>
 
-            {/* cta */}
+            
             <label className="flex flex-col gap-2">
         <span className="text-xs font-medium text-slate-100 uppercase tracking-wide">
           cta
@@ -43,7 +43,7 @@ export default function SlotsHeroForm({ registerAction }: Props) {
                 />
             </label>
 
-            {/* description */}
+            
             <label className="flex flex-col gap-2">
         <span className="text-xs font-medium text-slate-100 uppercase tracking-wide">
           description

@@ -1,4 +1,3 @@
-// src/components/validator_json/forms/home/AboutForm.tsx
 "use client";
 
 import { useEffect } from "react";
@@ -15,7 +14,6 @@ export default function HomeAboutForm({
     useEffect(() => {
         if (leadFA.fields.length === 0) leadFA.append("");
         if (rowsFA.fields.length === 0) rowsFA.append({ label: "", value: "" });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const err = (path: string) => path.split(".").reduce((a, k) => (a ? a[k] : undefined), errors);
@@ -29,7 +27,7 @@ export default function HomeAboutForm({
 
     return (
         <div className="space-y-4">
-            {/* title */}
+            
             <div className="flex flex-col gap-1.5">
                 <span className="text-xs font-semibold uppercase tracking-wide">title</span>
                 <input className={cls(!!err("title"))} {...registerAction("title")} />
@@ -38,7 +36,6 @@ export default function HomeAboutForm({
                 )}
             </div>
 
-            {/* lead */}
             <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4">
                 <div className="text-sm font-semibold text-slate-100">lead</div>
                 {leadFA.fields.map((f, i) => {
@@ -69,7 +66,6 @@ export default function HomeAboutForm({
                 </button>
             </div>
 
-            {/* info */}
             <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4">
                 <div className="text-sm font-semibold text-slate-100">info</div>
 
@@ -119,7 +115,6 @@ export default function HomeAboutForm({
                 </div>
             </div>
 
-            {/* safety */}
             <div className="flex flex-col gap-1.5">
                 <span className="text-xs font-semibold uppercase tracking-wide">safety</span>
                 <textarea className={cls(!!err("safety"))} rows={3} {...registerAction("safety")} />

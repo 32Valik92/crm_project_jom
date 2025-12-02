@@ -6,31 +6,31 @@ import { AppMobileApp } from "@/lib/schemas";
 import StepsArray from "@/components/validator_json/forms/StepsArray";
 
 type Props = {
-    control: Control; // можна звузити до Control<AppMobileApp>
+    control: Control; 
     registerAction: UseFormRegister<AppMobileApp>;
 };
 
 const HomeMobileAppForm = ({ control, registerAction }: Props) => {
-    // cards: { title: string; steps: string[] }[]
+    
     const { fields: cardFields, append: addCard, remove: delCard } = useFieldArray({
         control,
         name: "cards",
     });
 
-    // compare.rows: { label: string; items: string[] }[]
+    
     const { fields: rowFields, append: addRow, remove: delRow } = useFieldArray({
         control,
         name: "compare.rows",
     });
 
-    // Мінімум 1 картка
+    
     useEffect(() => {
         if (cardFields.length === 0) {
             addCard({ title: "", steps: [""] });
         }
     }, [cardFields.length, addCard]);
 
-    // Мінімум 1 рядок порівняння
+    
     useEffect(() => {
         if (rowFields.length === 0) {
             addRow({ label: "", items: [""] });
@@ -39,7 +39,7 @@ const HomeMobileAppForm = ({ control, registerAction }: Props) => {
 
     return (
         <div className="space-y-4">
-            {/* Заголовок (brand + tail) */}
+            
             <div className="grid gap-2 rounded-xl border border-slate-700 bg-slate-800 p-4 shadow-md">
                 <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">title</span>
 
@@ -56,7 +56,7 @@ const HomeMobileAppForm = ({ control, registerAction }: Props) => {
                 />
             </div>
 
-            {/* lead */}
+            
             <label className="flex flex-col gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wide">lead</span>
                 <textarea
@@ -66,7 +66,7 @@ const HomeMobileAppForm = ({ control, registerAction }: Props) => {
                 />
             </label>
 
-            {/* Cards */}
+            
             <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4 shadow-md">
                 <div className="flex items-center justify-between">
                     <span className="text-sm font-semibold text-slate-100">cards</span>
@@ -98,7 +98,7 @@ const HomeMobileAppForm = ({ control, registerAction }: Props) => {
                             placeholder="title"
                         />
 
-                        {/* steps: string[] */}
+                        
                         <StepsArray
                             control={control}
                             registerAction={registerAction}
@@ -109,9 +109,9 @@ const HomeMobileAppForm = ({ control, registerAction }: Props) => {
                 ))}
             </div>
 
-            {/* Compare */}
+            
             <div className="space-y-3 rounded-xl border border-slate-700 bg-slate-800 p-4 shadow-md">
-                {/* compare.title */}
+                
                 <label className="flex flex-col gap-2">
                     <span className="text-xs font-semibold uppercase tracking-wide text-slate-100">compare.title</span>
                     <input
@@ -150,7 +150,7 @@ const HomeMobileAppForm = ({ control, registerAction }: Props) => {
                             placeholder="label"
                         />
 
-                        {/* items: string[] */}
+                        
                         <StepsArray
                             control={control}
                             registerAction={registerAction}
@@ -161,7 +161,7 @@ const HomeMobileAppForm = ({ control, registerAction }: Props) => {
                 ))}
             </div>
 
-            {/* CTA */}
+            
             <label className="flex flex-col gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wide">cta</span>
                 <input
